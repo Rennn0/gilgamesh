@@ -1,5 +1,5 @@
-namespace educative_io.chapter_4;
-public class Challenge_7
+namespace EducativeIo.Chapter4;
+public class Solution
 {
     public static int[] nextGreaterElement(int[] arr, int size)
     {
@@ -22,7 +22,7 @@ public class Challenge_7
                 top = -1;
             }
 
-            while ((stack.Count != 0) && (top <= next))
+            while (stack.Count != 0 && top <= next)
             {
 
                 stack.Pop();

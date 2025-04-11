@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\educative_io\educative_io.csproj" />
+    <ProjectReference Include="..\EducativeIo\EducativeIo.csproj" />
   </ItemGroup>
 
   <ItemGroup>

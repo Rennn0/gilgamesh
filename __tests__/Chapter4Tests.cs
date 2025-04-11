@@ -1,6 +1,6 @@
-﻿using System.Diagnostics;
+﻿using EducativeIo.Chapter4;
 
-namespace __tests__;
+namespace __TESTS__;
 
 [TestClass]
 public sealed class Chapter4Tests
@@ -11,7 +11,7 @@ public sealed class Chapter4Tests
         int[] arr = [4, 5, 2, 10, 8];
         int size = arr.Length;
         int[] expected = [5, 10, 10, -1, -1];
-        int[] result = educative_io.chapter_4.Challenge_7.nextGreaterElement(arr, size);
+        int[] result = Solution.nextGreaterElement(arr, size);
         CollectionAssert.AreEqual(expected, result);
     }
 
@@ -21,7 +21,7 @@ public sealed class Chapter4Tests
         int[] arr = [4, 6, 3, 2, 8, 1, 9, 9];
         int size = arr.Length;
         int[] expected = [6, 8, 8, 8, 9, 9, -1, -1];
-        int[] result = educative_io.chapter_4.Challenge_7.nextGreaterElement(arr, size);
+        int[] result = Solution.nextGreaterElement(arr, size);
 
         CollectionAssert.AreEqual(expected, result);
     }
