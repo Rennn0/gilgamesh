@@ -11,7 +11,7 @@ public sealed class Chapter4Tests
         int[] arr = [4, 5, 2, 10, 8];
         int size = arr.Length;
         int[] expected = [5, 10, 10, -1, -1];
-        int[] result = Solution.nextGreaterElement(arr, size);
+        int[] result = Solution.nextGreaterElementStack(arr, size);
         CollectionAssert.AreEqual(expected, result);
     }
 
@@ -21,7 +21,28 @@ public sealed class Chapter4Tests
         int[] arr = [4, 6, 3, 2, 8, 1, 9, 9];
         int size = arr.Length;
         int[] expected = [6, 8, 8, 8, 9, 9, -1, -1];
-        int[] result = Solution.nextGreaterElement(arr, size);
+        int[] result = Solution.nextGreaterElementStack(arr, size);
+
+        CollectionAssert.AreEqual(expected, result);
+    }
+
+    [TestMethod]
+    public void TestMethod3()
+    {
+        int[] arr = [4, 5, 2, 10, 8];
+        int size = arr.Length;
+        int[] expected = [5, 10, 10, -1, -1];
+        int[] result = Solution.nextGreaterElementBruteForce(arr, size);
+        CollectionAssert.AreEqual(expected, result);
+    }
+
+    [TestMethod]
+    public void TestMethod4()
+    {
+        int[] arr = [4, 6, 3, 2, 8, 1, 9, 9];
+        int size = arr.Length;
+        int[] expected = [6, 8, 8, 8, 9, 9, -1, -1];
+        int[] result = Solution.nextGreaterElementBruteForce(arr, size);
 
         CollectionAssert.AreEqual(expected, result);
     }
