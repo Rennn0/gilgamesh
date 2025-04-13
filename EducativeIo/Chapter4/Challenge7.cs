@@ -1,6 +1,7 @@
 namespace EducativeIo.Chapter4;
-public class Solution
+public class Challenge7
 {
+
     public static int[] nextGreaterElementStack(int[] arr, int size)
     {
         int[] result = new int[size];
