@@ -138,4 +138,22 @@ public sealed class Chapter4Tests
         int result = newStack.min();
         Assert.AreEqual(expected, result);
     }
+
+    [TestMethod]
+    public void TestIsPostfix1()
+    {
+        string exp = "9,4,2,+,*,6,14,7,/,+,*";
+        int expected = 432;
+        int result = Challenge6.evaluatePostFix(exp);
+        Assert.AreEqual(expected, result);
+    }
+
+    [TestMethod]
+    public void TestIsPostfix2()
+    {
+        string exp = "2,3,1,*,+,9,-";
+        int expected = -4;
+        int result = Challenge6.evaluatePostFix(exp);
+        Assert.AreEqual(expected, result);
+    }
 }
