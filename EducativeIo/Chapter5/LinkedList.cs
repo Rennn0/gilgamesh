@@ -210,7 +210,6 @@ namespace chapter_5
             return count;
         }
 
-
         public string Reverse()
         {
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
@@ -338,7 +337,6 @@ namespace chapter_5
 
         }
 
-
         public string Union(LinkedList list1, LinkedList list2)
         {
             //Return other List if one of them is empty
@@ -359,7 +357,6 @@ namespace chapter_5
             start.nextElement = list2.head; // appendinf list2 with list 1
             return list1.RemoveDuplicates(); // removing duplicates from list and return list
         }
-
 
         //To Find nth node from end of list
         public int FindNth(int n)
