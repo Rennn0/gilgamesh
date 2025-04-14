@@ -9,17 +9,25 @@ namespace chapter_5
             internal int data; //Data to store (could be int,string,object etc)
             internal Node nextElement; //Pointer to next element
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
             public Node()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
             {
                 //Constructor to initialize nextElement of newlyCreated Node
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
                 nextElement = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
             }
         };
         Node head;
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         public LinkedList()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         {
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
             head = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         }
         public Node GetHead()
         {
@@ -99,7 +107,9 @@ namespace chapter_5
 
                 newNode.data = value;
                 Console.Write(value + " Inserted!    ");
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
                 newNode.nextElement = null; // point last's nextElement to nullptr
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
                 last.nextElement = newNode; // adding the newNode at the end of the list
             }
         }
@@ -132,7 +142,9 @@ namespace chapter_5
 
             //if list is not empty, start traversing it from the head
             Node currentNode = head; //currentNode to traverse the list
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             Node previousNode = null; //previousNode starts from null
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 
             if (currentNode.data == value)
             { // deleting value of head
@@ -201,20 +213,28 @@ namespace chapter_5
 
         public string Reverse()
         {
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             Node previous = null; //To keep track of the previous element, will be used in swapping links
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             Node current = head; //firstElement
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             Node next = null;
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 
             //While Traversing the list, swap links
             while (current != null)
             {
                 next = current.nextElement;
+#pragma warning disable CS8601 // Possible null reference assignment.
                 current.nextElement = previous;
+#pragma warning restore CS8601 // Possible null reference assignment.
                 previous = current;
                 current = next;
             }
 
+#pragma warning disable CS8601 // Possible null reference assignment.
             head = previous; // pointing head to start of the list
+#pragma warning restore CS8601 // Possible null reference assignment.
             return Elements(); // calling elements to return a string of values in list
         }
 
@@ -287,7 +307,9 @@ namespace chapter_5
 
         public string RemoveDuplicates()
         {
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             Node start, startNext = null;
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             start = head;
 
             /* Pick elements one by one */

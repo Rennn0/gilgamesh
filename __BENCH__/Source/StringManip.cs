@@ -18,7 +18,7 @@ namespace __BENCH__.Source
             {
                 result += "a";
             }
-            return result;
+            return result;  
         }
 
         [Benchmark]
