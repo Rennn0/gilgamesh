@@ -21,7 +21,7 @@ namespace __BENCH__.Source
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         private PotentialClientsDbContext _dbContext;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-        const string Connection = "Data Source=10.45.80.101;Initial Catalog=PotentialClientsDB;Persist Security Info=True;User ID=dev-fors;Password=asdASD123;Connect Timeout=60;TrustServerCertificate=true";
+        const string Connection = "";
 
         [GlobalSetup]
         public async Task Setup()
