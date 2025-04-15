@@ -1,7 +1,10 @@
-﻿using __BENCH__.Source;
+﻿using __BENCH__.Models;
+using __BENCH__.Source;
 using BenchmarkDotNet.Running;
+using Dapper;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
-BenchmarkDotNet.Reports.Summary summary = BenchmarkRunner.Run<StringManipulation>();
+BenchmarkDotNet.Reports.Summary summary = BenchmarkRunner.Run<DbBench>();
 
-// TODO  efcore vs dapper vs raw sql
-// [ ]  vs resharper source kods amoyris?  
+// [x]  vs resharper source kods amoyris?  
