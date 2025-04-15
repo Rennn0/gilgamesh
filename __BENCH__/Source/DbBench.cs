@@ -22,7 +22,7 @@ namespace __BENCH__.Source
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         private PotentialClientsDbContext _dbContext;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-        const string Connection = "";
+        readonly string Connection = Environment.GetEnvironmentVariable("DEV_CONNECTION") ?? throw new ArgumentNullException("env variable DEV_CONNECTION is null");
 
         [GlobalSetup]
         public async Task Setup()
@@ -116,6 +116,8 @@ JOIN [syn_AuthDbUsers] [u] ON [u].[UserId] = [o].[ManagerId]";
             //     Start = o.StartDate,
             // }).ToListAsync();
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             var foo = await _dbContext.Organizations
     .AsNoTracking()
     .OrderBy(o => o.OrganizationId) // always better to enforce order for perf
@@ -154,6 +156,8 @@ JOIN [syn_AuthDbUsers] [u] ON [u].[UserId] = [o].[ManagerId]";
         ManagerDisplayName = "PIZDEEEEEC"
     })
     .ToListAsync();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
             return foo;
         }
     }
@@ -171,12 +175,24 @@ JOIN [syn_AuthDbUsers] [u] ON [u].[UserId] = [o].[ManagerId]";
         public int OrganizationId { get; set; }
         public int EmployeeQuantity { get; set; }
         public decimal Premium { get; set; }
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         public string IdentificationCode { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         public string ManagerDisplayName { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         public string OrganizationName { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         public string NegotiationStatus { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         public string Product { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         public string ProductType { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         public string? Comment { get; set; }
         public DateTime ContactedAt { get; set; }
         public DateTime CreatedAt { get; set; }
