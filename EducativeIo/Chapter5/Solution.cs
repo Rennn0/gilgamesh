@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+using System.Text;
 using chapter_5;
 
 namespace EducativeIo.Chapter5
@@ -21,59 +23,97 @@ namespace EducativeIo.Chapter5
             }
             return result;
         }
-        public static void bfsTraversal_helper(Graph g, int source, bool[] visited, ref string result)
+        // public static void bfsTraversal_helper(Graph g, int source, bool[] visited, ref string result)
+        // {
+
+        //     if (g.getVertices() < 1)
+        //     {
+        //         return;
+        //     }
+        //     //Create Queue(Implemented in previous chapters) for Breadth First Traversal and enqueue source in it
+        //     //myQueue queue(g.getVertices());
+        //     Queue<int> queue = new Queue<int> { };
+
+        //     queue.Enqueue(source);
+        //     visited[source] = true;
+        //     int current_node;
+        //     //Traverse while queue is not empty
+        //     while (queue.Count != 0)
+        //     {
+
+        //         //Dequeue a vertex/node from queue and add it to result
+        //         current_node = queue.Dequeue();
+
+        //         result += current_node.ToString();
+
+        //         //Get adjacent vertices to the current_node from the array,
+        //         //and if they are not already visited then enqueue them in the Queue
+        //         LinkedList.Node temp = (g.getArray())[current_node].GetHead();
+
+        //         while (temp != null)
+        //         {
+
+        //             if (!visited[temp.data])
+        //             {
+        //                 queue.Enqueue(temp.data);
+        //                 visited[temp.data] = true; //Visit the current Node
+        //             }
+        //             temp = temp.nextElement;
+        //         }
+        //     } //end of while
+        // }
+        // public static string Bfs(Graph g)
+        // {
+        //     string result = "";
+
+        //     bool[] visited = new bool[g.getVertices()];
+        //     for (int i = 0; i < g.getVertices(); i++)
+        //     {
+        //         if (!visited[i])
+        //         {
+        //             bfsTraversal_helper(g, i, visited, ref result);
+        //         }
+        //     }
+
+        //     return result;
+        // }
+
+
+        public static string Bfs(Graph graph)
         {
+            if (graph.getVertices() < 1) return "";
 
-            if (g.getVertices() < 1)
+            StringBuilder result = new StringBuilder();
+            bool[] visited = new bool[graph.getVertices()];
+
+            for (int i = 0; i < graph.getVertices(); i++)
             {
-                return;
-            }
-            //Create Queue(Implemented in previous chapters) for Breadth First Traversal and enqueue source in it
-            //myQueue queue(g.getVertices());
-            Queue<int> queue = new Queue<int> { };
+                if (visited[i]) continue;
 
-            queue.Enqueue(source);
-            visited[source] = true;
-            int current_node;
-            //Traverse while queue is not empty
-            while (queue.Count != 0)
-            {
+                Queue<int> queue = new Queue<int>();
+                queue.Enqueue(i);
+                visited[i] = true;
 
-                //Dequeue a vertex/node from queue and add it to result
-                current_node = queue.Dequeue();
-
-                result += current_node.ToString();
-
-                //Get adjacent vertices to the current_node from the array,
-                //and if they are not already visited then enqueue them in the Queue
-                LinkedList.Node temp = (g.getArray())[current_node].GetHead();
-
-                while (temp != null)
+                while (queue.Count > 0)
                 {
+                    int currentNode = queue.Dequeue();
+                    result.Append(currentNode.ToString() + " ");
 
-                    if (!visited[temp.data])
+                    LinkedList.Node adjacentNodes = graph.getArray()[currentNode].GetHead();
+                    while (adjacentNodes != null)
                     {
-                        queue.Enqueue(temp.data);
-                        visited[temp.data] = true; //Visit the current Node
-                    }
-                    temp = temp.nextElement;
-                }
-            } //end of while
-        }
-        public static string Bfs(Graph g)
-        {
-            string result = "";
+                        if (!visited[adjacentNodes.data])
+                        {
+                            queue.Enqueue(adjacentNodes.data);
+                            visited[adjacentNodes.data] = true;
+                        }
 
-            bool[] visited = new bool[g.getVertices()];
-            for (int i = 0; i < g.getVertices(); i++)
-            {
-                if (!visited[i])
-                {
-                    bfsTraversal_helper(g, i, visited, ref result);
+                        adjacentNodes = adjacentNodes.nextElement;
+                    }
                 }
             }
 
-            return result;
+            return result.ToString();
         }
     }
 }

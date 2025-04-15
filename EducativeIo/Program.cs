@@ -11,8 +11,7 @@ class Solution
         g.addEdge(1, 5);
         g.addEdge(3, 6);
 
-        // Console.WriteLine(EducativeIo.Chapter5.Solution.graphtoString(g));
-        // g.printGraph();
+        g.printGraph();
         Console.WriteLine(EducativeIo.Chapter5.Solution.Bfs(g));
     }
 }
