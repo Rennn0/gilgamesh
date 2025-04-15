@@ -7,4 +7,4 @@ using Microsoft.EntityFrameworkCore;
 
 BenchmarkDotNet.Reports.Summary summary = BenchmarkRunner.Run<DbBench>();
 
-// [x]  vs resharper source kods amoyris?  
+// [x]  vs resharper source kods amoyris?  amoyara 

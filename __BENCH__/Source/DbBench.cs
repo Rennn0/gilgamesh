@@ -2,13 +2,14 @@ using System.Text;
 using System.Threading.Tasks;
 using __BENCH__.Models;
 using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Jobs;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace __BENCH__.Source
 {
-    [MemoryDiagnoser]
+    [MemoryDiagnoser, ThreadingDiagnoser]
     // [ShortRunJob]
     [MarkdownExporter]
     public class DbBench
@@ -48,19 +49,21 @@ namespace __BENCH__.Source
         }
 
         [Benchmark(Baseline = true)]
-        public async Task Procedure()
+        public async Task<List<OrganizationModel>> Procedure()
         {
-            await _dapperConnection.QueryAsync<AvailableOrganizationStruct>("GetOrganizations", new { Scope = "All", Limit = Count, Offset = 0, UserId = 301009 }, commandType: System.Data.CommandType.StoredProcedure);
+            var foo = await _dapperConnection.QueryAsync<OrganizationModel>("GetOrganizations", new { Scope = "All", Limit = Count, Offset = 0, UserId = 301009 }, commandType: System.Data.CommandType.StoredProcedure);
+            return foo.ToList();
         }
 
         [Benchmark]
-        public async Task ProcedureShrinked()
+        public async Task<List<OrganizationModel>> ProcedureShrinked()
         {
-            await _dapperConnection.QueryAsync<AvailableOrganizationStruct>("GetOrganizationsTemp", new { Count }, commandType: System.Data.CommandType.StoredProcedure);
+            var foo = await _dapperConnection.QueryAsync<OrganizationModel>("GetOrganizationsTemp", new { Count }, commandType: System.Data.CommandType.StoredProcedure);
+            return foo.ToList();
         }
 
         [Benchmark]
-        public async Task RawSql()
+        public async Task<List<OrganizationModel>> RawSql()
         {
             const string sql = @"
 SELECT TOP(@Count)
@@ -88,11 +91,12 @@ JOIN [Cls_ProductType] [pt] ON [opt].[ProductTypeId] = [pt].[ProductTypeId]
 JOIN [Cls_Product] [p] ON [pt].[ProductId] = [p].[ProductId]
 JOIN [syn_AuthDbUsers] [u] ON [u].[UserId] = [o].[ManagerId]";
 
-            await _dapperConnection.QueryAsync<OrganizationModel>(sql, new { Count });
+            var foo = await _dapperConnection.QueryAsync<OrganizationModel>(sql, new { Count });
+            return foo.ToList();
         }
 
         [Benchmark]
-        public async Task EfCore()
+        public async Task<List<OrganizationModel>> EfCore()
         {
             // await _dbContext.Organizations.AsNoTracking().Take(Count).Select(o => new OrganizationModel
             // {
@@ -112,7 +116,7 @@ JOIN [syn_AuthDbUsers] [u] ON [u].[UserId] = [o].[ManagerId]";
             //     Start = o.StartDate,
             // }).ToListAsync();
 
-            await _dbContext.Organizations
+            var foo = await _dbContext.Organizations
     .AsNoTracking()
     .OrderBy(o => o.OrganizationId) // always better to enforce order for perf
     .Take(Count)
@@ -150,7 +154,7 @@ JOIN [syn_AuthDbUsers] [u] ON [u].[UserId] = [o].[ManagerId]";
         ManagerDisplayName = "PIZDEEEEEC"
     })
     .ToListAsync();
-
+            return foo;
         }
     }
 
