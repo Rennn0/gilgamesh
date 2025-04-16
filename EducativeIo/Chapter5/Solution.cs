@@ -115,5 +115,40 @@ namespace EducativeIo.Chapter5
 
             return result.ToString();
         }
+
+        public static string Dfs(Graph graph)
+        {
+            if (graph.getVertices() < 1) return "";
+
+            StringBuilder result = new StringBuilder();
+            bool[] visited = new bool[graph.getVertices()];
+
+            for (int i = 0; i < graph.getVertices(); i++)
+            {
+                if (visited[i]) continue;
+                Stack<int> stack = new Stack<int>();
+                stack.Push(i);
+                visited[i] = true;
+
+                while (stack.Count > 0)
+                {
+                    int currentNode = stack.Pop();
+                    result.Append(currentNode.ToString() + " ");
+
+                    LinkedList.Node adjacentNodes = graph.getArray()[currentNode].GetHead();
+                    while (adjacentNodes != null)
+                    {
+                        if (!visited[adjacentNodes.data])
+                        {
+                            stack.Push(adjacentNodes.data);
+                            visited[adjacentNodes.data] = true;
+                        }
+                        adjacentNodes = adjacentNodes.nextElement;
+                    }
+                }
+            }
+
+            return result.ToString();
+        }
     }
 }
