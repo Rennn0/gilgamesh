@@ -1,18 +1,17 @@
-namespace EducativeIo.Chapter4;
+namespace EducativeIo.StackQueue;
+
 public class Challenge7
 {
-
-    public static int[] nextGreaterElementStack(int[] arr, int size)
+    public static int[] NextGreaterElementStack(int[] arr, int size)
     {
         int[] result = new int[size];
         Stack<int> stack = new Stack<int>();
-        int top, next;
 
         for (int i = size - 1; i >= 0; i--)
         {
-            next = arr[i];
+            int next = arr[i];
 
-            top = stack.Count > 0 ? stack.Peek() : -1;
+            int top = stack.Count > 0 ? stack.Peek() : -1;
 
             while (stack.Count > 0 && top <= next)
             {
@@ -27,8 +26,7 @@ public class Challenge7
         return result;
     }
 
-
-    public static int[] nextGreaterElementBruteForce(int[] arr, int size)
+    public static int[] NextGreaterElementBruteForce(int[] arr, int size)
     {
         int[] result = new int[size];
         Stack<int> stack = new Stack<int>();

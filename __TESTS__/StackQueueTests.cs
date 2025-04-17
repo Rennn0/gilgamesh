@@ -1,9 +1,9 @@
-﻿using EducativeIo.Chapter4;
+﻿using EducativeIo.StackQueue;
 
 namespace __TESTS__;
 
 [TestClass]
-public sealed class Chapter4Tests
+public sealed class StackQueueTests
 {
     [TestMethod]
     public void TestNextGreaterElementStack1()
@@ -11,7 +11,7 @@ public sealed class Chapter4Tests
         int[] arr = [4, 5, 2, 10, 8];
         int size = arr.Length;
         int[] expected = [5, 10, 10, -1, -1];
-        int[] result = Challenge7.nextGreaterElementStack(arr, size);
+        int[] result = Challenge7.NextGreaterElementStack(arr, size);
         CollectionAssert.AreEqual(expected, result);
     }
 
@@ -21,7 +21,7 @@ public sealed class Chapter4Tests
         int[] arr = [4, 6, 3, 2, 8, 1, 9, 9];
         int size = arr.Length;
         int[] expected = [6, 8, 8, 8, 9, 9, -1, -1];
-        int[] result = Challenge7.nextGreaterElementStack(arr, size);
+        int[] result = Challenge7.NextGreaterElementStack(arr, size);
 
         CollectionAssert.AreEqual(expected, result);
     }
@@ -32,7 +32,7 @@ public sealed class Chapter4Tests
         int[] arr = [4, 5, 2, 10, 8];
         int size = arr.Length;
         int[] expected = [5, 10, 10, -1, -1];
-        int[] result = Challenge7.nextGreaterElementBruteForce(arr, size);
+        int[] result = Challenge7.NextGreaterElementBruteForce(arr, size);
         CollectionAssert.AreEqual(expected, result);
     }
 
@@ -42,7 +42,7 @@ public sealed class Chapter4Tests
         int[] arr = [4, 6, 3, 2, 8, 1, 9, 9];
         int size = arr.Length;
         int[] expected = [6, 8, 8, 8, 9, 9, -1, -1];
-        int[] result = Challenge7.nextGreaterElementBruteForce(arr, size);
+        int[] result = Challenge7.NextGreaterElementBruteForce(arr, size);
 
         CollectionAssert.AreEqual(expected, result);
     }
@@ -52,7 +52,7 @@ public sealed class Chapter4Tests
     {
         string exp = "{[()]}";
         bool expected = true;
-        bool result = Challenge8.isBalanced(exp);
+        bool result = Challenge8.IsBalanced(exp);
         Assert.AreEqual(expected, result);
     }
 
@@ -61,15 +61,16 @@ public sealed class Chapter4Tests
     {
         string exp = "{[(])}";
         bool expected = false;
-        bool result = Challenge8.isBalanced(exp);
+        bool result = Challenge8.IsBalanced(exp);
         Assert.AreEqual(expected, result);
     }
+
     [TestMethod]
     public void TestIsBalanced_OkLong()
     {
         string exp = "{{[[(())]]}}";
         bool expected = true;
-        bool result = Challenge8.isBalanced(exp);
+        bool result = Challenge8.IsBalanced(exp);
         Assert.AreEqual(expected, result);
     }
 
@@ -78,64 +79,64 @@ public sealed class Chapter4Tests
     {
         string exp = "{[}";
         bool expected = false;
-        bool result = Challenge8.isBalanced(exp);
+        bool result = Challenge8.IsBalanced(exp);
         Assert.AreEqual(expected, result);
     }
 
     [TestMethod]
     public void TestIsNewStack_MultiplePops()
     {
-        newStack newStack = new newStack(5);
-        newStack.push(9);
-        newStack.push(3);
-        newStack.push(1);
+        NewStack newStack = new NewStack(5);
+        newStack.Push(9);
+        newStack.Push(3);
+        newStack.Push(1);
 
         int expected = 1;
-        int result = newStack.min();
+        int result = newStack.Min();
         Assert.AreEqual(expected, result);
 
-        newStack.pop();
+        newStack.Pop();
         expected = 3;
-        result = newStack.min();
+        result = newStack.Min();
         Assert.AreEqual(expected, result);
 
-        newStack.push(2);
+        newStack.Push(2);
         expected = 2;
-        result = newStack.min();
+        result = newStack.Min();
         Assert.AreEqual(expected, result);
     }
 
     [TestMethod]
     public void TestIsNewStack_Basic()
     {
-        newStack newStack = new newStack(6);
-        newStack.push(9);
-        newStack.push(3);
-        newStack.push(1);
-        newStack.push(4);
-        newStack.push(2);
-        newStack.push(5);
+        NewStack newStack = new NewStack(6);
+        newStack.Push(9);
+        newStack.Push(3);
+        newStack.Push(1);
+        newStack.Push(4);
+        newStack.Push(2);
+        newStack.Push(5);
         int expected = 1;
-        int result = newStack.min();
+        int result = newStack.Min();
         Assert.AreEqual(expected, result);
     }
 
     [TestMethod]
     public void TestIsNewStack_DoubleMin()
     {
-        newStack newStack = new newStack(6);
-        newStack.push(9);
-        newStack.push(3);
-        newStack.push(1);
-        newStack.push(4);
-        newStack.push(2);
-        newStack.push(1);
+        NewStack newStack = new NewStack(6);
+        newStack.Push(9);
+        newStack.Push(3);
+        newStack.Push(1);
+        newStack.Push(4);
+        newStack.Push(2);
+        newStack.Push(1);
 
-        newStack.pop();
-        newStack.pop();
+        newStack.Pop();
+        newStack.Pop();
 
         int expected = 1;
-        int result = newStack.min();
+        int result = newStack.Min();
         Assert.AreEqual(expected, result);
     }
 
@@ -144,7 +145,7 @@ public sealed class Chapter4Tests
     {
         string exp = "9,4,2,+,*,6,14,7,/,+,*";
         int expected = 432;
-        int result = Challenge6.evaluatePostFix(exp);
+        int result = Challenge6.EvaluatePostFix(exp);
         Assert.AreEqual(expected, result);
     }
 
@@ -153,7 +154,7 @@ public sealed class Chapter4Tests
     {
         string exp = "2,3,1,*,+,9,-";
         int expected = -4;
-        int result = Challenge6.evaluatePostFix(exp);
+        int result = Challenge6.EvaluatePostFix(exp);
         Assert.AreEqual(expected, result);
     }
 }

@@ -1,28 +1,29 @@
-using System.Security.Cryptography;
 using System.Text;
-using chapter_5;
 
-namespace EducativeIo.Chapter5
+namespace EducativeIo.Graph
 {
     public class Solution
     {
-        public static string graphtoString(Graph g)
+        public static string GraphtoString(EducativeIo.Graph.Graph g)
         {
             string result = "";
 
-            for (int i = 0; i < g.getVertices(); i++)
+            for (int i = 0; i < g.GetVertices(); i++)
             {
-                LinkedList.Node temp = (g.getArray())[i].GetHead();
+                LinkedList.Node temp = (g.GetArray())[i].GetHead();
                 result += "|" + i.ToString() + "|=>";
                 while (temp != null)
                 {
-                    result = result + temp.data.ToString() + "->";
-                    temp = temp.nextElement;
+                    result = result + temp._data.ToString() + "->";
+                    temp = temp._nextElement;
                 }
+
                 result += "NULL ";
             }
+
             return result;
         }
+
         // public static void bfsTraversal_helper(Graph g, int source, bool[] visited, ref string result)
         // {
 
@@ -79,16 +80,18 @@ namespace EducativeIo.Chapter5
         // }
 
 
-        public static string Bfs(Graph graph)
+        public static string Bfs(EducativeIo.Graph.Graph graph)
         {
-            if (graph.getVertices() < 1) return "";
+            if (graph.GetVertices() < 1)
+                return "";
 
             StringBuilder result = new StringBuilder();
-            bool[] visited = new bool[graph.getVertices()];
+            bool[] visited = new bool[graph.GetVertices()];
 
-            for (int i = 0; i < graph.getVertices(); i++)
+            for (int i = 0; i < graph.GetVertices(); i++)
             {
-                if (visited[i]) continue;
+                if (visited[i])
+                    continue;
 
                 Queue<int> queue = new Queue<int>();
                 queue.Enqueue(i);
@@ -99,16 +102,16 @@ namespace EducativeIo.Chapter5
                     int currentNode = queue.Dequeue();
                     result.Append(currentNode.ToString() + " ");
 
-                    LinkedList.Node adjacentNodes = graph.getArray()[currentNode].GetHead();
+                    LinkedList.Node adjacentNodes = graph.GetArray()[currentNode].GetHead();
                     while (adjacentNodes != null)
                     {
-                        if (!visited[adjacentNodes.data])
+                        if (!visited[adjacentNodes._data])
                         {
-                            queue.Enqueue(adjacentNodes.data);
-                            visited[adjacentNodes.data] = true;
+                            queue.Enqueue(adjacentNodes._data);
+                            visited[adjacentNodes._data] = true;
                         }
 
-                        adjacentNodes = adjacentNodes.nextElement;
+                        adjacentNodes = adjacentNodes._nextElement;
                     }
                 }
             }
@@ -116,16 +119,18 @@ namespace EducativeIo.Chapter5
             return result.ToString();
         }
 
-        public static string Dfs(Graph graph)
+        public static string Dfs(EducativeIo.Graph.Graph graph)
         {
-            if (graph.getVertices() < 1) return "";
+            if (graph.GetVertices() < 1)
+                return "";
 
             StringBuilder result = new StringBuilder();
-            bool[] visited = new bool[graph.getVertices()];
+            bool[] visited = new bool[graph.GetVertices()];
 
-            for (int i = 0; i < graph.getVertices(); i++)
+            for (int i = 0; i < graph.GetVertices(); i++)
             {
-                if (visited[i]) continue;
+                if (visited[i])
+                    continue;
                 Stack<int> stack = new Stack<int>();
                 stack.Push(i);
                 visited[i] = true;
@@ -135,15 +140,16 @@ namespace EducativeIo.Chapter5
                     int currentNode = stack.Pop();
                     result.Append(currentNode.ToString() + " ");
 
-                    LinkedList.Node adjacentNodes = graph.getArray()[currentNode].GetHead();
+                    LinkedList.Node adjacentNodes = graph.GetArray()[currentNode].GetHead();
                     while (adjacentNodes != null)
                     {
-                        if (!visited[adjacentNodes.data])
+                        if (!visited[adjacentNodes._data])
                         {
-                            stack.Push(adjacentNodes.data);
-                            visited[adjacentNodes.data] = true;
+                            stack.Push(adjacentNodes._data);
+                            visited[adjacentNodes._data] = true;
                         }
-                        adjacentNodes = adjacentNodes.nextElement;
+
+                        adjacentNodes = adjacentNodes._nextElement;
                     }
                 }
             }

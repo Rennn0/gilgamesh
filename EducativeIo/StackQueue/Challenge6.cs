@@ -1,7 +1,8 @@
-namespace EducativeIo.Chapter4;
+namespace EducativeIo.StackQueue;
+
 public class Challenge6
 {
-    public static int evaluatePostFix(string exp, char splitter = ',')
+    public static int EvaluatePostFix(string exp, char splitter = ',')
     {
         Stack<int> stack = new Stack<int>();
         string[] tokens = exp.Split(splitter, StringSplitOptions.RemoveEmptyEntries);

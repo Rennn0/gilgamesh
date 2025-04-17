@@ -1,15 +1,14 @@
-using System.Diagnostics;
+namespace EducativeIo.StackQueue;
 
-namespace EducativeIo.Chapter4;
 public class Challenge8
 {
-    public static bool isBalanced(string exp)
+    public static bool IsBalanced(string exp)
     {
         Dictionary<char, char> brackets = new Dictionary<char, char>
         {
             { '(', ')' },
             { '{', '}' },
-            { '[', ']' }
+            { '[', ']' },
         };
         Stack<char> stack = new Stack<char>();
 
@@ -27,6 +26,7 @@ public class Challenge8
                 }
             }
         }
+
         return true;
     }
 }

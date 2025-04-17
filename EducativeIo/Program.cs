@@ -1,18 +1,19 @@
-﻿using chapter_5;
-class Solution
+﻿namespace EducativeIo;
+
+internal class Solution
 {
     public static void Main(string[] args)
     {
-        Graph g = new Graph(7);
-        g.addEdge(0, 1);
-        g.addEdge(0, 2);
-        g.addEdge(1, 4);
-        g.addEdge(1, 3);
-        g.addEdge(1, 5);
-        g.addEdge(3, 6);
+        EducativeIo.Graph.Graph g = new Graph.Graph(7);
+        g.AddEdge(0, 1);
+        g.AddEdge(0, 2);
+        g.AddEdge(1, 4);
+        g.AddEdge(1, 3);
+        g.AddEdge(1, 5);
+        g.AddEdge(3, 6);
 
-        g.printGraph();
-        Console.WriteLine(EducativeIo.Chapter5.Solution.Bfs(g));
-        Console.WriteLine(EducativeIo.Chapter5.Solution.Dfs(g));
+        g.PrintGraph();
+        Console.WriteLine(Graph.Solution.Bfs(g));
+        Console.WriteLine(Graph.Solution.Dfs(g));
     }
 }
