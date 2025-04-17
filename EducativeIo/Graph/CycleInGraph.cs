@@ -12,12 +12,11 @@ public class CycleInGraph
             visited[i] = true;
             recNodes[i] = true;
 
-            int adjacent;
             LinkedList.Node adjacentNode = (g.GetArray())[i].GetHead();
             while (adjacentNode != null)
             {
                 // Access adjacent node and repeat algorithm
-                adjacent = adjacentNode._data;
+                int adjacent = adjacentNode._data;
                 if ((!visited[adjacent]) && DetectCycleRec(g, adjacent, visited, recNodes))
                     return true; // Loop found
                 else if (recNodes[adjacent])
