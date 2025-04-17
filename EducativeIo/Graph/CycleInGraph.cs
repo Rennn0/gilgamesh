@@ -19,7 +19,8 @@ public class CycleInGraph
                 int adjacent = adjacentNode._data;
                 if ((!visited[adjacent]) && DetectCycleRec(g, adjacent, visited, recNodes))
                     return true; // Loop found
-                else if (recNodes[adjacent])
+
+                if (recNodes[adjacent])
                     return true;
                 adjacentNode = adjacentNode._nextElement;
             }
