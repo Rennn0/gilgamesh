@@ -6,7 +6,7 @@ public class CycleInGraph
     {
         // Check if current node is being visited in the same recursive call
 
-        if (visited[i] == false)
+        if (!visited[i])
         {
             // Set recursive array and visited to true
             visited[i] = true;
@@ -31,8 +31,16 @@ public class CycleInGraph
     }
     public static bool detectCycle(Graph g)
     {
+        bool[] visited = new bool[g.getVertices()];
+        bool[] rec = new bool[g.getVertices()];
 
-        // Write your code here
+        for (int i = 0; i < g.getVertices(); i++)
+        {
+            if (detectCycleRec(g, i, visited, rec))
+            {
+                return true;
+            }
+        }
         return false;
     }
 }
