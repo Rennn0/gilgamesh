@@ -48,7 +48,7 @@ public class ClientsBackgroundWorker : BackgroundService
             }
 
             _clientIds = current;
-            await Task.Delay(100, stoppingToken);
+            await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
         }
     }
 }
