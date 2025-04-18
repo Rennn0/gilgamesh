@@ -32,14 +32,57 @@ public class CycleInGraph
 
     public static bool DetectCycle(Graph g)
     {
-        bool[] visited = new bool[g.GetVertices()];
-        bool[] rec = new bool[g.GetVertices()];
+        // bool[] visited = new bool[g.GetVertices()];
+        // bool[] rec = new bool[g.GetVertices()];
 
-        for (int i = 0; i < g.GetVertices(); i++)
+        // for (int i = 0; i < g.GetVertices(); i++)
+        // {
+        //     if (DetectCycleRec(g, i, visited, rec))
+        //     {
+        //         return true;
+        //     }
+        // }
+
+        // return false;
+        int vertices = g.GetVertices();
+        bool[] visited = new bool[vertices];
+        bool[] recursionStack = new bool[vertices];
+
+        for (int i = 0; i < vertices; i++)
         {
-            if (DetectCycleRec(g, i, visited, rec))
+            if (visited[i]) continue;
+            Stack<int> stack = new Stack<int>();
+            stack.Push(i);
+
+            while (stack.Count > 0)
             {
-                return true;
+                int current = stack.Peek();
+
+                if (!visited[current])
+                {
+                    visited[current] = true;
+                    recursionStack[current] = true;
+
+                    LinkedList.Node adjacentNode = g.GetArray()[current].GetHead();
+                    while (adjacentNode != null)
+                    {
+                        int adjacent = adjacentNode._data;
+                        if (!visited[adjacent])
+                        {
+                            stack.Push(adjacent);
+                        }
+                        else if (recursionStack[adjacent])
+                        {
+                            return true;
+                        }
+                        adjacentNode = adjacentNode._nextElement;
+                    }
+                }
+                else
+                {
+                    recursionStack[current] = false;
+                    stack.Pop();
+                }
             }
         }
 
