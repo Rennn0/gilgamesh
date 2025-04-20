@@ -4,10 +4,8 @@ public class Solution
 {
     public static void DFS(Graph g, int node, bool[] visited)
     {
-        // Mark the current node as visited and print it
         visited[node] = true;
 
-        // Recur for all the vertices adjacent to this vertex
         LinkedList.Node temp = (g.GetArray())[node].GetHead();
         while (temp != null)
         {
