@@ -14,6 +14,7 @@ public class Solution
             temp = temp._nextElement;
         }
     }
+
     public static int findMotherVertex(Graph g)
     {
         for (int i = 0; i < g.GetVertices(); i++)
