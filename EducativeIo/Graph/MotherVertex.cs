@@ -26,7 +26,7 @@ public partial class Solution
             //     return i;
 
             bool[] visited = new bool[g.GetVertices()];
-            DoDfs(g, i, visited, out _);
+            DoDfs(g, i, visited);
             bool isMother = visited.All(v => v);
             if (isMother)
                 return i;
@@ -35,12 +35,34 @@ public partial class Solution
         return -1;
     }
 
-    private static void DoDfs(Graph g, int source, bool[] visited, out int lastFinishedVertex)
+    private static void DoBfs(Graph g, int source, bool[] visited)
+    {
+        Queue<int> q = new();
+        q.Enqueue(source);
+        visited[source] = true;
+
+        while (q.Count > 0)
+        {
+            int current = q.Dequeue();
+            LinkedList.Node adjacents = g.GetArray()[current].GetHead();
+            while (adjacents != null)
+            {
+                if (!visited[adjacents.m_data])
+                {
+                    q.Enqueue(adjacents.m_data);
+                    visited[adjacents.m_data] = true;
+                }
+
+                adjacents = adjacents.m_nextElement;
+            }
+        }
+    }
+
+    private static void DoDfs(Graph g, int source, bool[] visited)
     {
         Stack<int> stack = new Stack<int>();
         stack.Push(source);
         visited[source] = true;
-        lastFinishedVertex = source;
 
         while (stack.Count > 0)
         {
@@ -52,7 +74,6 @@ public partial class Solution
                 {
                     stack.Push(adjacents.m_data);
                     visited[adjacents.m_data] = true;
-                    lastFinishedVertex = adjacents.m_data;
                 }
 
                 adjacents = adjacents.m_nextElement;
@@ -66,14 +87,15 @@ public partial class Solution
         int lastVisited = -1;
         for (int i = 0; i < g.GetVertices(); i++)
         {
-            if (!visited[i])
-            {
-                DoDfs(g, i, visited, out lastVisited);
-            }
+            if (visited[i])
+                continue;
+
+            DoBfs(g, i, visited);
+            lastVisited = i;
         }
 
         visited = new bool[g.GetVertices()];
-        DoDfs(g, lastVisited, visited, out _);
+        DoDfs(g, lastVisited, visited);
         bool isMother = visited.All(v => v);
 
         return isMother ? lastVisited : -1;

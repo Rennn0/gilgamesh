@@ -122,7 +122,7 @@ public class GraphTests
         g.AddEdge(1, 4);
         g.AddEdge(2, 5);
         g.AddEdge(2, 6);
-        Assert.AreEqual(0, Solution.FindMotherVertexDfs(g));
+        Assert.AreEqual(0, Solution.FindMotherVertexLastFinishedVertex(g));
     }
 
     [TestMethod]
@@ -133,7 +133,7 @@ public class GraphTests
         g.AddEdge(1, 2);
         g.AddEdge(3, 0);
         g.AddEdge(3, 1);
-        Assert.AreEqual(3, Solution.FindMotherVertexDfs(g));
+        Assert.AreEqual(3, Solution.FindMotherVertexLastFinishedVertex(g));
     }
 
     [TestMethod]
@@ -143,6 +143,6 @@ public class GraphTests
         g.AddEdge(0, 1);
         g.AddEdge(1, 2);
         g.AddEdge(3, 2);
-        Assert.AreEqual(-1, Solution.FindMotherVertexDfs(g));
+        Assert.AreEqual(-1, Solution.FindMotherVertexLastFinishedVertex(g));
     }
 }
