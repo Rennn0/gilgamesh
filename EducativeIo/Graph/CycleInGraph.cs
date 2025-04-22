@@ -1,5 +1,3 @@
-using System.Security;
-
 namespace EducativeIo.Graph;
 
 public class CycleInGraph
@@ -52,7 +50,8 @@ public class CycleInGraph
         bool[] recursion = new bool[vertices];
         for (int i = 0; i < vertices; i++)
         {
-            if (visited[i]) continue;
+            if (visited[i])
+                continue;
 
             Stack<int> stack = new Stack<int>();
             stack.Push(i);
@@ -68,7 +67,7 @@ public class CycleInGraph
                     LinkedList.Node adjacentNodes = g.GetArray()[current].GetHead();
                     while (adjacentNodes != null)
                     {
-                        int adjacent = adjacentNodes._data;
+                        int adjacent = adjacentNodes.m_data;
                         if (!visited[adjacent])
                         {
                             stack.Push(adjacent);
@@ -77,7 +76,8 @@ public class CycleInGraph
                         {
                             return true;
                         }
-                        adjacentNodes = adjacentNodes._nextElement;
+
+                        adjacentNodes = adjacentNodes.m_nextElement;
                     }
                 }
                 else

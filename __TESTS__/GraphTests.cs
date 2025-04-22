@@ -77,5 +77,28 @@ public class GraphTests
         g.AddEdge(2, 3);
         Assert.IsFalse(CycleInGraph.DetectCycle(g));
     }
-    
+
+    [TestMethod]
+    public void Graph_MotherVertex()
+    {
+        Graph g = new Graph(7);
+        g.AddEdge(0, 1);
+        g.AddEdge(0, 2);
+        g.AddEdge(1, 3);
+        g.AddEdge(1, 4);
+        g.AddEdge(2, 5);
+        g.AddEdge(2, 6);
+        Assert.AreEqual(0, Solution.FindMotherVertex(g));
+    }
+
+    [TestMethod]
+    public void Graph_MotherVertex1()
+    {
+        Graph g = new Graph(4);
+        g.AddEdge(0, 1);
+        g.AddEdge(1, 2);
+        g.AddEdge(3, 0);
+        g.AddEdge(3, 1);
+        Assert.AreEqual(3, Solution.FindMotherVertex(g));
+    }
 }

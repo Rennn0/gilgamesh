@@ -2,7 +2,7 @@ using System.Text;
 
 namespace EducativeIo.Graph
 {
-    public class Solution
+    public partial class Solution
     {
         public static string GraphtoString(EducativeIo.Graph.Graph g)
         {
