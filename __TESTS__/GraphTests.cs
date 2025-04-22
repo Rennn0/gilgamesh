@@ -88,7 +88,7 @@ public class GraphTests
         g.AddEdge(1, 4);
         g.AddEdge(2, 5);
         g.AddEdge(2, 6);
-        Assert.AreEqual(0, Solution.FindMotherVertex(g));
+        Assert.AreEqual(0, Solution.FindMotherVertexDfs(g));
     }
 
     [TestMethod]
@@ -99,6 +99,50 @@ public class GraphTests
         g.AddEdge(1, 2);
         g.AddEdge(3, 0);
         g.AddEdge(3, 1);
-        Assert.AreEqual(3, Solution.FindMotherVertex(g));
+        Assert.AreEqual(3, Solution.FindMotherVertexDfs(g));
+    }
+
+    [TestMethod]
+    public void Graph_MotherVertex2()
+    {
+        Graph g = new Graph(4);
+        g.AddEdge(0, 1);
+        g.AddEdge(1, 2);
+        g.AddEdge(3, 2);
+        Assert.AreEqual(-1, Solution.FindMotherVertexDfs(g));
+    }
+
+    [TestMethod]
+    public void Graph_MotherVertexLFI()
+    {
+        Graph g = new Graph(7);
+        g.AddEdge(0, 1);
+        g.AddEdge(0, 2);
+        g.AddEdge(1, 3);
+        g.AddEdge(1, 4);
+        g.AddEdge(2, 5);
+        g.AddEdge(2, 6);
+        Assert.AreEqual(0, Solution.FindMotherVertexDfs(g));
+    }
+
+    [TestMethod]
+    public void Graph_MotherVertexLFI1()
+    {
+        Graph g = new Graph(4);
+        g.AddEdge(0, 1);
+        g.AddEdge(1, 2);
+        g.AddEdge(3, 0);
+        g.AddEdge(3, 1);
+        Assert.AreEqual(3, Solution.FindMotherVertexDfs(g));
+    }
+
+    [TestMethod]
+    public void Graph_MotherVertexLFI2()
+    {
+        Graph g = new Graph(4);
+        g.AddEdge(0, 1);
+        g.AddEdge(1, 2);
+        g.AddEdge(3, 2);
+        Assert.AreEqual(-1, Solution.FindMotherVertexDfs(g));
     }
 }
