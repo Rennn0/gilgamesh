@@ -53,4 +53,29 @@ public class GraphTests
         g2.AddEdge(3, 4);
         Assert.IsFalse(CycleInGraph.DetectCycle(g2));
     }
+
+    [TestMethod]
+    public void Graph_NewHasCycle()
+    {
+        Graph g = new Graph(5);
+        g.AddEdge(0, 1);
+        g.AddEdge(0, 2);
+        g.AddEdge(1, 3);
+        g.AddEdge(2, 3);
+        g.AddEdge(2, 1);
+        g.AddEdge(3, 4);
+        g.AddEdge(4, 1);
+        Assert.IsTrue(CycleInGraph.DetectCycle(g));
+    }
+
+    [TestMethod]
+    public void Graph_NewNoCycle()
+    {
+        Graph g = new Graph(4);
+        g.AddEdge(0, 1);
+        g.AddEdge(0, 2);
+        g.AddEdge(2, 3);
+        Assert.IsFalse(CycleInGraph.DetectCycle(g));
+    }
+    
 }

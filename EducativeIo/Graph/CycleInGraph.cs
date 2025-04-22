@@ -1,3 +1,5 @@
+using System.Security;
+
 namespace EducativeIo.Graph;
 
 public class CycleInGraph
@@ -32,14 +34,57 @@ public class CycleInGraph
 
     public static bool DetectCycle(Graph g)
     {
-        bool[] visited = new bool[g.GetVertices()];
-        bool[] rec = new bool[g.GetVertices()];
+        // bool[] visited = new bool[g.GetVertices()];
+        // bool[] rec = new bool[g.GetVertices()];
 
-        for (int i = 0; i < g.GetVertices(); i++)
+        // for (int i = 0; i < g.GetVertices(); i++)
+        // {
+        //     if (DetectCycleRec(g, i, visited, rec))
+        //     {
+        //         return true;
+        //     }
+        // }
+
+        // return false;
+
+        int vertices = g.GetVertices();
+        bool[] visited = new bool[vertices];
+        bool[] recursion = new bool[vertices];
+        for (int i = 0; i < vertices; i++)
         {
-            if (DetectCycleRec(g, i, visited, rec))
+            if (visited[i]) continue;
+
+            Stack<int> stack = new Stack<int>();
+            stack.Push(i);
+
+            while (stack.Count > 0)
             {
-                return true;
+                int current = stack.Peek();
+                if (!visited[current])
+                {
+                    visited[current] = true;
+                    recursion[current] = true;
+
+                    LinkedList.Node adjacentNodes = g.GetArray()[current].GetHead();
+                    while (adjacentNodes != null)
+                    {
+                        int adjacent = adjacentNodes._data;
+                        if (!visited[adjacent])
+                        {
+                            stack.Push(adjacent);
+                        }
+                        else if (recursion[adjacent])
+                        {
+                            return true;
+                        }
+                        adjacentNodes = adjacentNodes._nextElement;
+                    }
+                }
+                else
+                {
+                    recursion[current] = false;
+                    stack.Pop();
+                }
             }
         }
 

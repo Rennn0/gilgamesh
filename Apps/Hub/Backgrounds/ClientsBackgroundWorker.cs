@@ -1,4 +1,5 @@
-﻿using Hub.Database;
+﻿using Hub.Api;
+using Hub.Database;
 using Hub.Entities;
 using Hub.Hubs;
 using Microsoft.AspNetCore.SignalR;
@@ -35,11 +36,14 @@ public class ClientsBackgroundWorker : BackgroundService
             {
                 m_clientIds.Add(id);
                 await m_hub.Clients.All.SendAsync("ClientAdded", id, stoppingToken);
+
+                await ServerEventsController.Publish($"Client {id} added");
             }
 
             foreach (int id in removed)
             {
                 await m_hub.Clients.All.SendAsync("ClientRemoved", id, stoppingToken);
+                await ServerEventsController.Publish($"Client {id} removed");
             }
 
             m_clientIds = current;
