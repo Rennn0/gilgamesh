@@ -16,13 +16,13 @@ public class CycleInGraph
             while (adjacentNode != null)
             {
                 // Access adjacent node and repeat algorithm
-                int adjacent = adjacentNode._data;
+                int adjacent = adjacentNode.m_data;
                 if ((!visited[adjacent]) && DetectCycleRec(g, adjacent, visited, recNodes))
                     return true; // Loop found
 
                 if (recNodes[adjacent])
                     return true;
-                adjacentNode = adjacentNode._nextElement;
+                adjacentNode = adjacentNode.m_nextElement;
             }
         }
 

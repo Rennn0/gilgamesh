@@ -9,36 +9,36 @@ namespace Hub.Api
     [ApiController]
     public class ClientsController : ControllerBase
     {
-        private readonly ApplicationContext _db;
+        private readonly ApplicationContext m_db;
 
         public ClientsController(ApplicationContext dbContext)
         {
-            _db = dbContext;
+            m_db = dbContext;
         }
 
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] Client client)
         {
-            _db.Clients.Add(client);
-            await _db.SaveChangesAsync();
+            m_db.Clients.Add(client);
+            await m_db.SaveChangesAsync();
             return Ok(client);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            Client? msg = await _db.Clients.FindAsync(id);
+            Client? msg = await m_db.Clients.FindAsync(id);
             if (msg == null)
                 return NotFound();
-            _db.Clients.Remove(msg);
-            await _db.SaveChangesAsync();
+            m_db.Clients.Remove(msg);
+            await m_db.SaveChangesAsync();
             return Ok();
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _db.Clients.ToListAsync());
+            return Ok(await m_db.Clients.ToListAsync());
         }
     }
 }

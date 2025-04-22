@@ -2,54 +2,54 @@ namespace EducativeIo.StackQueue
 {
     public class NewStack
     {
-        private readonly Stack<int> _stack;
-        private readonly Stack<int> _minStack;
-        private readonly int _size;
+        private readonly Stack<int> m_stack;
+        private readonly Stack<int> m_minStack;
+        private readonly int m_size;
 
         public NewStack(int size)
         {
-            _stack = new Stack<int>(size);
-            _minStack = new Stack<int>(size);
-            this._size = size;
+            m_stack = new Stack<int>(size);
+            m_minStack = new Stack<int>(size);
+            this.m_size = size;
         }
 
         public int Pop()
         {
-            if (_stack.Count == 0)
+            if (m_stack.Count == 0)
             {
                 throw new Exception("Stack is empty");
             }
 
-            _minStack.Pop();
-            return _stack.Pop();
+            m_minStack.Pop();
+            return m_stack.Pop();
         }
 
         public void Push(int value)
         {
-            if (_stack.Count == _size)
+            if (m_stack.Count == m_size)
             {
                 throw new Exception("Stack is full");
             }
 
-            _stack.Push(value);
-            if (_minStack.Count != 0 && value > _minStack.Peek())
+            m_stack.Push(value);
+            if (m_minStack.Count != 0 && value > m_minStack.Peek())
             {
-                _minStack.Push(_minStack.Peek());
+                m_minStack.Push(m_minStack.Peek());
             }
             else
             {
-                _minStack.Push(value);
+                m_minStack.Push(value);
             }
         }
 
         public int Min()
         {
-            if (_minStack.Count == 0)
+            if (m_minStack.Count == 0)
             {
                 throw new Exception("Stack is empty");
             }
 
-            return _minStack.Peek();
+            return m_minStack.Peek();
         }
     }
 }
