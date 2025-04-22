@@ -4,3 +4,4 @@ obj/
 *.Artifacts
 Models
 .vs
+node_modules
