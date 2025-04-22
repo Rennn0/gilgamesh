@@ -3,7 +3,7 @@
 namespace __TESTS__;
 
 [TestClass]
-public class GraphTests
+public class DirectedGraphTests
 {
     [TestMethod]
     public void Graph_HasCycle()

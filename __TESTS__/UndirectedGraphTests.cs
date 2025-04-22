@@ -3,7 +3,7 @@
 namespace __TESTS__;
 
 [TestClass]
-public class GraphUndirected
+public class UndirectedGraphTests
 {
     [TestMethod]
     public void Graph_NumEdges()
@@ -45,5 +45,29 @@ public class GraphUndirected
         g.AddEdge(6, 7);
 
         Assert.AreEqual(11, Solution.NumEdges(g));
+    }
+
+    [TestMethod]
+    public void Graph_IsTree()
+    {
+        Graph g = new Graph(4, false);
+        g.AddEdge(0, 1);
+        g.AddEdge(0, 2);
+        g.AddEdge(0, 3);
+        g.AddEdge(3, 4);
+
+        Assert.IsTrue(Solution.IsTree(g));
+    }
+
+    [TestMethod]
+    public void Graph_IsTree1()
+    {
+        Graph g = new Graph(4, false);
+        g.AddEdge(0, 1);
+        g.AddEdge(0, 2);
+        g.AddEdge(0, 3);
+        g.AddEdge(2, 3);
+
+        Assert.IsFalse(Solution.IsTree(g));
     }
 }
