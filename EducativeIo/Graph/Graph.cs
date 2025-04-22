@@ -3,12 +3,14 @@ namespace EducativeIo.Graph
     public class Graph
     {
         private readonly int m_vertices;
+        private readonly bool m_directed;
         private readonly LinkedList[] m_array;
 
-        public Graph(int v)
+        public Graph(int v, bool directed = true)
         {
             m_array = new LinkedList[v];
             m_vertices = v;
+            m_directed = directed;
             for (int i = 0; i < v; i++)
             {
                 m_array[i] = new LinkedList();
@@ -17,8 +19,11 @@ namespace EducativeIo.Graph
 
         public void AddEdge(int source, int destination)
         {
-            if (source < m_vertices && destination < m_vertices)
-                m_array[source].InsertAtHead(destination);
+            if (source >= m_vertices || destination >= m_vertices)
+                return;
+            m_array[source].InsertAtHead(destination);
+            if (!m_directed)
+                m_array[destination].InsertAtHead(source);
         }
 
         public void PrintGraph()

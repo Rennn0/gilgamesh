@@ -100,4 +100,6 @@ public partial class Solution
 
         return isMother ? lastVisited : -1;
     }
+
+    public static int NumEdges(Graph g) => g.GetArray().Sum(adj => adj.Length()) / 2;
 }

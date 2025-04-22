@@ -145,4 +145,40 @@ public class GraphTests
         g.AddEdge(3, 2);
         Assert.AreEqual(-1, Solution.FindMotherVertexLastFinishedVertex(g));
     }
+
+    [TestMethod]
+    public void Graph_PathExists()
+    {
+        Graph g = new Graph(8);
+        g.AddEdge(0, 1);
+        g.AddEdge(0, 2);
+        g.AddEdge(1, 3);
+        g.AddEdge(1, 6);
+        g.AddEdge(2, 3);
+        g.AddEdge(2, 4);
+        g.AddEdge(3, 6);
+        g.AddEdge(6, 4);
+        g.AddEdge(6, 5);
+        g.AddEdge(6, 7);
+        g.AddEdge(7, 5);
+        Assert.IsTrue(Solution.CheckPath(g, 0, 7));
+    }
+
+    [TestMethod]
+    public void Graph_PathExists1()
+    {
+        Graph g = new Graph(8);
+        g.AddEdge(0, 1);
+        g.AddEdge(0, 2);
+        g.AddEdge(1, 3);
+        g.AddEdge(1, 6);
+        g.AddEdge(2, 3);
+        g.AddEdge(2, 4);
+        g.AddEdge(3, 6);
+        g.AddEdge(6, 4);
+        g.AddEdge(6, 5);
+        // g.AddEdge(6, 7);
+        g.AddEdge(7, 5);
+        Assert.IsFalse(Solution.CheckPath(g, 0, 7));
+    }
 }
