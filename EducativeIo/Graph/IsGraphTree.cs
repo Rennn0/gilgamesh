@@ -31,8 +31,6 @@ public partial class Solution
         bool[] visited = new bool[g.GetVertices()];
         int vertices = g.GetVertices();
 
-        int[] arr = [];
-        arr.Max();
         int edges = g.GetArray().Sum(l => l.Length()) / 2;
         return (edges >= vertices - 1) && !HasCycle(g, 0, -1, ref visited);
     }

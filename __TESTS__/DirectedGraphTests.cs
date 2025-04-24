@@ -181,4 +181,49 @@ public class DirectedGraphTests
         g.AddEdge(7, 5);
         Assert.IsFalse(Solution.CheckPath(g, 0, 7));
     }
+
+    [TestMethod]
+    public void Graph_ShortestDistance()
+    {
+        Graph g = new Graph(6);
+        g.AddEdge(0, 1);
+        g.AddEdge(0, 2);
+        g.AddEdge(0, 3);
+        g.AddEdge(2, 4);
+        g.AddEdge(3, 5);
+        g.AddEdge(5, 4);
+        Assert.AreEqual(2, Solution.FindMin(g, 0, 4));
+    }
+
+    [TestMethod]
+    public void Graph_ShortestDistanceArray()
+    {
+        Graph g = new Graph(7);
+        g.AddEdge(0, 1);
+        g.AddEdge(0, 2);
+        g.AddEdge(0, 3);
+        g.AddEdge(1, 2);
+        g.AddEdge(2, 4);
+        g.AddEdge(2, 3);
+        g.AddEdge(3, 5);
+        g.AddEdge(5, 4);
+        g.AddEdge(5, 6);
+        Assert.AreEqual(2, Solution.FindMinWithArr(g, 0, 4));
+    }
+
+    [TestMethod]
+    public void Graph_ShortestDistanceArray2()
+    {
+        Graph g = new Graph(7);
+        g.AddEdge(0, 1);
+        g.AddEdge(0, 2);
+        g.AddEdge(0, 3);
+        g.AddEdge(1, 2);
+        g.AddEdge(2, 4);
+        g.AddEdge(2, 3);
+        g.AddEdge(3, 5);
+        g.AddEdge(5, 4);
+        g.AddEdge(5, 6);
+        Assert.AreEqual(4, Solution.FindMinWithArr(g, 1, 6));
+    }
 }
