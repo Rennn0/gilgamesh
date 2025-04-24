@@ -9,18 +9,18 @@ public partial class Solution
         if (source == destination)
             return string.Empty;
 
-        Dictionary<int, int> parentChild = new Dictionary<int, int>();
+        Dictionary<int, int> childParent = new Dictionary<int, int>();
         Queue<int> queue = new Queue<int>();
         bool[] visited = new bool[g.GetVertices()];
 
         queue.Enqueue(source);
-        parentChild[source] = -1;
+        childParent[source] = -1;
 
         while (queue.Count > 0)
         {
             int node = queue.Dequeue();
             if (node == destination)
-                return ReconstructPath(parentChild, source, destination);
+                return ReconstructPath(childParent, source, destination);
 
             LinkedList.Node adj = g.GetArray()[node].GetHead();
             while (adj != null)
@@ -28,7 +28,7 @@ public partial class Solution
                 if (!visited[adj.m_data])
                 {
                     visited[adj.m_data] = true;
-                    parentChild[adj.m_data] = node;
+                    childParent[adj.m_data] = node;
                     queue.Enqueue(adj.m_data);
                 }
 
