@@ -10,34 +10,30 @@ public partial class Solution
             return string.Empty;
 
         Dictionary<int, int> parentChild = new Dictionary<int, int>();
-        Queue<int> currentLayer = new Queue<int>();
-        Queue<int> nextLayer = new Queue<int>();
+        Queue<int> queue = new Queue<int>();
+        bool[] visited = new bool[g.GetVertices()];
 
-        currentLayer.Enqueue(source);
+        queue.Enqueue(source);
         parentChild[source] = -1;
 
-        while (currentLayer.Count > 0)
+        while (queue.Count > 0)
         {
-            int node = currentLayer.Dequeue();
+            int node = queue.Dequeue();
             if (node == destination)
                 return ReconstructPath(parentChild, source, destination);
 
             LinkedList.Node adj = g.GetArray()[node].GetHead();
             while (adj != null)
             {
-                if (parentChild.TryAdd(adj.m_data, node))
+                if (!visited[adj.m_data])
                 {
-                    nextLayer.Enqueue(adj.m_data);
+                    visited[adj.m_data] = true;
+                    parentChild[adj.m_data] = node;
+                    queue.Enqueue(adj.m_data);
                 }
 
                 adj = adj.m_nextElement;
             }
-
-            if (currentLayer.Count != 0)
-                continue;
-
-            currentLayer = nextLayer;
-            nextLayer = new Queue<int>();
         }
 
         return string.Empty;
