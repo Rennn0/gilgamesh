@@ -1,5 +1,15 @@
 ﻿namespace EducativeIo.Bst;
 
+public class Donk
+{
+    public int D { get; set; }
+}
+
+public ref struct DonkStruct
+{
+    public int D { get; set; }
+}
+
 public class Tree
 {
     private Node? m_root;
@@ -17,6 +27,43 @@ public class Tree
     public Node? GetRoot()
     {
         return m_root;
+    }
+
+    public void Arr(ref int[] arr)
+    {
+        arr = new int[10];
+        arr[0] = 10;
+    }
+
+    public void Arr(int[] arr)
+    {
+        arr = new int[100];
+        arr[0] = 10;
+    }
+
+    public void Arr(List<int> arr)
+    {
+        arr[0] *= 2;
+    }
+
+    public void Arr(ref List<int> arr)
+    {
+        arr[0] *= 2;
+    }
+
+    public void Arr(Donk donk)
+    {
+        donk.D *= 2;
+    }
+
+    public void Arr(DonkStruct donk)
+    {
+        donk.D *= 2;
+    }
+
+    public void Arr(ref DonkStruct donk)
+    {
+        donk.D *= 2;
     }
 
     public void _Insert(int value)
