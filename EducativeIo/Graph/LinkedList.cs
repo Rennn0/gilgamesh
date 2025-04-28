@@ -4,7 +4,7 @@ namespace EducativeIo.Graph
     {
         public class Node
         {
-            internal int m_data; //Data to store (could be int,string,object etc)
+            internal int m_data; //Value to store (could be int,string,object etc)
             internal Node m_nextElement; //Pointer to next element
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
             public Node()
