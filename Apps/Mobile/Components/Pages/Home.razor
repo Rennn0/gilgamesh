@@ -2,7 +2,6 @@
 @inject HttpClient Http
 @implements IDisposable
 
-<h1>Check-Ins</h1>
 
 @if (m_isLoading)
 {
@@ -29,6 +28,17 @@ else if (m_checkins is not null)
 
     private System.Threading.Timer? m_timer = null;
     private Exception? m_exception = null;
+    
+    string Text { get; set; } = "????";
+    string ButtonText { get; set; } = "Click Me";
+    int ClickCount { get; set; }
+
+    void ButtonOnClick()
+    {
+        ClickCount += 1;
+        Text = $"Awesome x {ClickCount}";
+        ButtonText = "Click Me Again";
+    }
 
     protected override async Task OnInitializedAsync()
     {

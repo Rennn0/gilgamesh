@@ -1,5 +1,8 @@
-﻿namespace EducativeIo.Bst;
+﻿using System.Diagnostics;
 
+namespace EducativeIo.Bst;
+
+[DebuggerDisplay("{Value}")]
 public class Node
 {
     public int Value { get; set; }

@@ -1,0 +1,111 @@
+﻿@page "/my-bookings"
+@inject IPreferences Preferences
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+
+<div class="bookings-container">
+    @if (m_bookings == null)
+    {
+        <p>Loading your bookings...</p>
+    }
+    else if (!m_bookings.Any())
+    {
+        <p>You don't have any bookings yet.</p>
+    }
+    else
+    {
+        <div class="bookings-list">
+            @foreach (BookingDto booking in m_bookings)
+            {
+                <div class="booking-card">
+                    <div class="booking-header">
+                        <span class="room-type">@(booking.Room == 1 ? "Large Room" : "Small Room")</span>
+                        <span class="booking-date">@booking.Start.ToString("MMMM dd, yyyy")</span>
+                    </div>
+                    <div class="booking-time">
+                        @booking.Start.ToString("hh:mm tt") - @booking.End.ToString("hh:mm tt")
+                    </div>
+                    <div class="booking-actions">
+                        <button class="cancel-button" @onclick="() => CancelBooking(booking.Id)">Cancel</button>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <button class="new-booking-button" @onclick="NavigateToBooking">New Booking</button>
+</div>
+@code {
+    private List<BookingDto>? m_bookings;
+    private string m_currentUser = string.Empty;
+    private string m_errorMessage = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        m_currentUser = Preferences.Get("Username", string.Empty);
+        if (string.IsNullOrWhiteSpace(m_currentUser))
+        {
+            NavigationManager.NavigateTo("auth");
+            return;
+        }
+
+        await LoadBookings();
+    }
+
+    private async Task LoadBookings()
+    {
+        try
+        {
+            HttpResponseMessage response = await Http.GetAsync($"/Api/Appointments/{m_currentUser}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                m_bookings = await response.Content.ReadFromJsonAsync<List<BookingDto>>();
+            }
+            else
+            {
+                m_errorMessage = "Failed to load bookings. Please try again.";
+            }
+        }
+        catch (Exception ex)
+        {
+            m_errorMessage = $"Error: {ex.Message}";
+        }
+    }
+
+    private async Task CancelBooking(Guid bookingId)
+    {
+        try
+        {
+            HttpResponseMessage response = await Http.DeleteAsync($"/Api/Appointment?id={bookingId}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                await LoadBookings(); 
+            }
+            else
+            {
+                m_errorMessage = "Failed to cancel booking. Please try again.";
+                
+            }
+        }
+        catch (Exception ex)
+        {
+            m_errorMessage = $"Error: {ex.Message}";
+        }
+    }
+
+    private void NavigateToBooking()
+    {
+        NavigationManager.NavigateTo("/booking");
+    }
+
+    internal sealed class BookingDto
+    {
+        public Guid Id { get; set; }
+        public string Host { get; set; } = string.Empty;
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
+        public int Room { get; set; }
+    }
+}

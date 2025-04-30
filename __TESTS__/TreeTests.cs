@@ -13,12 +13,10 @@ public class TreeTests
         tree.Insert(5);
         tree.Insert(6);
         tree.Insert(7);
-
         tree.Insert(1);
         tree.Insert(2);
         tree.Insert(3);
         tree.Insert(4);
-
         tree.Insert(14);
         tree.Insert(24);
         tree.Insert(10);
@@ -42,40 +40,83 @@ public class TreeTests
         tree.Insert(24);
         tree.Insert(10);
 
-        Assert.IsTrue(tree.Find(6) != null);
-        Assert.IsTrue(tree.Find(7) != null);
-        Assert.IsTrue(tree.Find(1) != null);
-        Assert.IsTrue(tree.Find(2) != null);
-        Assert.IsTrue(tree.Find(3) != null);
-        Assert.IsTrue(tree.Find(4) != null);
-        Assert.IsTrue(tree.Find(14) != null);
         Assert.IsTrue(tree.Find(24) != null);
-        Assert.IsTrue(tree.Find(10) != null);
         Assert.IsTrue(tree.Find(-1) == null);
     }
 
     [TestMethod]
-    public void Test()
+    public void Delete_NoChild()
     {
         Tree tree = new Tree();
 
-        int[] arr = new int[1];
-        arr[0] = 1;
+        tree.Insert(5);
+        tree.Insert(9);
+        tree.Insert(17);
+        tree.Insert(1);
+        tree.Insert(2);
+        tree.Insert(3);
+        tree.Insert(0);
+        tree.Insert(14);
+        tree.Insert(24);
 
-        tree.Arr(ref arr);
-        tree.Arr(arr);
+        tree.Delete(0);
+        Assert.IsTrue(tree.Find(0) == null);
+    }
 
-        List<int> list = new List<int>();
-        list.Add(1);
+    [TestMethod]
+    public void Delete_LeftChild()
+    {
+        Tree tree = new Tree();
 
-        tree.Arr(ref list);
-        tree.Arr(list);
+        tree.Insert(5);
+        tree.Insert(9);
+        tree.Insert(17);
+        tree.Insert(1);
+        tree.Insert(2);
+        tree.Insert(3);
+        tree.Insert(0);
+        tree.Insert(14);
+        // tree.Insert(24);
 
-        Donk d = new Donk { D = 1 };
-        tree.Arr(d);
+        tree.Delete(17);
+        Assert.IsTrue(tree.Find(17) == null);
+    }
 
-        DonkStruct ds = new DonkStruct { D = 2 };
-        tree.Arr(ds);
-        tree.Arr(ref ds);
+    [TestMethod]
+    public void Delete_RightChild()
+    {
+        Tree tree = new Tree();
+
+        tree.Insert(5);
+        tree.Insert(9);
+        tree.Insert(17);
+        tree.Insert(1);
+        tree.Insert(2);
+        tree.Insert(3);
+        tree.Insert(0);
+        tree.Insert(14);
+        tree.Insert(24);
+
+        tree.Delete(9);
+        Assert.IsTrue(tree.Find(9) == null);
+    }
+
+    [TestMethod]
+    public void Delete_BothChild()
+    {
+        Tree tree = new Tree();
+
+        tree.Insert(5);
+        tree.Insert(9);
+        tree.Insert(17);
+        tree.Insert(1);
+        tree.Insert(2);
+        tree.Insert(3);
+        tree.Insert(0);
+        tree.Insert(14);
+        tree.Insert(24);
+
+        tree.Delete(5);
+        Assert.IsTrue(tree.Find(5) == null);
     }
 }

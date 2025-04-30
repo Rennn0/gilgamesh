@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using Mobile.Source;
+using MudBlazor.Services;
 
 namespace Mobile
 {
@@ -15,7 +17,7 @@ namespace Mobile
                 });
 
             builder.Services.AddMauiBlazorWebView();
-
+            builder.Services.AddMudServices();
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
             builder.Logging.AddDebug();
@@ -26,6 +28,9 @@ namespace Mobile
                 BaseAddress = new Uri("https://api20250228131943.azurewebsites.net/"),
             });
 
+            builder.Services.AddSingleton(Preferences.Default);
+
+            builder.Services.AddSingleton<SharedState>();
             return builder.Build();
         }
     }
