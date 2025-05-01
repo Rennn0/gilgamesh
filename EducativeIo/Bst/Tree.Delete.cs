@@ -8,7 +8,6 @@ public partial class Tree
     {
         if (node == null || m_root == null)
             return false;
-
         Node parent = node;
         while (node != null && node.Value != value)
         {
@@ -20,85 +19,26 @@ public partial class Tree
             return false;
 
         if (node.Left == null && node.Right == null)
-        {
-            return DeleteLeafNode(node, value, parent);
-        }
-
-        if (node.Right == null)
-        {
-            return DeleteWithLeftChild(node, value, parent);
-        }
+            return DeleteWithoutChildNodes(parent, node);
 
         if (node.Left == null)
-        {
-            return DeleteWithRightChild(node, value, parent);
-        }
+            return DeleteWithRightChildNode(parent, node);
 
-        return DeleteWithBothChild(node);
+        if (node.Right == null)
+            return DeleteWithLeftChildNode(parent, node);
+
+        return DeleteWithBothChildNode(parent, node);
     }
 
-    private bool DeleteWithBothChild(Node node)
+    private bool DeleteWithBothChildNode(Node parent, Node node)
     {
         if (node.Right == null)
             return false;
+
         Node leastNode = FindLeastNode(node.Right);
-        int tmp = leastNode.Value;
-        Delete(m_root, leastNode.Value);
-        node.Value = tmp;
-
-        return true;
-    }
-
-    private bool DeleteWithRightChild(Node node, int value, Node parent)
-    {
-        if (m_root != null && m_root.Value == value)
-        {
-            m_root.Right = node.Right;
-        }
-        else if (parent.Value < value)
-        {
-            parent.Right = node.Right;
-        }
-        else
-        {
-            parent.Left = node.Right;
-        }
-
-        return true;
-    }
-
-    private bool DeleteWithLeftChild(Node node, int value, Node parent)
-    {
-        if (m_root != null && m_root.Value == value)
-        {
-            m_root = node.Left;
-        }
-        else if (parent.Value < value)
-        {
-            parent.Right = node.Left;
-        }
-        else
-        {
-            parent.Left = node.Left;
-        }
-
-        return true;
-    }
-
-    private bool DeleteLeafNode(Node node, int value, Node parent)
-    {
-        if (m_root != null && m_root.Value == value)
-        {
-            m_root = null;
-        }
-        else if (node.Value < parent.Value)
-        {
-            parent.Left = null;
-        }
-        else
-        {
-            parent.Right = null;
-        }
+        int leastValue = leastNode.Value;
+        Delete(leastValue);
+        node.Value = leastValue;
 
         return true;
     }
@@ -111,5 +51,65 @@ public partial class Tree
         }
 
         return node;
+    }
+
+    private bool DeleteWithLeftChildNode(Node parent, Node node)
+    {
+        if (m_root != null && m_root.Value == node.Value)
+        {
+            m_root = null;
+            return true;
+        }
+
+        if (parent.Value < node.Value)
+        {
+            parent.Right = node.Left;
+        }
+        else
+        {
+            parent.Left = node.Left;
+        }
+
+        return true;
+    }
+
+    private bool DeleteWithRightChildNode(Node parent, Node node)
+    {
+        if (m_root != null && m_root.Value == node.Value)
+        {
+            m_root = null;
+            return true;
+        }
+
+        if (parent.Value < node.Value)
+        {
+            parent.Right = node.Right;
+        }
+        else
+        {
+            parent.Left = node.Right;
+        }
+
+        return true;
+    }
+
+    private bool DeleteWithoutChildNodes(Node parent, Node node)
+    {
+        if (m_root != null && m_root.Value == node.Value)
+        {
+            m_root = null;
+            return true;
+        }
+
+        if (parent.Value < node.Value)
+        {
+            parent.Right = null;
+        }
+        else
+        {
+            parent.Left = null;
+        }
+
+        return true;
     }
 }
