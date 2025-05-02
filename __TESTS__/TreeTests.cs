@@ -263,4 +263,52 @@ public class TreeTests
         sb.Length--;
         Assert.AreEqual("7 5 2 6 13 10 8 11 15 20", sb.ToString());
     }
+
+    [TestMethod]
+    public void RotateRightLeft()
+    {
+        Tree tree = new Tree();
+        tree.Insert(7);
+        tree.Insert(4);
+        tree.Insert(13);
+        tree.Insert(10);
+        tree.Insert(8);
+        tree.Insert(11);
+        tree.Insert(15);
+
+        StringBuilder sb = new StringBuilder();
+        tree.PreOrder(tree.GetRoot(), ref sb);
+        sb.Length--;
+        Assert.AreEqual("7 4 13 10 8 11 15", sb.ToString());
+
+        tree.RotateRightLeft(10);
+        sb.Clear();
+        tree.PreOrder(tree.GetRoot(), ref sb);
+        sb.Length--;
+        Assert.AreEqual("10 7 4 8 13 11 15", sb.ToString());
+    }
+
+    [TestMethod]
+    public void RotateLeftRight()
+    {
+        Tree tree = new Tree();
+        tree.Insert(7);
+        tree.Insert(3);
+        tree.Insert(10);
+        tree.Insert(5);
+        tree.Insert(1);
+        tree.Insert(4);
+        tree.Insert(6);
+
+        StringBuilder sb = new StringBuilder();
+        tree.PreOrder(tree.GetRoot(), ref sb);
+        sb.Length--;
+        Assert.AreEqual("7 3 1 5 4 6 10", sb.ToString());
+
+        tree.RotateLeftRight(5);
+        sb.Clear();
+        tree.PreOrder(tree.GetRoot(), ref sb);
+        sb.Length--;
+        Assert.AreEqual("5 3 1 4 7 6 10", sb.ToString());
+    }
 }

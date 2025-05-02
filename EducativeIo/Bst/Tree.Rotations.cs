@@ -5,7 +5,6 @@ public partial class Tree
     public void RotateLeftLeft(int val)
     {
         FindParentChild(val, out Node? parent, out Node? child);
-
         if (child is null || parent is null)
             return;
 
@@ -15,11 +14,40 @@ public partial class Tree
     public void RotateRightRight(int val)
     {
         FindParentChild(val, out Node? parent, out Node? child);
-
         if (child is null || parent is null)
             return;
 
         RightRight(child, parent);
+    }
+
+    public void RotateLeftRight(int val)
+    {
+        FindParentChild(val, out Node? parent, out Node? child);
+        if (child is null || parent is null)
+            return;
+
+        RightRight(child, parent);
+
+        Node? grandParent = FindParent(child.Value);
+        if (grandParent is null)
+            return;
+
+        LeftLeft(child, grandParent);
+    }
+
+    public void RotateRightLeft(int val)
+    {
+        FindParentChild(val, out Node? parent, out Node? child);
+        if (child is null || parent is null)
+            return;
+
+        LeftLeft(child, parent);
+
+        Node? grandParent = FindParent(child.Value);
+        if (grandParent is null)
+            return;
+
+        RightRight(child, grandParent);
     }
 
     private void FindParentChild(int val, out Node? parent, out Node? child)
