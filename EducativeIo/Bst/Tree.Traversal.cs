@@ -31,4 +31,13 @@ public partial class Tree
         builder.Append($"{node.Value} ");
         InOrder(node.Right, ref builder);
     }
+
+    public void InOrder(Node? node, ref Stack<int> stack)
+    {
+        if (node == null)
+            return;
+        InOrder(node.Left, ref stack);
+        stack.Push(node.Value);
+        InOrder(node.Right, ref stack);
+    }
 }

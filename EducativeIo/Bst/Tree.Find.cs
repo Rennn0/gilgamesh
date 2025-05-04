@@ -1,4 +1,5 @@
-﻿namespace EducativeIo.Bst;
+﻿
+namespace EducativeIo.Bst;
 
 public partial class Tree
 {
@@ -35,5 +36,42 @@ public partial class Tree
         }
 
         return null;
+    }
+
+    public int Min() => Min(m_root);
+
+    private int Min(Node? m_root)
+    {
+        if (m_root == null)
+            return -1;
+
+        Node? current = m_root;
+        while (current.Left != null)
+        {
+            current = current.Left;
+        }
+        return current.Value;
+    }
+
+    public int KThLargest(int k)
+    {
+        if (m_root == null)
+            return -1;
+
+        Stack<int> stack = new();
+        InOrder(m_root, ref stack);
+
+        if (k > stack.Count)
+            return -1;
+
+        int count = 0;
+        while (stack.Count > 0)
+        {
+            int value = stack.Pop();
+            count++;
+            if (count == k)
+                return value;
+        }
+        return -1;
     }
 }
