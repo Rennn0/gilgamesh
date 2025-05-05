@@ -328,4 +328,38 @@ public class TreeTests
 
         Assert.AreEqual(12, tree.KThLargest(2));
     }
+
+    [TestMethod]
+    public void Ancestors()
+    {
+        Tree tree = new Tree();
+        tree.Insert(6);
+        tree.Insert(4);
+        tree.Insert(9);
+        tree.Insert(2);
+        tree.Insert(5);
+        tree.Insert(8);
+        tree.Insert(12);
+        tree.Insert(10);
+        tree.Insert(14);
+
+        Assert.AreEqual("12,9,6,", tree.Ancestors(10));
+    }
+
+    [TestMethod]
+    public void KthDistance()
+    {
+        Tree tree = new Tree();
+        tree.Insert(6);
+        tree.Insert(4);
+        tree.Insert(9);
+        tree.Insert(2);
+        tree.Insert(5);
+        tree.Insert(8);
+        tree.Insert(12);
+        tree.Insert(10);
+        tree.Insert(14);
+
+        Assert.AreEqual("10 14 ", tree.FindKNodes(3));
+    }
 }

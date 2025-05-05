@@ -1,4 +1,5 @@
-﻿
+﻿using System.Text;
+
 namespace EducativeIo.Bst;
 
 public partial class Tree
@@ -50,6 +51,7 @@ public partial class Tree
         {
             current = current.Left;
         }
+
         return current.Value;
     }
 
@@ -72,6 +74,30 @@ public partial class Tree
             if (count == k)
                 return value;
         }
+
         return -1;
+    }
+
+    public string Ancestors(int k) => Ancestors(m_root, k);
+
+    private string Ancestors(Node? node, int k)
+    {
+        StringBuilder builder = new StringBuilder();
+        if (node == null)
+            return builder.ToString();
+
+        while (node != null)
+        {
+            if (node.Value == k)
+            {
+                break;
+            }
+
+            builder.Insert(0, $"{node.Value.ToString()},");
+
+            node = node.Value < k ? node.Right : node.Left;
+        }
+
+        return builder.ToString();
     }
 }

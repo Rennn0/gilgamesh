@@ -1,5 +1,5 @@
-﻿using Core;
-using EducativeIo.Graph;
+﻿using System.Numerics;
+using System.Runtime.CompilerServices;
 
 namespace EducativeIo;
 
@@ -7,27 +7,25 @@ internal class Solution
 {
     public static void Main(string[] args)
     {
-        using (new ScopedTimer())
-        {
-            Graph.Graph g = new Graph.Graph(7);
-            g.AddEdge(0, 1);
-            g.AddEdge(0, 2);
-            g.AddEdge(1, 4);
-            g.AddEdge(1, 3);
-            g.AddEdge(1, 5);
-            g.AddEdge(4, 1);
-            g.AddEdge(3, 6);
-            g.AddEdge(5, 4);
+        int[] leftArray = new int[Vector<int>.Count];
+        int[] rightArray = new int[Vector<int>.Count];
 
-            g.PrintGraph();
-            CycleInGraph.DetectCycle(g);
-            // Console.WriteLine(Graph.Solution.Bfs(g));
-            // Console.WriteLine(Graph.Solution.Dfs(g));
-        }
+        leftArray[0] = 1;
+        leftArray[1] = 2;
+        leftArray[2] = 3;
 
-        using (new ScopedTimer())
-        {
-            for (int i = 0; i < 100_000_000; i++) { }
-        }
+        rightArray[0] = 4;
+        rightArray[1] = 5;
+        rightArray[2] = 6;
+
+        Vector<int> l = new Vector<int>(leftArray);
+        Vector<int> r = new Vector<int>(rightArray);
+
+        Vector<int> sum = Sum(l, r);
+
+        Console.WriteLine($"Sum: {sum}");
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector<int> Sum(Vector<int> a, Vector<int> b) => a + b;
 }
