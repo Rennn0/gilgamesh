@@ -22,14 +22,13 @@ internal class Program
             );
         });
 
-
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddControllers();
 
         builder.Services.AddDbContext<ApplicationContext>(opt => opt.UseInMemoryDatabase("app"));
-        builder.Services.AddSignalR();
-        builder.Services.AddHostedService<ClientsBackgroundWorker>();
+        // builder.Services.AddSignalR();
+        // builder.Services.AddHostedService<ClientsBackgroundWorker>();
 
         WebApplication app = builder.Build();
 
@@ -41,7 +40,7 @@ internal class Program
 
         app.UseCors();
 
-        app.MapHub<ClientsHub>("/hub/clients");
+        // app.MapHub<ClientsHub>("/hub/clients");
         app.MapControllers();
         app.Run();
     }
