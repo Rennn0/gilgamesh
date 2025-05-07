@@ -1,9 +1,6 @@
 using System.Collections.Concurrent;
 using System.Threading.Channels;
-using Hub.Database;
-using Hub.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Hub.Api
 {
@@ -32,27 +29,40 @@ namespace Hub.Api
 
             Channel<string> channel = GetOrCreateChannel(clientId);
 
-            Timer heartbeat = new Timer(async _ =>
-            {
-                try
+            Timer heartbeat = new Timer(
+                async void (_) =>
                 {
-                    m_logger.LogInformation($"Client {clientId} heartbeat");
-                    await Response.WriteAsync($"event: heartbeat\ndata:{DateTime.Now.ToLocalTime()}\n\n",
-                        HttpContext.RequestAborted);
-                    await Response.Body.FlushAsync(HttpContext.RequestAborted);
-                }
-                catch (TaskCanceledException)
-                {
-                    m_logger.LogInformation($"Client {clientId} disconnected");
-                }
-            }, null, TimeSpan.Zero, TimeSpan.FromSeconds(10));
+                    try
+                    {
+                        m_logger.LogInformation($"Client {clientId} heartbeat");
+                        await Response.WriteAsync(
+                            $"event:heartbeat\ndata:{DateTime.Now.ToLocalTime()}\n\n",
+                            HttpContext.RequestAborted
+                        );
+                        await Response.Body.FlushAsync(HttpContext.RequestAborted);
+                    }
+                    catch (TaskCanceledException)
+                    {
+                        m_logger.LogInformation($"Client {clientId} disconnected");
+                    }
+                    catch (Exception e)
+                    {
+                        m_logger.LogInformation($"Error {e.Message}");
+                    }
+                },
+                null,
+                TimeSpan.Zero,
+                TimeSpan.FromSeconds(10)
+            );
 
             try
             {
-                await foreach (var message in channel.Reader.ReadAllAsync(HttpContext.RequestAborted))
+                await foreach (
+                    string message in channel.Reader.ReadAllAsync(HttpContext.RequestAborted)
+                )
                 {
                     m_logger.LogInformation($"Client {clientId} received message: {message}");
-                    await Response.WriteAsync($"data: {message}\n\n", HttpContext.RequestAborted);
+                    await Response.WriteAsync($"data:{message}\n\n", HttpContext.RequestAborted);
                     await Response.Body.FlushAsync(HttpContext.RequestAborted);
                 }
             }
@@ -72,8 +82,11 @@ namespace Hub.Api
         [HttpGet("publish/{clientId}")]
         public IActionResult Publish(string clientId, [FromQuery] string message)
         {
-            if (s_channels.TryGetValue(clientId, out var channel))
+            lock (s_lock)
             {
+                if (!s_channels.TryGetValue(clientId, out Channel<string>? channel))
+                    return NotFound();
+
                 channel.Writer.TryWrite(message);
                 return Ok();
             }
@@ -104,15 +117,16 @@ namespace Hub.Api
                 while (!HttpContext.RequestAborted.IsCancellationRequested)
                 {
                     await Task.Delay(TimeSpan.FromSeconds(10), HttpContext.RequestAborted);
-                    await Response.WriteAsync($"event: heartbeat\ndata: {DateTime.UtcNow.ToLocalTime()}\n\n",
-                        HttpContext.RequestAborted);
+                    await Response.WriteAsync(
+                        $"event: heartbeat\ndata: {DateTime.UtcNow.ToLocalTime()}\n\n",
+                        HttpContext.RequestAborted
+                    );
                     await Response.Body.FlushAsync(HttpContext.RequestAborted);
                 }
             }
             catch (TaskCanceledException)
             {
                 m_logger.LogInformation($"Client disconnected: {guid}");
-
             }
             catch (System.Exception ex)
             {
@@ -131,7 +145,7 @@ namespace Hub.Api
                 return;
 
             Stack<Guid> toRemove = new Stack<Guid>();
-            var publishTasks = s_clients.Select(async kvp =>
+            IEnumerable<Task> publishTasks = s_clients.Select(async kvp =>
             {
                 try
                 {
@@ -145,34 +159,33 @@ namespace Hub.Api
             });
             await Task.WhenAll(publishTasks);
 
-            foreach (var guid in toRemove)
+            foreach (Guid guid in toRemove)
             {
                 s_clients.TryRemove(guid, out _);
             }
         }
 
-        private Channel<string> GetOrCreateChannel(string client)
+        private static Channel<string> GetOrCreateChannel(string client)
         {
             lock (s_lock)
             {
-                if (!s_channels.TryGetValue(client, out var channel))
-                {
-                    channel = Channel.CreateUnbounded<string>();
-                    s_channels[client] = channel;
-                }
+                if (s_channels.TryGetValue(client, out Channel<string>? channel))
+                    return channel;
+                channel = Channel.CreateUnbounded<string>();
+                s_channels[client] = channel;
+
                 return channel;
             }
         }
 
-        private void RemoveChannel(string client)
+        public void RemoveChannel(string client)
         {
             lock (s_lock)
             {
-                if (s_channels.TryGetValue(client, out var channel))
-                {
-                    channel.Writer.TryComplete();
-                    s_channels.TryRemove(client, out _);
-                }
+                if (!s_channels.TryGetValue(client, out Channel<string>? channel))
+                    return;
+                channel.Writer.TryComplete();
+                s_channels.TryRemove(client, out _);
             }
         }
     }
