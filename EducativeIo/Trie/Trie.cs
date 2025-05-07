@@ -56,6 +56,23 @@ public partial class Trie
         return (pCrawl != null) && (pCrawl!.IsEndWord());
     }
 
+    public static int TotalWords(TrieNode? node)
+    {
+        if (node == null)
+            return 0;
+
+        int totalWords = 0;
+        if (node.IsEndWord())
+            totalWords++;
+
+        for (int i = 0; i < TrieNode.Size; i++)
+        {
+            totalWords += TotalWords(node[i]);
+        }
+
+        return totalWords;
+    }
+
     public bool DeleteNode(string key)
     {
         if (string.IsNullOrWhiteSpace(key))
