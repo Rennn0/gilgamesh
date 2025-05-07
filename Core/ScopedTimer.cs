@@ -21,15 +21,15 @@ namespace Core
             m_logger = logger ?? DefaultLogger;
         }
 
-        private static void DefaultLogger(string title, long ms)
+        private static void DefaultLogger(string title, long ticks)
         {
-            Console.WriteLine($"[Scoped Timer] {title} took {ms} ms");
+            Console.WriteLine($"[Scoped Timer] {title} took {ticks} ticks");
         }
 
         public void Dispose()
         {
             m_stopwatch.Stop();
-            m_logger.Invoke(m_title, m_stopwatch.ElapsedMilliseconds);
+            m_logger.Invoke(m_title, m_stopwatch.ElapsedTicks);
         }
     }
 }

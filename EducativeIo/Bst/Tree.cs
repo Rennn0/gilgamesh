@@ -78,6 +78,29 @@ public partial class Tree
 
     public string FindKNodes(int k) => FindKNodes(m_root, k);
 
+    public string FindKNodesRecursive(int k)
+    {
+        string result = string.Empty;
+        FindKNodesRecursive(m_root, k, ref result);
+        return result;
+    }
+
+    private void FindKNodesRecursive(Node? node, int i, ref string result)
+    {
+        if (node == null)
+            return;
+
+        if (i == 0)
+        {
+            result += $"{node.Value} ";
+        }
+        else
+        {
+            FindKNodesRecursive(node.Left, i - 1, ref result);
+            FindKNodesRecursive(node.Right, i - 1, ref result);
+        }
+    }
+
     private string FindKNodes(Node? node, int k)
     {
         if (node == null)
