@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Threading.Channels;
 using Hub.Database;
 using Hub.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -14,9 +15,70 @@ namespace Hub.Api
         private static readonly ConcurrentDictionary<Guid, HttpResponse> s_clients = new();
         private readonly ILogger<ServerEventsController> m_logger;
 
+        private static readonly ConcurrentDictionary<string, Channel<string>> s_channels = new();
+        private static readonly object s_lock = new();
+
         public ServerEventsController(ILogger<ServerEventsController> logger)
         {
             m_logger = logger;
+        }
+
+        [HttpGet("subscribe/{clientId}")]
+        public async Task Subscribe(string clientId)
+        {
+            Response.Headers.Append("Content-Type", "text/event-stream");
+            Response.Headers.Append("Cache-Control", "no-cache");
+            Response.Headers.Append("Connection", "keep-alive");
+
+            Channel<string> channel = GetOrCreateChannel(clientId);
+
+            Timer heartbeat = new Timer(async _ =>
+            {
+                try
+                {
+                    m_logger.LogInformation($"Client {clientId} heartbeat");
+                    await Response.WriteAsync($"event: heartbeat\ndata:{DateTime.Now.ToLocalTime()}\n\n",
+                        HttpContext.RequestAborted);
+                    await Response.Body.FlushAsync(HttpContext.RequestAborted);
+                }
+                catch (TaskCanceledException)
+                {
+                    m_logger.LogInformation($"Client {clientId} disconnected");
+                }
+            }, null, TimeSpan.Zero, TimeSpan.FromSeconds(10));
+
+            try
+            {
+                await foreach (var message in channel.Reader.ReadAllAsync(HttpContext.RequestAborted))
+                {
+                    m_logger.LogInformation($"Client {clientId} received message: {message}");
+                    await Response.WriteAsync($"data: {message}\n\n", HttpContext.RequestAborted);
+                    await Response.Body.FlushAsync(HttpContext.RequestAborted);
+                }
+            }
+            catch (Exception ex)
+            {
+                m_logger.LogInformation($"Client {clientId} disconnected");
+                m_logger.LogInformation(ex, "Error in SSE connection");
+            }
+            finally
+            {
+                RemoveChannel(clientId);
+                await Response.CompleteAsync();
+                await heartbeat.DisposeAsync();
+            }
+        }
+
+        [HttpGet("publish/{clientId}")]
+        public IActionResult Publish(string clientId, [FromQuery] string message)
+        {
+            if (s_channels.TryGetValue(clientId, out var channel))
+            {
+                channel.Writer.TryWrite(message);
+                return Ok();
+            }
+
+            return NotFound();
         }
 
         [HttpGet]
@@ -50,6 +112,7 @@ namespace Hub.Api
             catch (TaskCanceledException)
             {
                 m_logger.LogInformation($"Client disconnected: {guid}");
+
             }
             catch (System.Exception ex)
             {
@@ -85,6 +148,31 @@ namespace Hub.Api
             foreach (var guid in toRemove)
             {
                 s_clients.TryRemove(guid, out _);
+            }
+        }
+
+        private Channel<string> GetOrCreateChannel(string client)
+        {
+            lock (s_lock)
+            {
+                if (!s_channels.TryGetValue(client, out var channel))
+                {
+                    channel = Channel.CreateUnbounded<string>();
+                    s_channels[client] = channel;
+                }
+                return channel;
+            }
+        }
+
+        private void RemoveChannel(string client)
+        {
+            lock (s_lock)
+            {
+                if (s_channels.TryGetValue(client, out var channel))
+                {
+                    channel.Writer.TryComplete();
+                    s_channels.TryRemove(client, out _);
+                }
             }
         }
     }
