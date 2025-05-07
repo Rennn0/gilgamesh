@@ -42,10 +42,10 @@ public class TrieNode
                     continue;
 
                 char c = (char)('a' + i);
-                nonNullIndices.Add($"{c}");
+                nonNullIndices.Add($"[{i}]{c}");
             }
 
-            return $"[{string.Join(", ", nonNullIndices)}], IsEnd: {m_isEndOfWord}";
+            return $"{string.Join(", ", nonNullIndices)}, IsEnd: {m_isEndOfWord}";
         }
     }
 
