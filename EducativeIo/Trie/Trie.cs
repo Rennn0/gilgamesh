@@ -1,4 +1,6 @@
-﻿namespace EducativeIo.Trie;
+﻿using System.Text;
+
+namespace EducativeIo.Trie;
 
 public partial class Trie
 {
@@ -130,6 +132,50 @@ public partial class Trie
         }
 
         return deletedSelf;
+    }
+
+    public List<string> FindWords() => FindWords(m_root);
+
+    private List<string> FindWords(TrieNode? root)
+    {
+        List<string> words = new List<string>();
+        string word = "";
+        FindWords(root, words, ref word, 0);
+        return words;
+    }
+
+    private void FindWords(TrieNode? root, List<string> words, ref string word, int level)
+    {
+        if (root == null)
+            return;
+        if (root.IsEndWord())
+        {
+            string temp = "";
+            for (int i = 0; i < level; i++)
+            {
+                temp += word[i];
+            }
+
+            words.Add(temp);
+        }
+
+        for (int i = 0; i < TrieNode.Size; i++)
+        {
+            if (root[i] is null)
+                continue;
+
+            if (level < word.Length)
+            {
+                StringBuilder sb = new StringBuilder(word) { [level] = (char)('a' + i) };
+                word = sb.ToString();
+            }
+            else
+            {
+                word += (char)('a' + i);
+            }
+
+            FindWords(root[i], words, ref word, level + 1);
+        }
     }
 
     private bool HasNoChildren(TrieNode node)

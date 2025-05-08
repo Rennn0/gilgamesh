@@ -49,4 +49,22 @@ public class TrieTests
 
         Assert.AreEqual(9, trie.TotalWords());
     }
+
+    [TestMethod]
+    public void FindWords()
+    {
+        Trie trie = new Trie();
+        trie.InsertNode("the");
+        trie.InsertNode("a");
+        trie.InsertNode("there");
+        trie.InsertNode("answer");
+        trie.InsertNode("any");
+        trie.InsertNode("by");
+        trie.InsertNode("bye");
+        trie.InsertNode("their");
+        trie.InsertNode("abc");
+
+        List<string> words = trie.FindWords();
+        Assert.AreEqual(9, words.Count);
+    }
 }
