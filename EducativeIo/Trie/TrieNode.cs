@@ -5,7 +5,7 @@ namespace EducativeIo.Trie;
 [DebuggerDisplay("{DebugView}")]
 public class TrieNode
 {
-    public const int Size = 26;
+    public const int Size = 4;
     private readonly TrieNode?[] m_children;
     private bool m_isEndOfWord;
 

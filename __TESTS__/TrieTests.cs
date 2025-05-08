@@ -19,7 +19,7 @@ public class TrieTests
     }
 
     [TestMethod]
-    public void BasicDelete()
+    public void Delete()
     {
         Trie trie = new Trie();
         trie.InsertNode("hello");
@@ -31,5 +31,22 @@ public class TrieTests
 
         Assert.IsFalse(trie.SearchNode("their"));
         Assert.IsTrue(trie.SearchNode("WORLD"));
+    }
+
+    [TestMethod]
+    public void TotalWords()
+    {
+        Trie trie = new Trie();
+        trie.InsertNode("ab");
+        trie.InsertNode("abcd");
+        trie.InsertNode("abd");
+        trie.InsertNode("aca");
+        trie.InsertNode("acad");
+        trie.InsertNode("da");
+        trie.InsertNode("dab");
+        trie.InsertNode("dc");
+        trie.InsertNode("dcba");
+
+        Assert.AreEqual(9, trie.TotalWords());
     }
 }

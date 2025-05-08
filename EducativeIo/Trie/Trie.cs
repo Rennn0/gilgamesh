@@ -56,7 +56,9 @@ public partial class Trie
         return (pCrawl != null) && (pCrawl!.IsEndWord());
     }
 
-    public static int TotalWords(TrieNode? node)
+    public int TotalWords() => TotalWords(m_root);
+
+    private int TotalWords(TrieNode? node)
     {
         if (node == null)
             return 0;
@@ -89,36 +91,28 @@ public partial class Trie
         if (node == null)
             return deletedSelf;
 
-        // base case: if we have reached the end of the key
-        if (level == key.Length)
+        if (level == key.Length) // base case
         {
-            //If there are no nodes ahead of this node in this path
-            //Then we can delete this node
             if (HasNoChildren(node))
             {
+                deletedSelf = true;
                 node = null;
             }
-            //If there are nodes ahead of currentNode in this path
-            //Then we cannot delete currentNode. We simply unmark this as leaf
             else
             {
+                deletedSelf = false;
                 node.UnMarkAsLeaf();
             }
-
-            deletedSelf = true;
         }
         else
         {
-            TrieNode? child = node[GetIndex(key[level])];
+            TrieNode? child = node?[GetIndex(key[level])];
             bool childDeleted = DeleteNode(child, key, level + 1);
+
             if (childDeleted)
             {
-                //Making children pointer also null: since child is deleted
-                node[GetIndex(key[level])] = null;
-                //If currentNode is leaf node that means currntNode is part of another key
-                //and hence we can not delete this node, and it's parent path nodes
-                //If childNode is deleted but if currentNode has more children than currentNode must be part of another key.
-                //So, we cannot delete currenNode
+                node![GetIndex(key[level])] = null;
+
                 if (node.IsEndWord() || !HasNoChildren(node))
                 {
                     deletedSelf = false;
