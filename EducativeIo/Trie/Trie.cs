@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Runtime.Intrinsics.X86;
+using System.Text;
 
 namespace EducativeIo.Trie;
 
@@ -56,6 +57,62 @@ public partial class Trie
         }
 
         return (pCrawl != null) && (pCrawl!.IsEndWord());
+    }
+
+    public bool IsFormationPossible(List<string> list, string word)
+    {
+        // while (word.Length > 0)
+        // {
+        //     bool found = false;
+        //     foreach (string str in list)
+        //     {
+        //         if (word.StartsWith(str))
+        //         {
+        //             found = true;
+        //             word = word.Substring(str.Length);
+        //             break;
+        //         }
+        //     }
+
+        //     if (!found)
+        //         return false;
+        // }
+        // return word.Length == 0;
+
+        // This is a more efficient way to check if the word can be formed, 2 WORDS ONLY
+        Trie trie = new Trie();
+        foreach (string str in list)
+        {
+            trie.InsertNode(str);
+        }
+        TrieNode? crawler = trie.m_root;
+        for (int i = 0; i < word.Length; i++)
+        {
+            int index = trie.GetIndex(word[i]);
+            if (crawler[index] is null)
+                return false;
+            else if (crawler[index].IsEndWord())
+            {
+                if (trie.SearchNode(word.Substring(i + 1)))
+                    return true;
+
+                return IsFormationPossible(list, word.Substring(i + 1));
+            }
+
+            crawler = crawler[index];
+        }
+
+        return false;
+    }
+    public List<string> SortArray(string[] arr)
+    {
+        Trie trie = new Trie();
+        foreach (string word in arr)
+        {
+            trie.InsertNode(word);
+        }
+
+        return trie.FindWords();
     }
 
     public int TotalWords() => TotalWords(m_root);

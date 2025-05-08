@@ -67,4 +67,13 @@ public class TrieTests
         List<string> words = trie.FindWords();
         Assert.AreEqual(9, words.Count);
     }
+    [TestMethod]
+    public void WordFormation()
+    {
+        Trie trie = new Trie();
+        List<string> words = new List<string>() { "the", "hello", "there", "answer", "any", "by", "world", "their", "abc" };
+        const string word = "thehelloworldby";
+        Assert.IsTrue(trie.IsFormationPossible(words, word));
+        Assert.IsFalse(trie.IsFormationPossible(words, "thehelloworldx"));
+    }
 }
