@@ -31,6 +31,40 @@ public class MaxHeap<T> where T : IComparable<T>
         }
     }
 
+    public string ConvertMax(List<int> maxHeap)
+    {
+        string result = "";
+        int size = maxHeap.Count;
+        for (int i = (size - 1) / 2; i >= 0; i--)
+        {
+            Heapify(i);
+        }
+        result = string.Join(',', maxHeap);
+        return result;
+        void Heapify(int i)
+        {
+            int min = i;
+            int left = LChild(i);
+            int right = RChild(i);
+
+            if (left < size && maxHeap[left] < maxHeap[min])
+            {
+                min = left;
+            }
+
+            if (right < size && maxHeap[right] < maxHeap[min])
+            {
+                min = right;
+            }
+
+            if (min != i)
+            {
+                (maxHeap[min], maxHeap[i]) = (maxHeap[i], maxHeap[min]);
+                Heapify(min);
+            }
+        }
+    }
+
     public MaxHeap()
     {
         h = new List<T>();
@@ -82,4 +116,5 @@ public class MaxHeap<T> where T : IComparable<T>
     {
         return i * 2 + 2;
     }
+    public string AsString() => string.Join(',', h);
 }

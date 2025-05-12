@@ -82,4 +82,5 @@ public class MinHeap<T> where T : IComparable<T>
     {
         return i * 2 + 2;
     }
+    public string AsString()=>string.Join(',',h);
 }
