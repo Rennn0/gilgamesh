@@ -15,8 +15,11 @@ public class HashTests
         hashTable.Insert("d", 4);
         hashTable.Insert("b", 5);
         hashTable.Insert("f", 6);
-        hashTable.Resize();
 
         int? value = hashTable.Search("b");
+        Assert.AreEqual(5, value);
+        hashTable.Delete("b");
+        value = hashTable.Search("b");
+        Assert.AreEqual(2, value);
     }
 }
