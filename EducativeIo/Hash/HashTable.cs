@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace EducativeIo.Hash;
@@ -153,6 +154,26 @@ public class HashTable
             sb.Append("null\n");
         }
 
+        return sb.ToString();
+    }
+
+    public string FindSymmetric(int[][] arr, int size)
+    {
+        StringBuilder sb = new StringBuilder();
+        HashSet<(int, int)> set = new HashSet<(int, int)>();
+        for (int i = 0; i < size; i++)
+        {
+            if (set.Contains((arr[i][1], arr[i][0])))
+            {
+                sb.Append($"({arr[i][1]}, {arr[i][0]})({arr[i][0]}, {arr[i][1]})");
+            }
+            else
+            {
+                set.Add((arr[i][0], arr[i][1]));
+            }
+        }
+        sb.Replace('(','{');
+        sb.Replace(')','}');
         return sb.ToString();
     }
 }

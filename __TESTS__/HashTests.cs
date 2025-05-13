@@ -22,4 +22,11 @@ public class HashTests
         value = hashTable.Search("b");
         Assert.AreEqual(2, value);
     }
+
+    [TestMethod]
+    public void Symetric()
+    {
+        HashTable ht = new HashTable();
+        string sym = ht.FindSymmetric([[3, 4], [3, 2], [5, 9], [4, 3], [9, 5]], 5);
+    }
 }
