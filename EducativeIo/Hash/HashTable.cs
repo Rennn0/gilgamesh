@@ -172,8 +172,8 @@ public class HashTable
                 set.Add((arr[i][0], arr[i][1]));
             }
         }
-        sb.Replace('(','{');
-        sb.Replace(')','}');
+        sb.Replace('(', '{');
+        sb.Replace(')', '}');
         return sb.ToString();
     }
 }
