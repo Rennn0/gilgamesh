@@ -1,16 +1,21 @@
 namespace EducativeIo.Heap;
-public class MaxHeap<T> where T : IComparable<T>
+
+public class MaxHeap<T>
+    where T : IComparable<T>
 {
     private List<T> h;
+
     void PerlocateUp(int i)
     {
-        if (i <= 0) return;
+        if (i <= 0)
+            return;
         else if (h[Parent(i)].CompareTo(h[i]) < 0)
         {
             (h[i], h[Parent(i)]) = (h[Parent(i)], h[i]);
             PerlocateUp(Parent(i));
         }
     }
+
     void MaxHeapify(int i)
     {
         int max = i;
@@ -20,15 +25,17 @@ public class MaxHeap<T> where T : IComparable<T>
         {
             max = lChild;
         }
+
         if (rChild < Size() && h[rChild].CompareTo(h[max]) > 0)
         {
             max = rChild;
         }
-        if (max != i)
-        {
-            (h[max], h[i]) = (h[i], h[max]);
-            MaxHeapify(max);
-        }
+
+        if (max == i)
+            return;
+
+        (h[max], h[i]) = (h[i], h[max]);
+        MaxHeapify(max);
     }
 
     public string ConvertMax(List<int> maxHeap)
@@ -39,8 +46,10 @@ public class MaxHeap<T> where T : IComparable<T>
         {
             Heapify(i);
         }
+
         result = string.Join(',', maxHeap);
         return result;
+
         void Heapify(int i)
         {
             int min = i;
@@ -69,19 +78,23 @@ public class MaxHeap<T> where T : IComparable<T>
     {
         h = new List<T>();
     }
+
     public int Size()
     {
         return h.Count;
     }
+
     public T GetMax()
     {
         return Size() <= 0 ? (T)Convert.ChangeType(-1, typeof(T)) : h[0];
     }
+
     public void Insert(T key)
     {
         h.Add(key);
         PerlocateUp(Size() - 1);
     }
+
     public void RemoveMax()
     {
         if (Size() == 1)
@@ -96,6 +109,7 @@ public class MaxHeap<T> where T : IComparable<T>
             MaxHeapify(0);
         }
     }
+
     public void BuildHeap(T[] arr)
     {
         h.AddRange(arr);
@@ -104,17 +118,21 @@ public class MaxHeap<T> where T : IComparable<T>
             MaxHeapify(i);
         }
     }
+
     public int Parent(int i)
     {
         return (i - 1) / 2;
     }
+
     public int LChild(int i)
     {
         return i * 2 + 1;
     }
+
     public int RChild(int i)
     {
         return i * 2 + 2;
     }
+
     public string AsString() => string.Join(',', h);
 }

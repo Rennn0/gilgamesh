@@ -1,5 +1,4 @@
-﻿using System.Runtime.Intrinsics.X86;
-using System.Text;
+﻿using System.Text;
 
 namespace EducativeIo.Trie;
 
@@ -85,6 +84,7 @@ public partial class Trie
         {
             trie.InsertNode(str);
         }
+
         TrieNode? crawler = trie.m_root;
         for (int i = 0; i < word.Length; i++)
         {
@@ -104,6 +104,7 @@ public partial class Trie
 
         return false;
     }
+
     public List<string> SortArray(string[] arr)
     {
         Trie trie = new Trie();
@@ -191,6 +192,10 @@ public partial class Trie
         return deletedSelf;
     }
 
+    /// <summary>
+    ///     yvela sityva rac prefix treeshia
+    /// </summary>
+    /// <returns></returns>
     public List<string> FindWords() => FindWords(m_root);
 
     private List<string> FindWords(TrieNode? root)
