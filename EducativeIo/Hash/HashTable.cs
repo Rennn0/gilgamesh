@@ -1,5 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace EducativeIo.Hash;
@@ -172,8 +171,29 @@ public class HashTable
                 set.Add((arr[i][0], arr[i][1]));
             }
         }
+
         sb.Replace('(', '{');
         sb.Replace(')', '}');
+        return sb.ToString();
+    }
+
+    public string TracePath(Dictionary<string, string> map)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        string? entry = map.FirstOrDefault(x => !map.ContainsValue(x.Key)).Key;
+
+        if (string.IsNullOrEmpty(entry))
+            return sb.ToString();
+
+        while (map.ContainsKey(map[entry]))
+        {
+            sb.Append($"{entry}->{map[entry]} ");
+            entry = map[entry];
+        }
+
+        sb.Append($"{entry}->{map[entry]}");
+
         return sb.ToString();
     }
 }

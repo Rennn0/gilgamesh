@@ -27,6 +27,29 @@ public class HashTests
     public void Symetric()
     {
         HashTable ht = new HashTable();
-        string sym = ht.FindSymmetric([[3, 4], [3, 2], [5, 9], [4, 3], [9, 5]], 5);
+        string sym = ht.FindSymmetric(
+            [
+                [3, 4],
+                [3, 2],
+                [5, 9],
+                [4, 3],
+                [9, 5],
+            ],
+            5
+        );
+    }
+
+    [TestMethod]
+    public void Path()
+    {
+        Dictionary<string, string> map = new Dictionary<string, string>
+        {
+            { "NewYork", "Chicago" },
+            { "Boston", "Texas" },
+            { "Missouri", "NewYork" },
+            { "Texas", "Missouri" },
+        };
+        HashTable ht = new HashTable();
+        string path = ht.TracePath(map);
     }
 }
