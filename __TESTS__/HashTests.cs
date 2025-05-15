@@ -64,4 +64,10 @@ public class HashTests
     {
         bool has = new HashTable().FindSubZero([6, 4, -7, 3, 12, 9]);
     }
+
+    [TestMethod]
+    public void Sum()
+    {
+        var sum = new HashTable().FindSum([1, 21, 3, 14, 5, 60, 7, 6], 81);
+    }
 }

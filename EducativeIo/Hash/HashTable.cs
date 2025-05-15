@@ -251,7 +251,8 @@ public class HashTable
         //     }
         //
         //     return sum;
-        // }
+        // }]
+        int[] res = new int[2];
 
         Dictionary<int, int> dic = new Dictionary<int, int>();
         int sum = 0;
@@ -291,5 +292,26 @@ public class HashTable
         }
 
         return -1;
+    }
+
+    public int[] FindSum(int[] arr, int sum)
+    {
+        int[] res = new int[2];
+        HashSet<int> set = new HashSet<int>();
+
+        for (int i = 0; i < arr.Length; i++)
+        {
+            int diff = sum - arr[i];
+            if (set.Contains(diff))
+            {
+                res[0] = arr[i];
+                res[1] = diff;
+                return res;
+            }
+
+            set.Add(arr[i]);
+        }
+
+        return res;
     }
 }
