@@ -52,4 +52,16 @@ public class HashTests
         HashTable ht = new HashTable();
         string path = ht.TracePath(map);
     }
+
+    [TestMethod]
+    public void Pairs()
+    {
+        var pair = new HashTable().FindPair([3, 4, 7, 1, 12, 9]);
+    }
+
+    [TestMethod]
+    public void SubZero()
+    {
+        bool has = new HashTable().FindSubZero([6, 4, -7, 3, 12, 9]);
+    }
 }

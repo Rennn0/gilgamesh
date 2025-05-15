@@ -196,4 +196,100 @@ public class HashTable
 
         return sb.ToString();
     }
+
+    public string FindPair(int[] arr)
+    {
+        //StringBuilder sb = new StringBuilder();
+
+        Dictionary<int, int[]> dic = new Dictionary<int, int[]>();
+
+        for (int i = 0; i < arr.Length - 1; i++)
+        {
+            for (int j = i + 1; j < arr.Length; j++)
+            {
+                //dic[$"{{{arr[i]},{arr[j]}}}"] = arr[i] + arr[j];
+                int sum = arr[i] + arr[j];
+                if (dic.TryGetValue(sum, out int[]? pair))
+                {
+                    return "{" + $"{pair[0]},{pair[1]}" + "}{" + $"{arr[i]},{arr[j]}" + "}";
+                }
+                else
+                {
+                    dic[sum] = [arr[i], arr[j]];
+                }
+            }
+        }
+
+        //List<string> match = (
+        //    dic.GroupBy(x => x.Value).FirstOrDefault(x => x.Count() > 1) ?? throw new Exception()
+        //)
+        //    .Select(x => x.Key)
+        //    .ToList();
+        //sb.Append('{');
+        //sb.Append(string.Join(',', match));
+        //sb.Append('}');
+        return "";
+    }
+
+    public bool FindSubZero(int[] arr)
+    {
+        // for (int i = 0; i < arr.Length - 1; i++)
+        // {
+        //     for (int j = i + 1; j < arr.Length; j++)
+        //     {
+        //         if (SubSum(i, j) == 0)
+        //             return true;
+        //     }
+        // }
+        //
+        // int SubSum(int l, int r)
+        // {
+        //     int sum = 0;
+        //     for (int k = l; k <= r; k++)
+        //     {
+        //         sum += arr[k];
+        //     }
+        //
+        //     return sum;
+        // }
+
+        Dictionary<int, int> dic = new Dictionary<int, int>();
+        int sum = 0;
+        for (int i = 0; i < arr.Length; i++)
+        {
+            sum += arr[i];
+            if (sum == 0 || !dic.TryAdd(sum, i))
+                return true;
+        }
+
+        return false;
+    }
+
+    public int FindFirstUnique(int[] arr)
+    {
+        Dictionary<int, int> dic = new Dictionary<int, int>();
+        for (int i = 0; i < arr.Length; i++)
+        {
+            if (dic.ContainsKey(arr[i]))
+                dic[arr[i]]++;
+            else
+                dic[arr[i]] = 1;
+        }
+
+        for (int i = 0; i < arr.Length; i++)
+        {
+            if (dic[arr[i]] == 1)
+                return arr[i];
+        }
+
+        foreach (KeyValuePair<int, int> pair in dic)
+        {
+            if (pair.Value > 1)
+            {
+                /*blahblah ezz*/
+            }
+        }
+
+        return -1;
+    }
 }
