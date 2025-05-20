@@ -312,6 +312,7 @@ public class HashTable
             set.Add(arr[i]);
         }
 
+        EventWaitHandle ewh = new EventWaitHandle(false, EventResetMode.AutoReset);
         return res;
     }
 }

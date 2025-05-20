@@ -89,9 +89,9 @@ public partial class Trie
         for (int i = 0; i < word.Length; i++)
         {
             int index = trie.GetIndex(word[i]);
-            if (crawler[index] is null)
+            if (crawler![index] is null)
                 return false;
-            else if (crawler[index].IsEndWord())
+            else if (crawler[index]!.IsEndWord())
             {
                 if (trie.SearchNode(word.Substring(i + 1)))
                     return true;
