@@ -2,6 +2,8 @@
 using System.Net.NetworkInformation;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using EducativeIo.BoundedBuffer;
 
 namespace EducativeIo;
 
@@ -20,7 +22,7 @@ internal class Solution
     private static SemaphoreSlim semaProd = new SemaphoreSlim(10);
     private static SemaphoreSlim semaCons = new SemaphoreSlim(3);
 
-    static int dummy = 0;
+    // static int dummy = 0;
 
     static EventWaitHandle eventWaitHandleManual = new EventWaitHandle(false, EventResetMode.ManualReset);
     static EventWaitHandle eventWaitHandleAuto = new EventWaitHandle(false, EventResetMode.AutoReset);
@@ -196,6 +198,7 @@ internal class Solution
         //     while (true)
         //     {
         //         ThreadPool.GetAvailableThreads(out int workerThreads, out int completionPortion);
+        // {
         //         ThreadPool.GetMaxThreads(out int maxWorker, out int maxCompl);
         //         Console.WriteLine($"{workerThreads}  {completionPortion}  {maxWorker} {maxCompl}");
         //         Thread.Sleep(1000);
@@ -203,7 +206,24 @@ internal class Solution
         // }, new object(), true);
         // Console.ReadKey();
 
-        new QuizQuestion().run();
+        // var res = await new MyAwaiter(2000);
+
+        // Task<int> tcs = new TcsTst().Wait();
+
+        // var completed = await Task.WhenAny(tcs, Task.Delay(5000));
+
+        // if (completed == tcs)
+        //     Console.WriteLine("Task completed successfully");
+        //     var result = await tcs;
+        //     Console.WriteLine($"Result from TCS: {result}");
+        // }
+        // else
+        // {
+        //     Console.WriteLine("Task timed out");
+        // }
+
+        new BBTest(5).Run();
+
     }
 
     public static void Printer()
@@ -408,17 +428,67 @@ public class QuizQuestion
         Console.WriteLine("All is good");
     }
 
-    public void run()
+    // public Task run()
+    // {
+
+    //     Thread t1 = new Thread(new ThreadStart(printMessage));
+    //     t1.Start();
+
+    //     Thread t2 = new Thread(new ThreadStart(printMessage));
+    //     Thread.Sleep(5000);
+    //     t2.Start();
+
+    //     t1.Join();
+    //     t2.Join();
+
+    // }
+}
+
+public class MyAwaiter : INotifyCompletion
+{
+    private bool _isCompleted;
+    private int _sleepDuration;
+
+    public MyAwaiter(int sleepDuration)
     {
+        _sleepDuration = sleepDuration;
+        _isCompleted = false;
+    }
+    public bool IsCompleted => _isCompleted;
+    public void OnCompleted(Action continuation)
+    {
+        new Thread(() =>
+        {
+            Console.WriteLine($"Thread {Thread.CurrentThread.ManagedThreadId} started");
+            Thread.Sleep(_sleepDuration);
+            _isCompleted = true;
+            continuation();
+        }).Start();
+    }
 
-        Thread t1 = new Thread(new ThreadStart(printMessage));
-        t1.Start();
+    public string GetResult() => "Hello World";
 
-        Thread t2 = new Thread(new ThreadStart(printMessage));
-        Thread.Sleep(5000);
-        t2.Start();
+    public MyAwaiter GetAwaiter() => this;
+}
 
-        t1.Join();
-        t2.Join();
+public class TcsTst
+{
+    private TaskCompletionSource<int> _tcs { get; }
+    public TcsTst()
+    {
+        _tcs = new TaskCompletionSource<int>();
+    }
+    public Task<int> Wait()
+    {
+        ThreadPool.QueueUserWorkItem(_ =>
+        {
+            Console.WriteLine("Waiting for 2 seconds...");
+            Thread.Sleep(2000);
+            // _tcs.SetResult(42);
+            Console.WriteLine("Task completed");
+
+        });
+
+        return _tcs.Task;
     }
 }
