@@ -72,6 +72,7 @@ namespace EducativeIo.BoundedBuffer
                     Thread.Sleep(1000);
                     long after = Interlocked.Read(ref _counter);
                     Console.WriteLine(after - before);
+                    Console.WriteLine(_bb.Count);
                 }
             }
             catch (System.Exception e)
