@@ -29,8 +29,8 @@ namespace EducativeIo.BoundedBuffer
 
                     Console.WriteLine($"TPS = {b - a}");
                 }
-
             }).Start();
+
         }
     }
     public class RateLimiter
