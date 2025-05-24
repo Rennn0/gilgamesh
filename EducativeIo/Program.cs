@@ -222,7 +222,7 @@ internal class Solution
         //     Console.WriteLine("Task timed out");
         // }
 
-        new BBTest(5).Run();
+        new BBTest(1).Run();
 
     }
 

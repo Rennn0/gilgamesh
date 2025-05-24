@@ -5,13 +5,13 @@ namespace EducativeIo.BoundedBuffer
     public class BBTest
     {
         private readonly BoundedBuffer<int> _bb;
-        private readonly BoundedBuffer<string> _logs;
+        // private readonly BoundedBuffer<string> _logs;
         private readonly AutoResetEvent _are = new AutoResetEvent(false);
         private long _counter = 0;
         public BBTest(int capacity)
         {
             _bb = new BoundedBuffer<int>(capacity);
-            _logs = new BoundedBuffer<string>(100);
+            // _logs = new BoundedBuffer<string>(100);
         }
         private void ConsumerThread()
         {
@@ -52,15 +52,15 @@ namespace EducativeIo.BoundedBuffer
 
         }
 
-        private void LoggerThread()
-        {
-            while (true)
-            {
-                _are.WaitOne();
-                string log = _logs.Dequeue();
-                Console.WriteLine($"Log: {log} ");
-            }
-        }
+        // private void LoggerThread()
+        // {
+        //     while (true)
+        //     {
+        //         _are.WaitOne();
+        //         string log = _logs.Dequeue();
+        //         Console.WriteLine($"Log: {log} ");
+        //     }
+        // }
 
         private void CounterThread()
         {
@@ -112,6 +112,9 @@ namespace EducativeIo.BoundedBuffer
         private int _tail;
         private Mutex _mutex;
         private object _sync;
+        private readonly SemaphoreSlim _semaConsumer;
+        private readonly SemaphoreSlim _semaProducer;
+        private readonly SemaphoreSlim _semaSync;
         public BoundedBuffer(int capacity)
         {
             _capacity = capacity;
@@ -121,6 +124,9 @@ namespace EducativeIo.BoundedBuffer
             _tail = 0;
             _mutex = new Mutex();
             _sync = new object();
+            _semaConsumer = new SemaphoreSlim(0, capacity);
+            _semaProducer = new SemaphoreSlim(capacity, capacity);
+            _semaSync = new SemaphoreSlim(1, 1);
         }
         public int Count => _occupied;
         public void Enqueue(T item)
@@ -131,17 +137,26 @@ namespace EducativeIo.BoundedBuffer
             //     _mutex.ReleaseMutex();
             //     _mutex.WaitOne();
             // }
-            Monitor.Enter(_sync);
-            while (_occupied == _capacity) Monitor.Wait(_sync);
+
+            // Monitor.Enter(_sync);
+            // while (_occupied == _capacity) Monitor.Wait(_sync);
+
+            _semaProducer.Wait();
+            _semaSync.Wait();
+
             if (_tail == _capacity) _tail = 0;
 
             _buffer[_tail] = item;
             _occupied++;
             _tail++;
 
+            _semaSync.Release();
+            _semaConsumer.Release();
+
             // Monitor.Pulse(_sync);
-            Monitor.PulseAll(_sync);
-            Monitor.Exit(_sync);
+            // Monitor.PulseAll(_sync);
+            // Monitor.Exit(_sync);
+
             // _mutex.ReleaseMutex();
         }
 
@@ -154,18 +169,26 @@ namespace EducativeIo.BoundedBuffer
             //     _mutex.WaitOne();
             // }
 
-            Monitor.Enter(_sync);
-            while (_occupied == 0) Monitor.Wait(_sync);
+            // Monitor.Enter(_sync);
+            // while (_occupied == 0) Monitor.Wait(_sync);
+
+            _semaConsumer.Wait();
+            _semaSync.Wait();
 
             if (_head == _capacity) _head = 0;
             T item = _buffer[_head];
             _head++;
             _occupied--;
 
+            _semaSync.Release();
+            _semaProducer.Release();
+
             // Monitor.Pulse(_sync);
-            Monitor.PulseAll(_sync);
-            Monitor.Exit(_sync);
+            // Monitor.PulseAll(_sync);
+            // Monitor.Exit(_sync);
+
             // _mutex.ReleaseMutex();
+
             return item;
         }
     }
