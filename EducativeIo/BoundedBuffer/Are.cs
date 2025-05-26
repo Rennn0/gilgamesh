@@ -1,6 +1,6 @@
 namespace EducativeIo.BoundedBuffer
 {
-    public class Are
+    public class Are // auto reset event
     {
         private bool m_isSignaled;
         private readonly object m_sync;

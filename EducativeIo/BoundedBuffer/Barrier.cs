@@ -4,9 +4,9 @@ namespace EducativeIo.BoundedBuffer
     {
         private Barrier barrier = new Barrier(3);
 
-        public void threadTask(Object sleepFor)
+        public void threadTask(Object? sleepFor)
         {
-            Thread.Sleep((int)sleepFor);
+            Thread.Sleep((int)sleepFor!);
             Console.WriteLine(String.Format("Thread with id {0} reached the barrier", Thread.CurrentThread.ManagedThreadId));
             barrier.Arrive();
 

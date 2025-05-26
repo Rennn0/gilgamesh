@@ -231,7 +231,8 @@ internal class Solution
         // new SemaTest().Run();
         // new ReadersWriteLockTest().run();
         // new UnisexRoomTest().run();
-        new BarrierTest().run();
+        // new BarrierTest().run();
+        new UberSeatingProblemTest().run();
     }
 
     public static void Printer()
