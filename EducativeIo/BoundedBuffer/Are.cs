@@ -11,6 +11,7 @@ namespace EducativeIo.BoundedBuffer
             m_isSignaled = isSignaled;
             mr_sema = new Semaphore(isSignaled ? 1 : 0, 1);
             mr_semaSync = new Semaphore(1, 1);
+            m_sync = new object();
             // m_sync = new object();
         }
         public void Signal()
