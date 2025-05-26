@@ -225,8 +225,10 @@ internal class Solution
         // new BBTest(1).Run();
         // new TokenBucketFilterTest().Run();
 
-        new DefferedCallbackExecutorTest().Run2();
+        // new DefferedCallbackExecutorTest().Run2();
         // new DeferredCallbackExecutorTest().run();
+
+        new SemaTest().Run();
 
     }
 
