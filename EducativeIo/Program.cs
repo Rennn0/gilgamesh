@@ -228,8 +228,8 @@ internal class Solution
         // new DefferedCallbackExecutorTest().Run2();
         // new DeferredCallbackExecutorTest().run();
 
-        new SemaTest().Run();
-
+        // new SemaTest().Run();
+        new ReadersWriteLockTest().run();
     }
 
     public static void Printer()
