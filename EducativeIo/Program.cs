@@ -237,7 +237,8 @@ internal class Solution
         // new BarrierTest().run();
         // new UberSeatingProblemTest().run();
         // new DiningPhilosophersTest().Run();
-        new BarberShopTest().Run();
+        // new BarberShopTest().Run();
+        new SupermanTest().Test();
     }
 
     public static void Printer()
