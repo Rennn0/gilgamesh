@@ -46,7 +46,6 @@ namespace EducativeIo.BoundedBuffer
             }
         }
 
-
         public void controlledSimulation()
         {
             UberSitting problem = new UberSitting();
@@ -98,6 +97,9 @@ namespace EducativeIo.BoundedBuffer
         private readonly Barrier mr_barrier;
         private readonly Semaphore mr_respublicanSemaphore;
         private readonly Semaphore mr_democratSemaphore;
+
+        private const int mc_zoro = 2;
+
         public UberSitting()
         {
             m_democrats = 0;
@@ -109,6 +111,7 @@ namespace EducativeIo.BoundedBuffer
             mr_respublicanSemaphore = new Semaphore(0, 99);
             mr_democratSemaphore = new Semaphore(0, 99);
         }
+
         public void drive()
         {
             m_rides++;
@@ -117,7 +120,9 @@ namespace EducativeIo.BoundedBuffer
 
         public void seated(String party)
         {
-            Console.WriteLine(String.Format("\n{0} {1} seated", party, Thread.CurrentThread.ManagedThreadId));
+            Console.WriteLine(
+                String.Format("\n{0} {1} seated", party, Thread.CurrentThread.ManagedThreadId)
+            );
         }
 
         public void seatDemocrat()

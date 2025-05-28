@@ -1,8 +1,5 @@
 ﻿using System.Collections.Concurrent;
-using System.Net.NetworkInformation;
-using System.Numerics;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using EducativeIo.BoundedBuffer;
 
 namespace EducativeIo;
@@ -17,15 +14,21 @@ internal class Solution
 
     private static SemaphoreSlim sema = new SemaphoreSlim(3, 3);
 
-
     private static BlockingCollection<int> tasks = new BlockingCollection<int>();
     private static SemaphoreSlim semaProd = new SemaphoreSlim(10);
     private static SemaphoreSlim semaCons = new SemaphoreSlim(3);
 
     // static int dummy = 0;
 
-    static EventWaitHandle eventWaitHandleManual = new EventWaitHandle(false, EventResetMode.ManualReset);
-    static EventWaitHandle eventWaitHandleAuto = new EventWaitHandle(false, EventResetMode.AutoReset);
+    static EventWaitHandle eventWaitHandleManual = new EventWaitHandle(
+        false,
+        EventResetMode.ManualReset
+    );
+
+    static EventWaitHandle eventWaitHandleAuto = new EventWaitHandle(
+        false,
+        EventResetMode.AutoReset
+    );
 
     static AutoResetEvent are1 = new AutoResetEvent(false);
     static AutoResetEvent are2 = new AutoResetEvent(false);
@@ -37,9 +40,9 @@ internal class Solution
     static volatile bool shutDown = false;
     static int val = 0;
     static object pad = new object();
+
     public static void Main(string[] args)
     {
-
         // new Thread(Ping) { IsBackground = true }.Start();
         // new Thread(Pong) { IsBackground = true }.Start();
 
@@ -232,7 +235,9 @@ internal class Solution
         // new ReadersWriteLockTest().run();
         // new UnisexRoomTest().run();
         // new BarrierTest().run();
-        new UberSeatingProblemTest().run();
+        // new UberSeatingProblemTest().run();
+        // new DiningPhilosophersTest().Run();
+        new BarberShopTest().Run();
     }
 
     public static void Printer()
@@ -240,7 +245,8 @@ internal class Solution
         while (!shutDown)
         {
             Monitor.Enter(pad);
-            while (!printTurn && !shutDown) Monitor.Wait(pad);
+            while (!printTurn && !shutDown)
+                Monitor.Wait(pad);
 
             printTurn = false;
             Console.WriteLine($"Thread {System.Environment.CurrentManagedThreadId} printing {val}");
@@ -249,12 +255,14 @@ internal class Solution
             Monitor.Exit(pad);
         }
     }
+
     public static void Finder()
     {
         while (!shutDown)
         {
             Monitor.Enter(pad);
-            while (printTurn && !shutDown) Monitor.Wait(pad);
+            while (printTurn && !shutDown)
+                Monitor.Wait(pad);
 
             printTurn = true;
             val = new Random().Next(1, 100);
@@ -305,6 +313,7 @@ internal class Solution
             }
         }
     }
+
     public static async Task SemaTestAsync(int id)
     {
         Console.WriteLine($"Thread {id} waiting");
@@ -331,6 +340,7 @@ internal class Solution
             s1.Release();
         }
     }
+
     public static void PongSema()
     {
         while (true)
@@ -383,7 +393,6 @@ internal class Solution
             semaphore.Release();
         }
     }
-
 }
 
 // public class QuizQuestion
@@ -391,13 +400,11 @@ internal class Solution
 
 //     private readonly Object obj = new Object();
 
-
 //     void MonitorExit()
 //     {
 //         Thread.Sleep(500);
 //         Monitor.Exit(obj);
 //     }
-
 
 //     void MonitorEnter()
 //     {
@@ -429,7 +436,6 @@ public class QuizQuestion
 
     public void printMessage()
     {
-
         Monitor.Enter(obj);
         obj = true;
         Thread.Sleep(3000);
@@ -463,7 +469,9 @@ public class MyAwaiter : INotifyCompletion
         _sleepDuration = sleepDuration;
         _isCompleted = false;
     }
+
     public bool IsCompleted => _isCompleted;
+
     public void OnCompleted(Action continuation)
     {
         new Thread(() =>
@@ -483,10 +491,12 @@ public class MyAwaiter : INotifyCompletion
 public class TcsTst
 {
     private TaskCompletionSource<int> _tcs { get; }
+
     public TcsTst()
     {
         _tcs = new TaskCompletionSource<int>();
     }
+
     public Task<int> Wait()
     {
         ThreadPool.QueueUserWorkItem(_ =>
@@ -495,7 +505,6 @@ public class TcsTst
             Thread.Sleep(2000);
             // _tcs.SetResult(42);
             Console.WriteLine("Task completed");
-
         });
 
         return _tcs.Task;
