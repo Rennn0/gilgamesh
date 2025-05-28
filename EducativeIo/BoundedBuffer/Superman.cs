@@ -100,7 +100,7 @@ public class Superman
     //
     //         return s_instance;
     //     }
-}
+    // }
 
     // private class InstanceHelper
     // {

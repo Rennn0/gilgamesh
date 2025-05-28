@@ -238,7 +238,11 @@ internal class Solution
         // new UberSeatingProblemTest().run();
         // new DiningPhilosophersTest().Run();
         // new BarberShopTest().Run();
-        new SupermanTest().Test();
+        // new SupermanTest().Test();
+
+        int[] arr = [2, 5, 4, 1, 23, 0, 15];
+        new MultiThreadedMergeSort(arr.Length).Sort(0, arr.Length - 1, arr);
+        Console.WriteLine("Sorted array: " + string.Join(", ", arr));
     }
 
     public static void Printer()
