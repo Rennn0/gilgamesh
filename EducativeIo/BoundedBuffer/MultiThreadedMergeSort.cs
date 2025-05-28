@@ -15,14 +15,17 @@ public class MultiThreadedMergeSort
             return;
         int mid = (start + end) / 2;
 
-        Thread leftThread = new Thread(() => Sort(start, mid, arr));
-        Thread rightThread = new Thread(() => Sort(mid + 1, end, arr));
+        // Thread leftThread = new Thread(() => Sort(start, mid, arr));
+        // Thread rightThread = new Thread(() => Sort(mid + 1, end, arr));
 
-        leftThread.Start();
-        rightThread.Start();
+        // leftThread.Start();
+        // rightThread.Start();
 
-        leftThread.Join();
-        rightThread.Join();
+        // leftThread.Join();
+        // rightThread.Join();
+
+        Sort(start, mid, arr);
+        Sort(mid + 1, end, arr);
 
         int i = start;
         int j = mid + 1;
