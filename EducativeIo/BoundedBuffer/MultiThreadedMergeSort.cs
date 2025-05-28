@@ -11,9 +11,11 @@ public class MultiThreadedMergeSort
 
     public void Sort(int start, int end, int[] arr)
     {
-        if (start == end)
-            return;
+        if (start == end) return;
         int mid = (start + end) / 2;
+
+        Sort(start, mid, arr);
+        Sort(mid + 1, end, arr);
 
         // Thread leftThread = new Thread(() => Sort(start, mid, arr));
         // Thread rightThread = new Thread(() => Sort(mid + 1, end, arr));
@@ -24,45 +26,39 @@ public class MultiThreadedMergeSort
         // leftThread.Join();
         // rightThread.Join();
 
-        Sort(start, mid, arr);
-        Sort(mid + 1, end, arr);
+        int left = start;
+        int right = mid + 1;
+        int k;
 
-        int i = start;
-        int j = mid + 1;
-        int k = start;
-
-        for (; k <= end; k++)
+        for (k = start; k <= end; k++)
         {
             _arr[k] = arr[k];
         }
 
-        k = start;
-        while (k <= end)
+        for (k = start; k <= end; k++)
         {
-            if (i <= mid && j <= end)
+            if (left <= mid && right <= end)
             {
-                arr[k] = Math.Min(_arr[i], _arr[j]);
-                if (arr[k] == _arr[i])
+                arr[k] = Math.Min(_arr[left], _arr[right]);
+                if (arr[k] == _arr[left])
                 {
-                    i++;
+                    left++;
                 }
                 else
                 {
-                    j++;
+                    right++;
                 }
             }
-            else if (i <= mid && j > end)
+            else if (left <= mid && right > end)
             {
-                arr[k] = _arr[i];
-                i++;
+                arr[k] = _arr[left];
+                left++;
             }
             else
             {
-                arr[k] = _arr[j];
-                j++;
+                arr[k] = _arr[right];
+                right++;
             }
-
-            k++;
         }
     }
 }
