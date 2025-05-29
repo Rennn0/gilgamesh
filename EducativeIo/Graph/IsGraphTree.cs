@@ -8,19 +8,19 @@ public partial class Solution
         LinkedList.Node adj = g.GetArray()[node].GetHead();
         while (adj != null)
         {
-            if (!visited[adj.m_data])
+            if (!visited[adj.MData])
             {
-                if (HasCycle(g, adj.m_data, node, ref visited))
+                if (HasCycle(g, adj.MData, node, ref visited))
                 {
                     return true;
                 }
             }
-            else if (adj.m_data != parent)
+            else if (adj.MData != parent)
             {
                 return true;
             }
 
-            adj = adj.m_nextElement;
+            adj = adj.MNextElement;
         }
 
         return false;

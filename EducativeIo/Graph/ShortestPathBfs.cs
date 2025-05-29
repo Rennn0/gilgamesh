@@ -32,13 +32,13 @@ public partial class Solution
                 LinkedList.Node adjacentNodes = g.GetArray()[node].GetHead();
                 while (adjacentNodes != null)
                 {
-                    if (!visited[adjacentNodes.m_data])
+                    if (!visited[adjacentNodes.MData])
                     {
-                        visited[adjacentNodes.m_data] = true;
-                        nextLayer.Enqueue(adjacentNodes.m_data);
+                        visited[adjacentNodes.MData] = true;
+                        nextLayer.Enqueue(adjacentNodes.MData);
                     }
 
-                    adjacentNodes = adjacentNodes.m_nextElement;
+                    adjacentNodes = adjacentNodes.MNextElement;
                 }
             }
 
@@ -70,11 +70,11 @@ public partial class Solution
             LinkedList.Node adjacentNodes = g.GetArray()[node].GetHead();
             while (adjacentNodes != null)
             {
-                if (!visited[adjacentNodes.m_data])
+                if (!visited[adjacentNodes.MData])
                 {
-                    distance[adjacentNodes.m_data] = distance[node] + 1;
-                    queue.Enqueue(adjacentNodes.m_data);
-                    visited[adjacentNodes.m_data] = true;
+                    distance[adjacentNodes.MData] = distance[node] + 1;
+                    queue.Enqueue(adjacentNodes.MData);
+                    visited[adjacentNodes.MData] = true;
 
                     //if (adjacentNodes.m_data == destination)
                     //{
@@ -82,7 +82,7 @@ public partial class Solution
                     //}
                 }
 
-                adjacentNodes = adjacentNodes.m_nextElement;
+                adjacentNodes = adjacentNodes.MNextElement;
             }
         }
 

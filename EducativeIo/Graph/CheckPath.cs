@@ -19,16 +19,16 @@ public partial class Solution
             LinkedList.Node adjNodes = g.GetArray()[node].GetHead();
             while (adjNodes != null)
             {
-                if (adjNodes.m_data == destination)
+                if (adjNodes.MData == destination)
                     return true;
 
-                if (!visited[adjNodes.m_data])
+                if (!visited[adjNodes.MData])
                 {
-                    stack.Push(adjNodes.m_data);
-                    visited[adjNodes.m_data] = true;
+                    stack.Push(adjNodes.MData);
+                    visited[adjNodes.MData] = true;
                 }
 
-                adjNodes = adjNodes.m_nextElement;
+                adjNodes = adjNodes.MNextElement;
             }
         }
 

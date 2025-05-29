@@ -25,14 +25,14 @@ public partial class Solution
             LinkedList.Node adj = g.GetArray()[node].GetHead();
             while (adj != null)
             {
-                if (!visited[adj.m_data])
+                if (!visited[adj.MData])
                 {
-                    visited[adj.m_data] = true;
-                    childParent[adj.m_data] = node;
-                    queue.Enqueue(adj.m_data);
+                    visited[adj.MData] = true;
+                    childParent[adj.MData] = node;
+                    queue.Enqueue(adj.MData);
                 }
 
-                adj = adj.m_nextElement;
+                adj = adj.MNextElement;
             }
         }
 

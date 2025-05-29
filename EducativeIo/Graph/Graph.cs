@@ -36,8 +36,8 @@ namespace EducativeIo.Graph
 
                 while (temp != null)
                 {
-                    Console.Write("[" + temp.m_data + "] -> ");
-                    temp = temp.m_nextElement;
+                    Console.Write("[" + temp.MData + "] -> ");
+                    temp = temp.MNextElement;
                 }
 
                 Console.WriteLine("NULL");

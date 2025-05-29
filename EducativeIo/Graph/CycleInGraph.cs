@@ -16,13 +16,13 @@ public class CycleInGraph
             while (adjacentNode != null)
             {
                 // Access adjacent node and repeat algorithm
-                int adjacent = adjacentNode.m_data;
+                int adjacent = adjacentNode.MData;
                 if ((!visited[adjacent]) && DetectCycleRec(g, adjacent, visited, recNodes))
                     return true; // Loop found
 
                 if (recNodes[adjacent])
                     return true;
-                adjacentNode = adjacentNode.m_nextElement;
+                adjacentNode = adjacentNode.MNextElement;
             }
         }
 
@@ -67,7 +67,7 @@ public class CycleInGraph
                     LinkedList.Node adjacentNodes = g.GetArray()[current].GetHead();
                     while (adjacentNodes != null)
                     {
-                        int adjacent = adjacentNodes.m_data;
+                        int adjacent = adjacentNodes.MData;
                         if (!visited[adjacent])
                         {
                             stack.Push(adjacent);
@@ -77,7 +77,7 @@ public class CycleInGraph
                             return true;
                         }
 
-                        adjacentNodes = adjacentNodes.m_nextElement;
+                        adjacentNodes = adjacentNodes.MNextElement;
                     }
                 }
                 else

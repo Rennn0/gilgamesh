@@ -9,9 +9,9 @@ public partial class Solution
         LinkedList.Node temp = (g.GetArray())[node].GetHead();
         while (temp != null)
         {
-            if (visited[temp.m_data] == false)
-                Dfs(g, temp.m_data, visited);
-            temp = temp.m_nextElement;
+            if (visited[temp.MData] == false)
+                Dfs(g, temp.MData, visited);
+            temp = temp.MNextElement;
         }
     }
 
@@ -47,13 +47,13 @@ public partial class Solution
             LinkedList.Node adjacents = g.GetArray()[current].GetHead();
             while (adjacents != null)
             {
-                if (!visited[adjacents.m_data])
+                if (!visited[adjacents.MData])
                 {
-                    q.Enqueue(adjacents.m_data);
-                    visited[adjacents.m_data] = true;
+                    q.Enqueue(adjacents.MData);
+                    visited[adjacents.MData] = true;
                 }
 
-                adjacents = adjacents.m_nextElement;
+                adjacents = adjacents.MNextElement;
             }
         }
     }
@@ -70,13 +70,13 @@ public partial class Solution
             LinkedList.Node adjacents = g.GetArray()[current].GetHead();
             while (adjacents != null)
             {
-                if (!visited[adjacents.m_data])
+                if (!visited[adjacents.MData])
                 {
-                    stack.Push(adjacents.m_data);
-                    visited[adjacents.m_data] = true;
+                    stack.Push(adjacents.MData);
+                    visited[adjacents.MData] = true;
                 }
 
-                adjacents = adjacents.m_nextElement;
+                adjacents = adjacents.MNextElement;
             }
         }
     }

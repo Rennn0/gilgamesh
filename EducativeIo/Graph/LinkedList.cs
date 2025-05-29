@@ -4,38 +4,38 @@ namespace EducativeIo.Graph
     {
         public class Node
         {
-            internal int m_data; //Value to store (could be int,string,object etc)
-            internal Node m_nextElement; //Pointer to next element
+            internal int MData; //Value to store (could be int,string,object etc)
+            internal Node MNextElement; //Pointer to next element
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
             public Node()
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
             {
                 //Constructor to initialize nextElement of newlyCreated Node
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-                m_nextElement = null;
+                MNextElement = null;
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
             }
         };
 
-        private Node m_head;
+        private Node _mHead;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         public LinkedList()
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         {
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-            m_head = null;
+            _mHead = null;
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         }
 
         public Node GetHead()
         {
-            return m_head;
+            return _mHead;
         }
 
         private bool IsEmpty()
         {
-            if (m_head == null) //Check whether the head points to null
+            if (_mHead == null) //Check whether the head points to null
                 return true;
             else
                 return false;
@@ -49,13 +49,13 @@ namespace EducativeIo.Graph
                 return false;
             }
 
-            Node temp = m_head;
+            Node temp = _mHead;
             Console.Write("List : ");
 
             while (temp != null)
             {
-                Console.Write(temp.m_data + "->");
-                temp = temp.m_nextElement;
+                Console.Write(temp.MData + "->");
+                temp = temp.MNextElement;
             }
 
             Console.WriteLine("null ");
@@ -65,33 +65,33 @@ namespace EducativeIo.Graph
         public void InsertAtHead(int value)
         {
             Node newNode = new Node();
-            newNode.m_data = value;
-            newNode.m_nextElement = m_head; //Linking newNode to head's nextNode
-            m_head = newNode;
+            newNode.MData = value;
+            newNode.MNextElement = _mHead; //Linking newNode to head's nextNode
+            _mHead = newNode;
         }
 
         public string Elements()
         {
             // this function will return all values of linked List
             string elementsList = "";
-            Node start = m_head;
-            Node check = m_head;
+            Node start = _mHead;
+            Node check = _mHead;
 
-            elementsList += start.m_data.ToString();
+            elementsList += start.MData.ToString();
             elementsList += "->";
-            start = start.m_nextElement;
+            start = start.MNextElement;
 
-            while (start != null && start.m_data != check.m_data)
+            while (start != null && start.MData != check.MData)
             {
-                elementsList += start.m_data.ToString();
+                elementsList += start.MData.ToString();
                 elementsList += "->";
-                start = start.m_nextElement;
+                start = start.MNextElement;
             }
 
             if (start == null)
                 return elementsList + "null";
 
-            elementsList += check.m_data.ToString();
+            elementsList += check.MData.ToString();
             return elementsList;
         }
 
@@ -105,37 +105,37 @@ namespace EducativeIo.Graph
             else
             {
                 Node newNode = new Node(); // creating new node
-                Node last = m_head; // last pointing at the head of the list
+                Node last = _mHead; // last pointing at the head of the list
 
-                while (last.m_nextElement != null)
+                while (last.MNextElement != null)
                 {
                     // traversing through the list
-                    last = last.m_nextElement;
+                    last = last.MNextElement;
                 }
 
-                newNode.m_data = value;
+                newNode.MData = value;
                 Console.Write(value + " Inserted!    ");
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-                newNode.m_nextElement = null; // point last's nextElement to nullptr
+                newNode.MNextElement = null; // point last's nextElement to nullptr
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
-                last.m_nextElement = newNode; // adding the newNode at the end of the list
+                last.MNextElement = newNode; // adding the newNode at the end of the list
             }
         }
 
         // function to check if element exists in the list
         public bool Search(int value)
         {
-            Node temp = m_head; // pointing temp to the head
+            Node temp = _mHead; // pointing temp to the head
 
             while (temp != null)
             {
-                if (temp.m_data == value)
+                if (temp.MData == value)
                 {
                     // if passed value matches with temp's data
                     return true;
                 }
 
-                temp = temp.m_nextElement; // pointig to temp's nextElement
+                temp = temp.MNextElement; // pointig to temp's nextElement
             }
 
             return false; // if not found
@@ -153,12 +153,12 @@ namespace EducativeIo.Graph
             }
 
             //if list is not empty, start traversing it from the head
-            Node currentNode = m_head; //currentNode to traverse the list
+            Node currentNode = _mHead; //currentNode to traverse the list
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             Node previousNode = null; //previousNode starts from null
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 
-            if (currentNode.m_data == value)
+            if (currentNode.MData == value)
             {
                 // deleting value of head
                 deleted = DeleteAtHead();
@@ -168,23 +168,23 @@ namespace EducativeIo.Graph
             }
 
             previousNode = currentNode;
-            currentNode = currentNode.m_nextElement; // pointing current to current's nextElement
+            currentNode = currentNode.MNextElement; // pointing current to current's nextElement
             //Traversing/Searching for Node to Delete
             while (currentNode != null)
             {
                 //Node to delete is found
-                if (value == currentNode.m_data)
+                if (value == currentNode.MData)
                 {
                     // pointing previousNode's nextElement to currentNode's nextElement
-                    previousNode.m_nextElement = currentNode.m_nextElement;
+                    previousNode.MNextElement = currentNode.MNextElement;
                     // delete currentNode;
-                    currentNode = previousNode.m_nextElement;
+                    currentNode = previousNode.MNextElement;
                     deleted = true;
                     break;
                 }
 
                 previousNode = currentNode;
-                currentNode = currentNode.m_nextElement; // pointing current to current's nextElement
+                currentNode = currentNode.MNextElement; // pointing current to current's nextElement
             }
 
             //deleted is true only when value is found and deleted
@@ -209,21 +209,21 @@ namespace EducativeIo.Graph
                 return false;
             }
 
-            m_head = m_head.m_nextElement; //nextNode points to head's nextElement
+            _mHead = _mHead.MNextElement; //nextNode points to head's nextElement
 
             return true;
         }
 
         public int Length()
         {
-            Node current = m_head; // Start from the first element
+            Node current = _mHead; // Start from the first element
             int count = 0; // in start count is 0
 
             while (current != null)
             {
                 // Traverse the list and count the number of nodes
                 count++; // increment everytime as element is found
-                current = current.m_nextElement; // pointing to current's nextElement
+                current = current.MNextElement; // pointing to current's nextElement
             }
 
             return count;
@@ -234,7 +234,7 @@ namespace EducativeIo.Graph
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             Node previous = null; //To keep track of the previous element, will be used in swapping links
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
-            Node current = m_head; //firstElement
+            Node current = _mHead; //firstElement
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             Node next = null;
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
@@ -242,29 +242,29 @@ namespace EducativeIo.Graph
             //While Traversing the list, swap links
             while (current != null)
             {
-                next = current.m_nextElement;
+                next = current.MNextElement;
 #pragma warning disable CS8601 // Possible null reference assignment.
-                current.m_nextElement = previous;
+                current.MNextElement = previous;
 #pragma warning restore CS8601 // Possible null reference assignment.
                 previous = current;
                 current = next;
             }
 
 #pragma warning disable CS8601 // Possible null reference assignment.
-            m_head = previous; // pointing head to start of the list
+            _mHead = previous; // pointing head to start of the list
 #pragma warning restore CS8601 // Possible null reference assignment.
             return Elements(); // calling elements to return a string of values in list
         }
 
         public bool DetectLoop()
         {
-            Node slow = m_head,
-                fast = m_head; //starting from head of the list
+            Node slow = _mHead,
+                fast = _mHead; //starting from head of the list
 
-            while (slow != null && fast != null && fast.m_nextElement != null) //checking if all elements exist
+            while (slow != null && fast != null && fast.MNextElement != null) //checking if all elements exist
             {
-                slow = slow.m_nextElement;
-                fast = fast.m_nextElement.m_nextElement;
+                slow = slow.MNextElement;
+                fast = fast.MNextElement.MNextElement;
 
                 /* If slow and fast meet at some point then there
                     is a loop */
@@ -281,14 +281,14 @@ namespace EducativeIo.Graph
 
         public void InsertLoop()
         {
-            Node temp = m_head;
+            Node temp = _mHead;
             // traversing to get to last element of the list
-            while (temp.m_nextElement != null)
+            while (temp.MNextElement != null)
             {
-                temp = temp.m_nextElement;
+                temp = temp.MNextElement;
             }
 
-            temp.m_nextElement = m_head; // pointing last element to head of the list
+            temp.MNextElement = _mHead; // pointing last element to head of the list
         }
 
         public int FindMid()
@@ -298,16 +298,16 @@ namespace EducativeIo.Graph
                 return 0;
 
             //currentNode starts at the head
-            Node currentNode = m_head;
+            Node currentNode = _mHead;
 
-            if (currentNode.m_nextElement == null)
+            if (currentNode.MNextElement == null)
             {
                 //Only 1 element exist in array so return its value.
-                return currentNode.m_data;
+                return currentNode.MData;
             }
 
             Node midNode = currentNode; //midNode starts at head
-            currentNode = currentNode.m_nextElement.m_nextElement; //currentNode moves two steps forward
+            currentNode = currentNode.MNextElement.MNextElement; //currentNode moves two steps forward
 
             //Move midNode (Slower) one step at a time
             //Move currentNode (Faster) two steps at a time
@@ -316,15 +316,15 @@ namespace EducativeIo.Graph
             {
                 // traversing from head to end
 
-                midNode = midNode.m_nextElement;
+                midNode = midNode.MNextElement;
 
-                currentNode = currentNode.m_nextElement; // pointing to current's next
+                currentNode = currentNode.MNextElement; // pointing to current's next
                 if (currentNode != null)
-                    currentNode = currentNode.m_nextElement; // pointing to current's next
+                    currentNode = currentNode.MNextElement; // pointing to current's next
             }
 
             if (midNode != null) // pointing at middle of the list
-                return midNode.m_data;
+                return midNode.MData;
             return 0;
         }
 
@@ -334,28 +334,28 @@ namespace EducativeIo.Graph
             Node start,
                 startNext = null;
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
-            start = m_head;
+            start = _mHead;
 
             /* Pick elements one by one */
-            while (start != null && start.m_nextElement != null)
+            while (start != null && start.MNextElement != null)
             {
                 startNext = start;
 
                 /* Compare the picked element with rest
                    of the elements */
-                while (startNext.m_nextElement != null)
+                while (startNext.MNextElement != null)
                 {
                     /* If duplicate then delete it */
-                    if (start.m_data == startNext.m_nextElement.m_data)
+                    if (start.MData == startNext.MNextElement.MData)
                     {
                         // skipping elements from the list to be deleted
-                        startNext.m_nextElement = startNext.m_nextElement.m_nextElement;
+                        startNext.MNextElement = startNext.MNextElement.MNextElement;
                     }
                     else
-                        startNext = startNext.m_nextElement; // pointing to next of startNext
+                        startNext = startNext.MNextElement; // pointing to next of startNext
                 }
 
-                start = start.m_nextElement;
+                start = start.MNextElement;
             }
 
             return Elements();
@@ -369,16 +369,16 @@ namespace EducativeIo.Graph
             else if (list2.IsEmpty())
                 return list1.Elements();
 
-            Node start = list1.m_head; // starting from head of list 1
+            Node start = list1._mHead; // starting from head of list 1
 
             //Traverse first list till the last element
-            while (start.m_nextElement != null)
+            while (start.MNextElement != null)
             {
-                start = start.m_nextElement;
+                start = start.MNextElement;
             }
 
             //Link last element of first list to the first element of second list
-            start.m_nextElement = list2.m_head; // appendinf list2 with list 1
+            start.MNextElement = list2._mHead; // appendinf list2 with list 1
             return list1.RemoveDuplicates(); // removing duplicates from list and return list
         }
 
@@ -389,17 +389,17 @@ namespace EducativeIo.Graph
                 return -1;
 
             int length = 0;
-            Node currentNode = m_head; // pointing to head of the list
+            Node currentNode = _mHead; // pointing to head of the list
 
             // finding the length of the list
             while (currentNode != null)
             {
-                currentNode = currentNode.m_nextElement;
+                currentNode = currentNode.MNextElement;
                 length++;
             }
 
             //Find the Node which is at (len - n) position from start
-            currentNode = m_head;
+            currentNode = _mHead;
             int position = length - n;
 
             if (position < 0 || position > length) // check if out of the range of the list
@@ -410,12 +410,12 @@ namespace EducativeIo.Graph
             while (count != position)
             {
                 // finding the position of the element
-                currentNode = currentNode.m_nextElement;
+                currentNode = currentNode.MNextElement;
                 count++;
             }
 
             if (currentNode != null) // if node exists
-                return currentNode.m_data;
+                return currentNode.MData;
 
             return -1;
         }

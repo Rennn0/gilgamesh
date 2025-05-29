@@ -14,8 +14,8 @@ namespace EducativeIo.Graph
                 result += "|" + i.ToString() + "|=>";
                 while (temp != null)
                 {
-                    result = result + temp.m_data.ToString() + "->";
-                    temp = temp.m_nextElement;
+                    result = result + temp.MData.ToString() + "->";
+                    temp = temp.MNextElement;
                 }
 
                 result += "NULL ";
@@ -105,13 +105,13 @@ namespace EducativeIo.Graph
                     LinkedList.Node adjacentNodes = graph.GetArray()[currentNode].GetHead();
                     while (adjacentNodes != null)
                     {
-                        if (!visited[adjacentNodes.m_data])
+                        if (!visited[adjacentNodes.MData])
                         {
-                            queue.Enqueue(adjacentNodes.m_data);
-                            visited[adjacentNodes.m_data] = true;
+                            queue.Enqueue(adjacentNodes.MData);
+                            visited[adjacentNodes.MData] = true;
                         }
 
-                        adjacentNodes = adjacentNodes.m_nextElement;
+                        adjacentNodes = adjacentNodes.MNextElement;
                     }
                 }
             }
@@ -143,13 +143,13 @@ namespace EducativeIo.Graph
                     LinkedList.Node adjacentNodes = graph.GetArray()[currentNode].GetHead();
                     while (adjacentNodes != null)
                     {
-                        if (!visited[adjacentNodes.m_data])
+                        if (!visited[adjacentNodes.MData])
                         {
-                            stack.Push(adjacentNodes.m_data);
-                            visited[adjacentNodes.m_data] = true;
+                            stack.Push(adjacentNodes.MData);
+                            visited[adjacentNodes.MData] = true;
                         }
 
-                        adjacentNodes = adjacentNodes.m_nextElement;
+                        adjacentNodes = adjacentNodes.MNextElement;
                     }
                 }
             }
