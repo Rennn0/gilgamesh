@@ -2,62 +2,85 @@
 
 public class MultiThreadedMergeSort
 {
-    private readonly int[] _arr;
-
-    public MultiThreadedMergeSort(int size)
-    {
-        _arr = new int[size];
-    }
+    public MultiThreadedMergeSort() { }
 
     public void Sort(int start, int end, int[] arr)
     {
-        if (start == end) return;
+        int[] temp = new int[arr.Length];
+        Sort(start, end, arr, temp);
+    }
+
+    private void Sort(int start, int end, ref int[] arr, ref int[] temp)
+    {
+        if (start >= end)
+            return;
+
         int mid = (start + end) / 2;
+        Sort(start, mid, ref arr, ref temp);
+        Sort(mid + 1, end, ref arr, ref temp);
 
-        Sort(start, mid, arr);
-        Sort(mid + 1, end, arr);
+        int l = start;
+        int r = mid + 1;
+        int i;
 
-        // Thread leftThread = new Thread(() => Sort(start, mid, arr));
-        // Thread rightThread = new Thread(() => Sort(mid + 1, end, arr));
-
-        // leftThread.Start();
-        // rightThread.Start();
-
-        // leftThread.Join();
-        // rightThread.Join();
-
-        int left = start;
-        int right = mid + 1;
-        int k;
-
-        for (k = start; k <= end; k++)
+        for (i = start; i <= end; i++)
         {
-            _arr[k] = arr[k];
+            temp[i] = arr[i];
         }
 
-        for (k = start; k <= end; k++)
+        for (i = start; i <= end; i++)
         {
-            if (left <= mid && right <= end)
+            if (l <= mid && r <= end)
             {
-                arr[k] = Math.Min(_arr[left], _arr[right]);
-                if (arr[k] == _arr[left])
-                {
-                    left++;
-                }
-                else
-                {
-                    right++;
-                }
+                arr[i] = temp[l] <= temp[r] ? temp[l++] : temp[r++];
             }
-            else if (left <= mid && right > end)
+            else if (l <= mid && r > end)
             {
-                arr[k] = _arr[left];
-                left++;
+                arr[i] = temp[l++];
             }
             else
             {
-                arr[k] = _arr[right];
-                right++;
+                arr[i] = temp[r++];
+            }
+        }
+    }
+
+    private void Sort(int start, int end, int[] arr, int[] temp)
+    {
+        if (start >= end)
+            return;
+
+        int mid = (start + end) / 2;
+
+        Thread tl = new Thread(() => Sort(start, mid, arr, temp));
+        Thread tr = new Thread(() => Sort(mid + 1, end, arr, temp));
+        tl.Start();
+        tr.Start();
+        tl.Join();
+        tr.Join();
+
+        int l = start;
+        int r = mid + 1;
+        int i;
+
+        for (i = start; i <= end; i++)
+        {
+            temp[i] = arr[i];
+        }
+
+        for (i = start; i <= end; i++)
+        {
+            if (l <= mid && r <= end)
+            {
+                arr[i] = temp[l] <= temp[r] ? temp[l++] : temp[r++];
+            }
+            else if (l <= mid && r > end)
+            {
+                arr[i] = temp[l++];
+            }
+            else
+            {
+                arr[i] = temp[r++];
             }
         }
     }

@@ -241,7 +241,7 @@ internal class Solution
         // new SupermanTest().Test();
 
         int[] arr = [2, 5, 4, 1, 23, 0, 15, 0, -1];
-        new MultiThreadedMergeSort(arr.Length).Sort(0, arr.Length - 1, arr);
+        new MultiThreadedMergeSort().Sort(0, arr.Length - 1, arr);
         Console.WriteLine("Sorted array: " + string.Join(", ", arr));
     }
 
