@@ -7,14 +7,9 @@ namespace EducativeIo.Projects.Netflix;
 /// </summary>
 public partial class Netflix
 {
-    private readonly Dictionary<string, LinkedList<string>> _anagrams;
+    private readonly Dictionary<string, LinkedList<string>> _anagrams = new Dictionary<string, LinkedList<string>>();
 
     private const int AlphabetSize = 26;
-
-    public Netflix()
-    {
-        _anagrams = new Dictionary<string, LinkedList<string>>();
-    }
 
     /// <summary>
     ///     Create vector for anagram, example: "abbcc" => "#1#2#3#0#0...."
@@ -49,7 +44,7 @@ public partial class Netflix
     {
         string vector = CreateVector(input);
 
-        if (_anagrams.TryGetValue(vector, out var anagram))
+        if (_anagrams.TryGetValue(vector, out LinkedList<string>? anagram))
         {
             anagram.AddFirst(input);
         }

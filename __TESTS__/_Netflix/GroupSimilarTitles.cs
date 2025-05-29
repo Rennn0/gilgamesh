@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace __TESTS__.Netflix;
+namespace __TESTS__._Netflix;
 
 [TestClass]
 public class GroupSimilarTitles

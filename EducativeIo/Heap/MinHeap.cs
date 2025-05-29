@@ -1,7 +1,23 @@
 namespace EducativeIo.Heap;
+
 public class MinHeap<T> where T : IComparable<T>
 {
     private List<T> h;
+
+    public void Poll()
+    {
+        if (Size() == 1)
+        {
+            h.RemoveAt(0);
+        }
+        else
+        {
+            (h[0], h[Size() - 1]) = (h[Size() - 1], h[0]);
+            h.RemoveAt(Size() - 1);
+            MinHeapify(0);
+        }
+    }
+
     void PerlocateUp(int i)
     {
         if (i <= 0) return;
@@ -82,5 +98,5 @@ public class MinHeap<T> where T : IComparable<T>
     {
         return i * 2 + 2;
     }
-    public string AsString()=>string.Join(',',h);
+    public string AsString() => string.Join(',', h);
 }
