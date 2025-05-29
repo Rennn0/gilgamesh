@@ -240,9 +240,13 @@ internal class Solution
         // new BarberShopTest().Run();
         // new SupermanTest().Test();
 
-        int[] arr = [2, 5, 4, 1, 23, 0, 15, 0, -1];
-        new MultiThreadedMergeSort().Sort(0, arr.Length - 1, arr);
-        Console.WriteLine("Sorted array: " + string.Join(", ", arr));
+        // int[] arr = [2, 5, 4, 1, 23, 0, 15, 0, -1];
+        // new MultiThreadedMergeSort().Sort(0, arr.Length - 1, arr);
+        // Console.WriteLine("Sorted array: " + string.Join(", ", arr));
+
+        SyncExecutor executor = new SyncExecutor();
+        executor.AsynchronousExecution(new Callback());
+        Console.WriteLine("Main thread waiting for callback to complete...");
     }
 
     public static void Printer()
