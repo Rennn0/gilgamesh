@@ -122,7 +122,7 @@ namespace __TESTS__._Netflix
         public void Combinations()
         {
             Netflix.MovieCombinations comb = new Netflix.MovieCombinations();
-            IEnumerable<string> c1 = comb.Combinations(new string[] { "Action", "Horror" });
+            List<string> c1 = comb.Combinations(new string[] { "Action", "Horror" });
             Console.WriteLine(string.Join(" ", c1));
         }
     }
