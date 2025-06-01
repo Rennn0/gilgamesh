@@ -85,5 +85,27 @@ namespace __TESTS__._Netflix
             CollectionAssert.AreEqual(new[] { 3, 4, 9 }, nodes);
             CollectionAssert.AreEqual(new[] { "3:3", "4:3", "9:1" }, freq);
         }
+
+        [TestMethod]
+        public void MaxStack()
+        {
+            Netflix.MinStack stack = new Netflix.MinStack();
+            stack.Push(1);
+            stack.Push(2);
+            stack.Push(3);
+
+            Assert.AreEqual(3, stack.GetMax());
+
+            stack.Pop();
+            stack.Push(4);
+            stack.Push(1);
+
+            Assert.AreEqual(4, stack.GetMax());
+
+            stack.Pop();
+            stack.Pop();
+
+            Assert.AreEqual(2, stack.GetMax());
+        }
     }
 }
