@@ -1,4 +1,5 @@
 using EducativeIo.Projects.Netflix;
+using Newtonsoft.Json.Bson;
 
 namespace __TESTS__._Netflix
 {
@@ -106,6 +107,23 @@ namespace __TESTS__._Netflix
             stack.Pop();
 
             Assert.AreEqual(2, stack.GetMax());
+        }
+
+        [TestMethod]
+        public void Session()
+        {
+            Netflix.MinStack stack = new Netflix.MinStack();
+            Assert.IsTrue(stack.VerifySession(new int[] { 1, 2, 3, 4, 5 }, new int[] { 4, 5, 3, 2, 1 }));
+            Assert.IsFalse(stack.VerifySession(new int[] { 1, 2, 3, 4, 5 }, new int[] { 4, 5, 3, 1, 2 }));
+        }
+
+
+        [TestMethod]
+        public void Combinations()
+        {
+            Netflix.MovieCombinations comb = new Netflix.MovieCombinations();
+            IEnumerable<string> c1 = comb.Combinations(new string[] { "Action", "Horror" });
+            Console.WriteLine(string.Join(" ", c1));
         }
     }
 }

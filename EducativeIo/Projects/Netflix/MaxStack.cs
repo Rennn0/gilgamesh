@@ -33,6 +33,26 @@ namespace EducativeIo.Projects.Netflix
             }
             public int GetMax() => _maxStack.Peek();
 
+            public bool VerifySession(IEnumerable<int> pushOp, IEnumerable<int> popOp)
+            {
+                if (pushOp.Count() != popOp.Count()) return false;
+
+                Stack<int> stack = new Stack<int>();
+                int i = 0;
+                foreach (int op in pushOp)
+                {
+                    stack.Push(op);
+                    while (stack.Count > 0 && stack.Peek() == popOp.ElementAt(i))
+                    {
+                        i++;
+                        stack.Pop();
+                    }
+                }
+
+                if (stack.Count == 0) return true;
+
+                return false;
+            }
         }
     }
 }
