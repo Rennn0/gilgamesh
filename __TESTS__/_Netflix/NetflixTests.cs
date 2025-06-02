@@ -152,10 +152,12 @@ namespace __TESTS__._Netflix
             cw.Add("b");
             cw.Add("a");
             cw.Add("b");
+            cw.Add("z");
 
             Assert.AreEqual("b", cw.GetMovie());
             Assert.AreEqual("a", cw.GetMovie());
             Assert.AreEqual("b", cw.GetMovie());
+            Assert.AreEqual("z", cw.GetMovie());
             Assert.AreEqual("c", cw.GetMovie());
             Assert.AreEqual("b", cw.GetMovie());
             Assert.AreEqual("a", cw.GetMovie());
