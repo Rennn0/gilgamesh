@@ -125,5 +125,40 @@ namespace __TESTS__._Netflix
             List<string> c1 = comb.Combinations(new string[] { "Action", "Horror" });
             Console.WriteLine(string.Join(" ", c1));
         }
+
+        [TestMethod]
+        public void Permutations()
+        {
+            Netflix.MovieCombinations combinations = new Netflix.MovieCombinations();
+            string[] Input = new string[3] { "A", "B", "C" };
+            var Output = combinations.Permutations(Input);
+            System.Console.Write("Output 1: [");
+            for (int i = 0; i < Output.Count; i++)
+            {
+                System.Console.Write("[");
+                System.Console.Write(string.Join(", ", Output[i]));
+                System.Console.Write("]");
+            }
+            System.Console.WriteLine("]");
+        }
+
+        [TestMethod]
+        public void ContinueWatching()
+        {
+            Netflix.ContinueWatching cw = new Netflix.ContinueWatching();
+            cw.Add("a");
+            cw.Add("b");
+            cw.Add("c");
+            cw.Add("b");
+            cw.Add("a");
+            cw.Add("b");
+
+            Assert.AreEqual("b", cw.GetMovie());
+            Assert.AreEqual("a", cw.GetMovie());
+            Assert.AreEqual("b", cw.GetMovie());
+            Assert.AreEqual("c", cw.GetMovie());
+            Assert.AreEqual("b", cw.GetMovie());
+            Assert.AreEqual("a", cw.GetMovie());
+        }
     }
 }
