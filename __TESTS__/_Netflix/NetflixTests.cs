@@ -162,5 +162,16 @@ namespace __TESTS__._Netflix
             Assert.AreEqual("b", cw.GetMovie());
             Assert.AreEqual("a", cw.GetMovie());
         }
+
+
+        [TestMethod]
+        public void GroupAnagrams()
+        {
+            Netflix.Solution solution = new Netflix.Solution();
+            List<List<string>> matrix = solution.GroupAnagrams(["word", "sword", "drow", "rowd", "iced", "dice"]);
+            matrix.ForEach(list => Console.WriteLine(string.Join(',', list)));
+
+            CollectionAssert.AreEqual(new string[][] { ["word", "drow", "rowd"], ["sword"], ["iced", "dice"] }, matrix);
+        }
     }
 }
