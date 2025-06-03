@@ -17,9 +17,7 @@ namespace EducativeIo.BoundedBuffer
             {
                 int pi = (ci - 1) / 2;
                 if (data[ci].CompareTo(data[pi]) >= 0) break;
-                T tmp = data[ci];
-                data[ci] = data[pi];
-                data[pi] = tmp;
+                (data[pi], data[ci]) = (data[ci], data[pi]);
                 ci = pi;
             }
         }
@@ -41,9 +39,7 @@ namespace EducativeIo.BoundedBuffer
                 if (rc <= li && data[rc].CompareTo(data[ci]) < 0)
                     ci = rc;
                 if (data[pi].CompareTo(data[ci]) <= 0) break;
-                T tmp = data[pi];
-                data[pi] = data[ci];
-                data[ci] = tmp;
+                (data[ci], data[pi]) = (data[pi], data[ci]);
                 pi = ci;
             }
             return frontItem;

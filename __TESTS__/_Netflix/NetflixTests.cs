@@ -173,5 +173,19 @@ namespace __TESTS__._Netflix
 
             CollectionAssert.AreEqual(new string[][] { ["word", "drow", "rowd"], ["sword"], ["iced", "dice"] }, matrix);
         }
+
+        [TestMethod]
+        public void Merge()
+        {
+            Netflix.Solution solution = new Netflix.Solution();
+            LinkedList<int> link1 = new LinkedList<int>([4, 5, 1, 9]);
+            LinkedList<int> link2 = new LinkedList<int>([14, 25, -1, 89]);
+            LinkedList<int> link3 = new LinkedList<int>([4, 45,]);
+
+            LinkedListNode<int>? sorted = solution.Merge([link1.First, link2.First, link3.First]);
+            Console.WriteLine(string.Join(',', sorted?.List?.ToList() ?? []));
+
+            CollectionAssert.AreEqual(new int[] { -1, 1, 4, 4, 5, 9, 14, 25, 45, 89 }, sorted?.List?.ToList());
+        }
     }
 }

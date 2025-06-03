@@ -1,4 +1,7 @@
+using System.Globalization;
 using System.Text;
+using EducativeIo.BoundedBuffer;
+using EducativeIo.Heap;
 
 namespace EducativeIo.Projects.Netflix
 {
@@ -51,6 +54,36 @@ namespace EducativeIo.Projects.Netflix
             }
 
             private int GetIndex(char c) => c - 'a';
+
+            public LinkedListNode<int>? Merge(List<LinkedListNode<int>> nodes)
+            {
+                LinkedList<int> linker = new LinkedList<int>();
+                MinHeap<int> minHeap = new MinHeap<int>();
+
+                PriorityQueue<int> pq = new PriorityQueue<int>();
+
+                foreach (LinkedListNode<int> node in nodes)
+                {
+                    LinkedListNode<int>? current = node;
+                    while (current != null)
+                    {
+                        // minHeap.Insert(current.Value);
+                        pq.Add(current.Value);
+                        current = current.Next;
+                    }
+                }
+
+                // while (minHeap.Size() != 0)
+                while (pq.Size() != 0)
+                {
+                    // int min = minHeap.GetMin();
+                    int min = pq.Poll();
+                    linker.AddLast(min);
+                    // minHeap.Poll();
+                }
+
+                return linker.First;
+            }
         }
     }
 }
