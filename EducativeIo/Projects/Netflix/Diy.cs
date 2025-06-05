@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Globalization;
 using System.Text;
 using EducativeIo.BoundedBuffer;
@@ -83,6 +84,30 @@ namespace EducativeIo.Projects.Netflix
                 }
 
                 return linker.First;
+            }
+
+            public void InsertNum(int num) => NumHolder.Instance.Nums.Add(num);
+
+
+            public float FindMedian()
+            {
+                int count = NumHolder.Instance.Nums.Count;
+                List<int> list = NumHolder.Instance.Nums.Order().ToList();
+                if (count % 2 == 0)
+                {
+                    return (list[count / 2] + list[count / 2 - 1]) / 2f;
+                }
+                else
+                {
+                    return list[count / 2];
+                }
+            }
+
+            internal class NumHolder
+            {
+                internal List<int> Nums = new List<int>();
+                private NumHolder() { }
+                public static NumHolder Instance = new NumHolder();
             }
         }
     }

@@ -187,5 +187,19 @@ namespace __TESTS__._Netflix
 
             CollectionAssert.AreEqual(new int[] { -1, 1, 4, 4, 5, 9, 14, 25, 45, 89 }, sorted?.List?.ToList());
         }
+
+        [TestMethod]
+        public void Median()
+        {
+            Netflix.Solution solution = new Netflix.Solution();
+            solution.InsertNum(5);
+            Assert.AreEqual(5, solution.FindMedian());
+            solution.InsertNum(4);
+            Assert.AreEqual(4.5, solution.FindMedian());
+            solution.InsertNum(3);
+            Assert.AreEqual(4, solution.FindMedian());
+            solution.InsertNum(1);
+            Assert.AreEqual(3.5, solution.FindMedian());
+        }
     }
 }
