@@ -131,21 +131,24 @@ namespace EducativeIo.Projects.Netflix
                 return asc || desc;
             }
 
-            public class MinStack
+            public class MinMaxStack
             {
                 private int _capacity;
                 private readonly Stack<int> _mainStack;
                 private readonly Stack<int> _minStack;
-                public MinStack(int capacity)
+                private readonly Stack<int> _maxStack;
+                public MinMaxStack(int capacity)
                 {
                     _capacity = capacity;
                     _mainStack = new Stack<int>(_capacity);
                     _minStack = new Stack<int>(_capacity);
+                    _maxStack = new Stack<int>(_capacity);
                 }
 
                 public int Pop()
                 {
                     _minStack.Pop();
+                    _maxStack.Pop();
                     return _mainStack.Pop();
                 }
 
@@ -154,21 +157,23 @@ namespace EducativeIo.Projects.Netflix
                     if (_mainStack.Count >= _capacity) return;
 
                     _mainStack.Push(value);
+
                     int currentMin = _minStack.IsEmpty() ? value : _minStack.Peek();
+
                     if (value <= currentMin)
-                    {
                         _minStack.Push(value);
-                    }
                     else
-                    {
                         _minStack.Push(currentMin);
-                    }
+
+                    int currentMax = _maxStack.IsEmpty() ? value : _maxStack.Peek();
+                    if (value >= currentMax)
+                        _maxStack.Push(value);
+                    else
+                        _maxStack.Push(currentMax);
                 }
 
-                public int Min()
-                {
-                    return _minStack.Peek();
-                }
+                public int Min() => _minStack.Peek();
+                public int Max() => _maxStack.Peek();
             }
         }
     }

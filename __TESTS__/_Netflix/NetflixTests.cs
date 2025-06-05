@@ -204,26 +204,31 @@ namespace __TESTS__._Netflix
         }
 
         [TestMethod]
-        public void MinStack()
+        public void MinMaxStack()
         {
-            Netflix.Solution.MinStack solution = new Netflix.Solution.MinStack(3);
+            Netflix.Solution.MinMaxStack solution = new Netflix.Solution.MinMaxStack(3);
             solution.Push(5);
             solution.Push(1);
             solution.Push(10);
             Assert.AreEqual(1, solution.Min());
+            Assert.AreEqual(10, solution.Max());
 
             solution.Pop();
             Assert.AreEqual(1, solution.Min());
+            Assert.AreEqual(5, solution.Max());
 
             solution.Pop();
             Assert.AreEqual(5, solution.Min());
+            Assert.AreEqual(5, solution.Max());
 
             solution.Push(2);
             Assert.AreEqual(2, solution.Min());
+            Assert.AreEqual(5, solution.Max());
 
             solution.Pop();
             solution.Push(0);
             Assert.AreEqual(0, solution.Min());
+            Assert.AreEqual(5, solution.Max());
         }
     }
 }
