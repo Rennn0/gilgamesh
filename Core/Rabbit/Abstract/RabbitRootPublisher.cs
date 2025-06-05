@@ -1,15 +1,17 @@
 ﻿using System.Text;
-using Core.Guards;
 using RabbitMQ.Client;
 
 namespace Core.Rabbit.Abstract;
 
-public abstract class RabbitRootPublisher : RabbitRootObject
+public abstract class RabbitRootPublisher : IAsyncDisposable
 {
     protected readonly string Exchange;
     protected readonly string RoutingKey;
+    protected readonly RabbitRootObject Root;
+    protected IChannel? Channel;
 
     protected RabbitRootPublisher(
+        string name,
         string exchange,
         string routingKey,
         string host,
@@ -17,16 +19,18 @@ public abstract class RabbitRootPublisher : RabbitRootObject
         string password,
         int port = 5672
     )
-        : base(host, username, password, port)
     {
         Exchange = exchange;
         RoutingKey = routingKey;
+
+        Root = RabbitRootObject.Instance(name, host, username, password, port);
     }
 
-    // TODO basic properties dasamatebelia parametrebshi
-    public virtual ValueTask PublishAsync(string message)
+    public virtual async ValueTask PublishAsync(string message)
     {
-        Guard.AgainstNull(Channel);
+        if (!Root.HasConnection())
+            Root.CreateConnection();
+        Channel ??= await Root.Connection.CreateChannelAsync();
 
         byte[] msgBytes = Encoding.UTF8.GetBytes(message);
         BasicProperties properties = new BasicProperties()
@@ -34,6 +38,20 @@ public abstract class RabbitRootPublisher : RabbitRootObject
             Persistent = true,
             ContentType = "text/plain",
         };
-        return Channel.BasicPublishAsync(Exchange, RoutingKey, true, properties, msgBytes);
+
+        await Channel.BasicPublishAsync(
+            exchange: Exchange,
+            routingKey: RoutingKey,
+            basicProperties: properties,
+            body: msgBytes,
+            mandatory: true
+        );
+    }
+
+    public virtual async ValueTask DisposeAsync()
+    {
+        GC.SuppressFinalize(this);
+        if (Channel is not null)
+            await Channel.DisposeAsync();
     }
 }

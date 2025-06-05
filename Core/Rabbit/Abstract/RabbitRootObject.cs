@@ -1,32 +1,88 @@
-﻿using RabbitMQ.Client;
+﻿using Core.Guards;
+using RabbitMQ.Client;
 
 namespace Core.Rabbit.Abstract;
 
-public abstract class RabbitRootObject
+public class RabbitRootObject
 {
-    private static Lazy<IConnection> m_connection;
+    private readonly ConnectionFactory _connectionFactory;
+    private IConnection? _connection;
+    private readonly object _padLock = new object();
+    private static Lazy<RabbitRootObject>? _instance;
 
-    protected IChannel? Channel;
-
-    protected RabbitRootObject(string host, string username, string password, int port = 5672)
+    public static RabbitRootObject Instance(Uri uri)
     {
-        ConnectionFactory = new ConnectionFactory()
+        _instance ??= new Lazy<RabbitRootObject>(() => new RabbitRootObject(uri));
+        return _instance.Value;
+    }
+
+    public static RabbitRootObject Instance(
+        string name,
+        string host,
+        string username,
+        string password,
+        int port = 5672
+    )
+    {
+        _instance ??= new Lazy<RabbitRootObject>(
+            () => new RabbitRootObject(name, host, username, password, port)
+        );
+        return _instance.Value;
+    }
+
+    static RabbitRootObject() { }
+
+    private RabbitRootObject(Uri uri)
+    {
+        Monitor.Enter(_padLock);
+        _connectionFactory = new ConnectionFactory() { Uri = uri, AutomaticRecoveryEnabled = true };
+        Monitor.Exit(_padLock);
+    }
+
+    private RabbitRootObject(
+        string name,
+        string host,
+        string username,
+        string password,
+        int port = 5672
+    )
+    {
+        Monitor.Enter(_padLock);
+        _connectionFactory = new ConnectionFactory()
         {
+            HostName = host,
             UserName = username,
             Password = password,
-            HostName = host,
             Port = port,
             AutomaticRecoveryEnabled = true,
+            ClientProvidedName = name,
         };
+        Monitor.Exit(_padLock);
     }
 
-    public ConnectionFactory ConnectionFactory { get; }
-
-    public IConnection? Connection => m_connection;
-    public virtual bool ChannelIsReady => Channel is not null;
-
-    public virtual async Task InitializeAsync()
+    public void CreateConnection()
     {
-        m_connection = await ConnectionFactory.CreateConnectionAsync().ConfigureAwait(false);
+        Monitor.Enter(_padLock);
+
+        Guard.AgainstNull(_connectionFactory);
+        _connection ??= _connectionFactory.CreateConnectionAsync().Result;
+
+        Monitor.Exit(_padLock);
     }
+
+    public bool HasConnection()
+    {
+        Monitor.Enter(_padLock);
+        try
+        {
+            return _connection is not null && _connection.IsOpen;
+        }
+        finally
+        {
+            Monitor.Exit(_padLock);
+        }
+    }
+
+    public IConnection Connection =>
+        _connection ?? throw new NullReferenceException(nameof(Connection));
 }
