@@ -26,25 +26,26 @@ namespace __TESTS__._Netflix
         [TestMethod]
         public void LruCache()
         {
-            Netflix.LruCache cache = new Netflix.LruCache(3);
-            cache.Add(1);
-            cache.Add(2);
-            cache.Add(3);
+            Netflix.LruCache<int> cache = new Netflix.LruCache<int>(3);
+            cache.Add("1", 1);
+            cache.Add("2", 2);
+            cache.Add("3", 3);
+
             int[] recentlyUsed = cache.GetCache();
             CollectionAssert.AreEqual(new[] { 1, 2, 3 }, recentlyUsed);
 
-            cache.Add(4);
-            cache.Add(5);
+            cache.Add("otxi", 4);
+            cache.Add("xuti", 5);
             recentlyUsed = cache.GetCache();
             CollectionAssert.AreEqual(new[] { 3, 4, 5 }, recentlyUsed);
 
-            cache.Add(4);
+            cache.Add("otxi", 4);
             recentlyUsed = cache.GetCache();
             CollectionAssert.AreEqual(new[] { 3, 5, 4 }, recentlyUsed);
 
-            cache.Add(4);
-            cache.Add(4);
-            cache.Add(1);
+            cache.Add("otxi", 4);
+            cache.Add("otxi", 4);
+            cache.Add("1", 1);
 
             recentlyUsed = cache.GetCache();
             CollectionAssert.AreEqual(new[] { 5, 4, 1 }, recentlyUsed);
@@ -53,38 +54,38 @@ namespace __TESTS__._Netflix
         [TestMethod]
         public void LfuCache()
         {
-            Netflix.LfuCache cache = new Netflix.LfuCache(3);
-            cache.Add(1);
-            cache.Add(1);
-            cache.Add(1);
-            cache.Add(2);
-            cache.Add(3);
+            Netflix.LfuCache<int> cache = new Netflix.LfuCache<int>(3);
+            cache.Add("erti", 1);
+            cache.Add("erti", 1);
+            cache.Add("erti", 1);
+            cache.Add("ori", 2);
+            cache.Add("sami", 3);
 
             int[] nodes = cache.GetCache();
             string[] freq = cache.GetFrequency();
 
             CollectionAssert.AreEqual(new[] { 1, 2, 3 }, nodes);
-            CollectionAssert.AreEqual(new[] { "1:3", "2:1", "3:1" }, freq);
+            CollectionAssert.AreEquivalent(new[] { "erti:3", "ori:1", "sami:1" }, freq);
 
-            cache.Add(3);
-            cache.Add(3);
-            cache.Add(4);
+            cache.Add("sami", 3);
+            cache.Add("sami", 3);
+            cache.Add("otxi", 4);
 
             nodes = cache.GetCache();
             freq = cache.GetFrequency();
 
             CollectionAssert.AreEqual(new[] { 1, 3, 4 }, nodes);
-            CollectionAssert.AreEqual(new[] { "1:3", "3:3", "4:1" }, freq);
+            CollectionAssert.AreEquivalent(new[] { "erti:3", "sami:3", "otxi:1" }, freq);
 
-            cache.Add(4);
-            cache.Add(4);
-            cache.Add(9);
+            cache.Add("otxi", 4);
+            cache.Add("otxi", 4);
+            cache.Add("cxra", 9);
 
             nodes = cache.GetCache();
             freq = cache.GetFrequency();
 
             CollectionAssert.AreEqual(new[] { 3, 4, 9 }, nodes);
-            CollectionAssert.AreEqual(new[] { "3:3", "4:3", "9:1" }, freq);
+            CollectionAssert.AreEquivalent(new[] { "sami:3", "otxi:3", "cxra:1" }, freq);
         }
 
         [TestMethod]

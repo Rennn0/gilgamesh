@@ -3,43 +3,45 @@ namespace EducativeIo.Projects.Netflix
     public partial class Netflix
     {
 
-        public class LruCache
+        public class LruCache<T> where T : IComparable
         {
             private readonly int _capacity;
-            private readonly LinkedList<int> _cache;
-            private readonly Dictionary<int, LinkedListNode<int>> _map;
+            private readonly LinkedList<T> _cache;
+            private readonly Dictionary<object, LinkedListNode<T>> _map;
             public LruCache(int capacity)
             {
                 _capacity = capacity;
-                _cache = new LinkedList<int>();
-                _map = new Dictionary<int, LinkedListNode<int>>();
+                _cache = new LinkedList<T>();
+                _map = new Dictionary<object, LinkedListNode<T>>();
             }
 
-            public void Add(int value)
+            public void Add(object cacheKey, T value)
             {
-                if (_map.TryGetValue(value, out LinkedListNode<int>? node))
+                if (_map.TryGetValue(cacheKey, out LinkedListNode<T>? node))
                 {
                     _cache.Remove(node);
-                    _cache.AddLast(node);
+                    _cache.AddLast(new LinkedListNode<T>(value));
+                    _map[cacheKey] = _cache.Last!;
                 }
                 else
                 {
                     if (_cache.Count >= _capacity)
-                    {
                         Eviction();
-                    }
 
-                    LinkedListNode<int> temp = new LinkedListNode<int>(value);
-                    _cache.AddLast(temp);
-                    _map[value] = temp;
+                    _cache.AddLast(new LinkedListNode<T>(value));
+                    _map[cacheKey] = _cache.Last!;
                 }
             }
-            public int[] GetCache() => _cache.ToArray();
+            public T[] GetCache() => _cache.ToArray();
 
             private void Eviction()
             {
-                int headVal = _cache.First();
-                _map.Remove(headVal);
+                LinkedListNode<T>? firstNode = _cache.First;
+                if (firstNode is null) return;
+
+                object key = _map.First(x => x.Value.Value.Equals(firstNode.Value)).Key;
+                _map.Remove(key);
+
                 _cache.RemoveFirst();
             }
         }
