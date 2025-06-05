@@ -202,5 +202,28 @@ namespace __TESTS__._Netflix
             solution.InsertNum(1);
             Assert.AreEqual(3.5, solution.FindMedian());
         }
+
+        [TestMethod]
+        public void MinStack()
+        {
+            Netflix.Solution.MinStack solution = new Netflix.Solution.MinStack(3);
+            solution.Push(5);
+            solution.Push(1);
+            solution.Push(10);
+            Assert.AreEqual(1, solution.Min());
+
+            solution.Pop();
+            Assert.AreEqual(1, solution.Min());
+
+            solution.Pop();
+            Assert.AreEqual(5, solution.Min());
+
+            solution.Push(2);
+            Assert.AreEqual(2, solution.Min());
+
+            solution.Pop();
+            solution.Push(0);
+            Assert.AreEqual(0, solution.Min());
+        }
     }
 }
