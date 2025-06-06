@@ -89,9 +89,9 @@ public class RabbitRootObject
 
     public bool HasConnection()
     {
-        Monitor.Enter(_padLock);
         try
         {
+            Monitor.Enter(_padLock);
             return _connection is not null && _connection.IsOpen;
         }
         finally
