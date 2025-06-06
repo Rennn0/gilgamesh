@@ -12,7 +12,7 @@ namespace EducativeIo.Projects.Netflix
         {
             private int _maxFrequency;
             private readonly Dictionary<string, int> _titleFrequencyMap;
-            private readonly Dictionary<int, Stack<string>> _frequencyTitlesMap;
+            private readonly    Dictionary<int, Stack<string>> _frequencyTitlesMap;
             public ContinueWatching()
             {
                 _maxFrequency = 0;

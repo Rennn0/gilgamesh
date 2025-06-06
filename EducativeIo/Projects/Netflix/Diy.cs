@@ -198,16 +198,16 @@ namespace EducativeIo.Projects.Netflix
             public class Combinations
             {
                 private readonly Dictionary<char, string> _map = new()
-                {
-                    {'2',"abc"},
-                    {'3',"def"},
-                    {'4',"ghi"},
-                    {'5',"jkl"},
-                    {'6',"mno"},
-                    {'7',"pqrs"},
-                    {'8',"tuv"},
-                    {'9',"wxyz"},
-                };
+                    {
+                        {'2',"abc"},
+                        {'3',"def"},
+                        {'4',"ghi"},
+                        {'5',"jkl"},
+                        {'6',"mno"},
+                        {'7',"pqrs"},
+                        {'8',"tuv"},
+                        {'9',"wxyz"},
+                    };
                 public string[] LetterCombinatios(string digits)
                 {
                     if (string.IsNullOrWhiteSpace(digits))
@@ -229,7 +229,7 @@ namespace EducativeIo.Projects.Netflix
                         char digit = digits[index];
                         if (_map.TryGetValue(digit, out string? letters))
                         {
-                            for (int i = 0; i < letters.Length; i++)
+                            for (int i = letters.Length - 1; i >= 0; i--)
                             {
                                 stack.Push((index + 1, $"{combination}{letters[i]}"));
                             }
