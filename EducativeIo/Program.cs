@@ -244,9 +244,24 @@ internal class Solution
         // new MultiThreadedMergeSort().Sort(0, arr.Length - 1, arr);
         // Console.WriteLine("Sorted array: " + string.Join(", ", arr));
 
-        SyncExecutor executor = new SyncExecutor();
-        executor.AsynchronousExecution(new Callback());
-        Console.WriteLine("Main thread waiting for callback to complete...");
+        // SyncExecutor executor = new SyncExecutor();
+        // executor.AsynchronousExecution(new Callback());
+        // Console.WriteLine("Main thread waiting for callback to complete...");
+
+            const int N = 10;
+            {
+
+                Span<int> span = stackalloc int[N];
+                for (int i = 0; i < N; i++)
+                {
+                    span[i] = i * i;
+                }
+
+                for (int i = 0; i < N; i++)
+                {
+                    Console.WriteLine(span[i]);
+                }
+            }
     }
 
     public static void Printer()

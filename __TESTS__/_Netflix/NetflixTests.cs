@@ -230,5 +230,25 @@ namespace __TESTS__._Netflix
             Assert.AreEqual(0, solution.Min());
             Assert.AreEqual(5, solution.Max());
         }
+
+        [TestMethod]
+        public void VerifySession()
+        {
+            Netflix.Solution session = new Netflix.Solution();
+            Assert.IsTrue(session.VerifySession([1, 2, 3, 4, 5], [5, 4, 3, 2, 1]));
+            Assert.IsTrue(session.VerifySession([1, 2, 3, 4, 5], [3, 2, 5, 4, 1]));
+            Assert.IsFalse(session.VerifySession([1, 2, 3, 4, 5], [4, 5, 3, 1, 2]));
+        }
+
+        [TestMethod]
+        public void MobileCombinations()
+        {
+            Netflix.Solution.Combinations solution = new Netflix.Solution.Combinations();
+            string[] combinations = solution.LetterCombinatios("23");
+            foreach (string combination in combinations)
+            {
+                Console.WriteLine(combination);
+            }
+        }
     }
 }

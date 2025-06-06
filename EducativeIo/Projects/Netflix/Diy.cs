@@ -175,6 +175,70 @@ namespace EducativeIo.Projects.Netflix
                 public int Min() => _minStack.Peek();
                 public int Max() => _maxStack.Peek();
             }
+
+            public bool VerifySession(int[] pushed, int[] popped)
+            {
+                if (pushed.Length != popped.Length) return false;
+
+                int i = 0;
+                Stack<int> session = new Stack<int>();
+                foreach (int item in pushed)
+                {
+                    session.Push(item);
+                    while (!session.IsEmpty() && popped[i] == session.Peek())
+                    {
+                        session.Pop();
+                        i++;
+                    }
+                }
+
+                return session.IsEmpty();
+            }
+
+            public class Combinations
+            {
+                private readonly Dictionary<char, string> _map = new()
+                {
+                    {'2',"abc"},
+                    {'3',"def"},
+                    {'4',"ghi"},
+                    {'5',"jkl"},
+                    {'6',"mno"},
+                    {'7',"pqrs"},
+                    {'8',"tuv"},
+                    {'9',"wxyz"},
+                };
+                public string[] LetterCombinatios(string digits)
+                {
+                    if (string.IsNullOrWhiteSpace(digits))
+                        return Array.Empty<string>();
+
+                    List<string> result = new();
+                    Stack<(int index, string combination)> stack = new();
+                    stack.Push((0, ""));
+
+                    while (!stack.IsEmpty())
+                    {
+                        (int index, string combination) = stack.Pop();
+                        if (index == digits.Length)
+                        {
+                            result.Add(combination);
+                            continue;
+                        }
+
+                        char digit = digits[index];
+                        if (_map.TryGetValue(digit, out string? letters))
+                        {
+                            for (int i = 0; i < letters.Length; i++)
+                            {
+                                stack.Push((index + 1, $"{combination}{letters[i]}"));
+                            }
+                        }
+                    }
+
+                    return result.ToArray();
+                }
+            }
         }
     }
 }
