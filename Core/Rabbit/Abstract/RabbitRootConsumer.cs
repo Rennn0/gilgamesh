@@ -30,7 +30,7 @@ public abstract class RabbitRootConsumer
     public virtual async Task StartListeningAsync()
     {
         if (!Root.HasConnection())
-            Root.CreateConnection();
+            await Root.CreateConnectionAsync();
 
         if (_listening)
             return;

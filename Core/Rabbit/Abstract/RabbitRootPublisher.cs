@@ -29,7 +29,7 @@ public abstract class RabbitRootPublisher : IAsyncDisposable
     public virtual async ValueTask PublishAsync(string message)
     {
         if (!Root.HasConnection())
-            Root.CreateConnection();
+            await Root.CreateConnectionAsync();
         Channel ??= await Root.Connection.CreateChannelAsync();
 
         byte[] msgBytes = Encoding.UTF8.GetBytes(message);

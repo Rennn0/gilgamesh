@@ -9,6 +9,7 @@ public class RabbitRootObject
     private IConnection? _connection;
     private readonly object _padLock = new object();
     private static Lazy<RabbitRootObject>? _instance;
+    private readonly Semaphore _sema = new Semaphore(1, 1);
 
     public static RabbitRootObject Instance(Uri uri)
     {
@@ -60,14 +61,13 @@ public class RabbitRootObject
         Monitor.Exit(_padLock);
     }
 
-    public void CreateConnection()
+    public async Task CreateConnectionAsync()
     {
-        Monitor.Enter(_padLock);
-
         Guard.AgainstNull(_connectionFactory);
-        _connection ??= _connectionFactory.CreateConnectionAsync().Result;
 
-        Monitor.Exit(_padLock);
+        _sema.WaitOne();
+        _connection ??= await _connectionFactory.CreateConnectionAsync();
+        _sema.Release();
     }
 
     public bool HasConnection()
