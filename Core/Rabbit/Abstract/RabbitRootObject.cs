@@ -8,13 +8,22 @@ public class RabbitRootObject
     private readonly ConnectionFactory _connectionFactory;
     private IConnection? _connection;
     private readonly object _padLock = new object();
+    private static readonly object _staticLock = new object();
     private static Lazy<RabbitRootObject>? _instance;
     private readonly Semaphore _sema = new Semaphore(1, 1);
 
     public static RabbitRootObject Instance(Uri uri)
     {
-        _instance ??= new Lazy<RabbitRootObject>(() => new RabbitRootObject(uri));
-        return _instance.Value;
+        try
+        {
+            Monitor.Enter(_staticLock);
+            _instance ??= new Lazy<RabbitRootObject>(() => new RabbitRootObject(uri));
+            return _instance.Value;
+        }
+        finally
+        {
+            Monitor.Exit(_staticLock);
+        }
     }
 
     public static RabbitRootObject Instance(
@@ -25,10 +34,18 @@ public class RabbitRootObject
         int port = 5672
     )
     {
-        _instance ??= new Lazy<RabbitRootObject>(
-            () => new RabbitRootObject(name, host, username, password, port)
-        );
-        return _instance.Value;
+        try
+        {
+            Monitor.Enter(_staticLock);
+            _instance ??= new Lazy<RabbitRootObject>(
+                () => new RabbitRootObject(name, host, username, password, port)
+            );
+            return _instance.Value;
+        }
+        finally
+        {
+            Monitor.Exit(_staticLock);
+        }
     }
 
     static RabbitRootObject() { }
