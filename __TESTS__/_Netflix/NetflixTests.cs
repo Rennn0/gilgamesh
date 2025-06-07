@@ -273,5 +273,24 @@ namespace __TESTS__._Netflix
                 Assert.IsTrue(result.Any(r => r.SequenceEqual(perm)), $"Missing permutation: [{string.Join(",", perm)}]");
             }
         }
+
+        [TestMethod]
+        public void Freq()
+        {
+            Netflix.Solution.FreqStack solution = new Netflix.Solution.FreqStack();
+            solution.Push(1);
+            solution.Push(2);
+            solution.Push(1);
+            solution.Push(3);
+            solution.Push(1);
+            solution.Push(2);
+
+            Assert.AreEqual(1, solution.Pop());
+            Assert.AreEqual(2, solution.Pop());
+            Assert.AreEqual(1, solution.Pop());
+            Assert.AreEqual(3, solution.Pop());
+            Assert.AreEqual(2, solution.Pop());
+            Assert.AreEqual(1, solution.Pop());
+        }
     }
 }

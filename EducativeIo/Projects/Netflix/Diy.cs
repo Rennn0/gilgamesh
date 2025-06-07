@@ -262,6 +262,36 @@ namespace EducativeIo.Projects.Netflix
                     return result;
                 }
             }
+
+            public class FreqStack
+            {
+                private int _maxFreq = 0;
+                private Dictionary<int, int> _valFreqMap = new Dictionary<int, int>();
+                private Dictionary<int, Stack<int>> _freqValStackMap = new Dictionary<int, Stack<int>>();
+                public void Push(int val)
+                {
+                    if (_valFreqMap.ContainsKey(val))
+                        _valFreqMap[val]++;
+                    else
+                        _valFreqMap[val] = 1;
+
+                    if (_freqValStackMap.ContainsKey(_valFreqMap[val]))
+                        _freqValStackMap[_valFreqMap[val]].Push(val);
+                    else
+                        _freqValStackMap[_valFreqMap[val]] = new Stack<int>([val]);
+
+                    if (_maxFreq < _valFreqMap[val])
+                        _maxFreq = _valFreqMap[val];
+
+                }
+                public int Pop()
+                {
+                    int val = _freqValStackMap[_maxFreq].Pop();
+                    _valFreqMap[val]--;
+                    if (_freqValStackMap[_maxFreq].IsEmpty()) _maxFreq--;
+                    return val;
+                }
+            }
         }
     }
 }
