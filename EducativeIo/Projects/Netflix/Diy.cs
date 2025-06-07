@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Globalization;
+using System.Runtime.InteropServices;
 using System.Text;
 using EducativeIo.BoundedBuffer;
 using EducativeIo.Heap;
@@ -210,11 +211,10 @@ namespace EducativeIo.Projects.Netflix
                     };
                 public string[] LetterCombinatios(string digits)
                 {
-                    if (string.IsNullOrWhiteSpace(digits))
-                        return Array.Empty<string>();
+                    if (string.IsNullOrWhiteSpace(digits)) throw new ArgumentException();
 
-                    List<string> result = new();
-                    Stack<(int index, string combination)> stack = new();
+                    List<string> result = new List<string>();
+                    Stack<(int index, string combination)> stack = new Stack<(int index, string combination)>();
                     stack.Push((0, ""));
 
                     while (!stack.IsEmpty())
@@ -226,17 +226,40 @@ namespace EducativeIo.Projects.Netflix
                             continue;
                         }
 
-                        char digit = digits[index];
-                        if (_map.TryGetValue(digit, out string? letters))
+                        string letters = _map[digits[index]];
+                        for (int i = letters.Length - 1; i >= 0; i--)
                         {
-                            for (int i = letters.Length - 1; i >= 0; i--)
-                            {
-                                stack.Push((index + 1, $"{combination}{letters[i]}"));
-                            }
+                            stack.Push((index + 1, $"{combination}{letters[i]}"));
                         }
                     }
 
                     return result.ToArray();
+                }
+
+                public List<List<int>> Permutaions(int[] arr)
+                {
+                    List<List<int>> result = new List<List<int>>();
+
+                    Stack<(int index, List<int> current)> stack = new Stack<(int index, List<int> current)>();
+                    stack.Push((0, arr.ToList()));
+
+                    while (!stack.IsEmpty())
+                    {
+                        (int index, List<int> current) = stack.Pop();
+                        if (index == current.Count)
+                        {
+                            result.Add(current);
+                            continue;
+                        }
+
+                        for (int i = current.Count - 1; i >= index; i--)
+                        {
+                            List<int> temp = new List<int>(current);
+                            (temp[i], temp[index]) = (temp[index], temp[i]);
+                            stack.Push((index + 1, temp));
+                        }
+                    }
+                    return result;
                 }
             }
         }

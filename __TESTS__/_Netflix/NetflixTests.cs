@@ -250,5 +250,28 @@ namespace __TESTS__._Netflix
                 Console.WriteLine(combination);
             }
         }
+
+        [TestMethod]
+        public void NumPermutations()
+        {
+            Netflix.Solution.Combinations solution = new Netflix.Solution.Combinations();
+            List<List<int>> result = solution.Permutaions([1, 2, 3]);
+            var expected = new List<List<int>>
+            {
+                new List<int> {1,2,3},
+                new List<int> {1,3,2},
+                new List<int> {2,1,3},
+                new List<int> {2,3,1},
+                new List<int> {3,1,2},
+                new List<int> {3,2,1},
+            };
+
+            Assert.AreEqual(expected.Count, result.Count, "Permutation count mismatch");
+
+            foreach (var perm in expected)
+            {
+                Assert.IsTrue(result.Any(r => r.SequenceEqual(perm)), $"Missing permutation: [{string.Join(",", perm)}]");
+            }
+        }
     }
 }
