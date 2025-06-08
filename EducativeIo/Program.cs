@@ -248,20 +248,20 @@ internal class Solution
         // executor.AsynchronousExecution(new Callback());
         // Console.WriteLine("Main thread waiting for callback to complete...");
 
-            const int N = 10;
-            {
+        // const int N = 10;
+        // {
 
-                Span<int> span = stackalloc int[N];
-                for (int i = 0; i < N; i++)
-                {
-                    span[i] = i * i;
-                }
+        //     Span<int> span = stackalloc int[N];
+        //     for (int i = 0; i < N; i++)
+        //     {
+        //         span[i] = i * i;
+        //     }
 
-                for (int i = 0; i < N; i++)
-                {
-                    Console.WriteLine(span[i]);
-                }
-            }
+        //     for (int i = 0; i < N; i++)
+        //     {
+        //         Console.WriteLine(span[i]);
+        //     }
+        // }
     }
 
     public static void Printer()

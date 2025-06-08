@@ -282,10 +282,10 @@ namespace EducativeIo.Projects.Netflix
 
                     if (_maxFreq < _valFreqMap[val])
                         _maxFreq = _valFreqMap[val];
-
                 }
                 public int Pop()
                 {
+
                     int val = _freqValStackMap[_maxFreq].Pop();
                     _valFreqMap[val]--;
                     if (_freqValStackMap[_maxFreq].IsEmpty()) _maxFreq--;
