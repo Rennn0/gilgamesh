@@ -1,3 +1,4 @@
+using EducativeIo.Projects.Facebook;
 using EducativeIo.Projects.Netflix;
 using Newtonsoft.Json.Bson;
 
@@ -291,6 +292,32 @@ namespace __TESTS__._Netflix
             Assert.AreEqual(3, solution.Pop());
             Assert.AreEqual(2, solution.Pop());
             Assert.AreEqual(1, solution.Pop());
+        }
+
+        [TestMethod]
+        public void Subset()
+        {
+            Feature feature = new Feature();
+            var res = feature.WordSubsets(["amazon", "apple", "facebook", "google", "leetcode"], ["e", "o"]);
+        }
+
+        [TestMethod]
+        public void SearchInCircularList()
+        {
+            Feature feature = new Feature();
+            int[] v1 = [6, 7, 1, 2, 3, 4, 5];
+            int k1 = feature.SearchInCircularList(v1, 3); // 4
+            int k2 = feature.SearchInCircularList(v1, 6); // 0
+
+            int[] v2 = [4, 5, 6, 1, 2, 3];
+            int k3 = feature.SearchInCircularList(v2, 3); // 5
+            int k4 = feature.SearchInCircularList(v2, 6); // 2
+
+
+            Assert.AreEqual(4, k1);
+            Assert.AreEqual(0, k2);
+            Assert.AreEqual(5, k3);
+            Assert.AreEqual(2, k4);
         }
     }
 }
