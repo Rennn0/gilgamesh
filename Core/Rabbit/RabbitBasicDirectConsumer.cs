@@ -1,8 +1,10 @@
 ﻿using Core.Rabbit.Abstract;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 
 namespace Core.Rabbit;
 
-public class RabbitBasicDirectConsumer : RabbitRootConsumer
+public class RabbitBasicDirectConsumer : RabbitRootConsumer, IAsyncDisposable
 {
     public RabbitBasicDirectConsumer(
         string name,
@@ -12,5 +14,14 @@ public class RabbitBasicDirectConsumer : RabbitRootConsumer
         string password,
         int port = 5672
     )
-        : base(name, queue, host, username, password, port) { }
+        : base(name, queue, host, username, password, port)
+    { }
+    public bool IsReady => Channel is not null && Channel.IsOpen;
+    public async ValueTask DisposeAsync()
+    {
+        if (Channel is null) return;
+
+        await Channel.DisposeAsync();
+        Channel = null;
+    }
 }

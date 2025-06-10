@@ -178,7 +178,7 @@ namespace Hub.Api
             }
         }
 
-        public void RemoveChannel(string client)
+        private void RemoveChannel(string client)
         {
             lock (s_lock)
             {

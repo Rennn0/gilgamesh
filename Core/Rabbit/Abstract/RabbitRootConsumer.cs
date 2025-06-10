@@ -27,7 +27,7 @@ public abstract class RabbitRootConsumer
         _listening = false;
     }
 
-    public virtual async Task StartListeningAsync()
+    public virtual async Task StartListeningAsync(uint prefetchsize = 0, ushort prefetchcount = 5, bool global = false)
     {
         if (!Root.HasConnection())
             await Root.CreateConnectionAsync();
@@ -36,12 +36,15 @@ public abstract class RabbitRootConsumer
             return;
 
         Channel = await Root.Connection.CreateChannelAsync();
+
         await Channel.QueueDeclareAsync(
             queue: Queue,
             durable: true,
             exclusive: false,
             autoDelete: false
         );
+        await Channel.BasicQosAsync(prefetchsize, prefetchcount, global);
+
         Consumer = new AsyncEventingBasicConsumer(Channel);
         await Channel.BasicConsumeAsync(queue: Queue, autoAck: false, consumer: Consumer);
 

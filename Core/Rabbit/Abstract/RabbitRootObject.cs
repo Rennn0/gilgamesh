@@ -72,8 +72,9 @@ public class RabbitRootObject
             UserName = username,
             Password = password,
             Port = port,
-            AutomaticRecoveryEnabled = true,
             ClientProvidedName = name,
+            AutomaticRecoveryEnabled = true,
+            NetworkRecoveryInterval = TimeSpan.FromSeconds(1)
         };
         Monitor.Exit(_padLock);
     }
@@ -81,10 +82,15 @@ public class RabbitRootObject
     public async Task CreateConnectionAsync()
     {
         Guard.AgainstNull(_connectionFactory);
-
-        _sema.WaitOne();
-        _connection ??= await _connectionFactory.CreateConnectionAsync();
-        _sema.Release();
+        try
+        {
+            _sema.WaitOne();
+            _connection = await _connectionFactory.CreateConnectionAsync();
+        }
+        finally
+        {
+            _sema.Release();
+        }
     }
 
     public bool HasConnection()

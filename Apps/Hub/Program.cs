@@ -1,4 +1,7 @@
+using HealthChecks.UI.Client;
+using Hub.Backgrounds;
 using Hub.Database;
+using Hub.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hub;
@@ -23,7 +26,15 @@ internal class Program
 
         builder.Services.AddDbContext<ApplicationContext>(opt => opt.UseInMemoryDatabase("app"));
         // builder.Services.AddSignalR();
-        // builder.Services.AddHostedService<ClientsBackgroundWorker>();
+        // bRabbitMQ consumer is not connecteduilder.Services.AddHostedService<ClientsBackgroundWorker>();
+
+        builder.Services.AddHostedService<RabbitQueueWorker>();
+
+
+        builder.Services.AddHealthChecks().AddCheck<RabbitQueueHc>(
+            nameof(RabbitQueueWorker),
+            Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Unhealthy,
+            ["ready", "rabbitmq"]);
 
         WebApplication app = builder.Build();
 
@@ -36,6 +47,17 @@ internal class Program
         app.UseCors();
 
         // app.MapHub<ClientsHub>("/hub/clients");
+        app.MapHealthChecks("/health/ready", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions()
+        {
+            Predicate = hc => hc.Tags.Contains("ready"),
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        });
+
+        app.MapHealthChecks("/health/live", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions()
+        {
+            Predicate = (_) => false
+        });
+
         app.MapControllers();
         app.Run();
     }
