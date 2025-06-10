@@ -1,7 +1,7 @@
-using Hub.Backgrounds;
 using Hub.Database;
-using Hub.Hubs;
 using Microsoft.EntityFrameworkCore;
+
+namespace Hub;
 
 internal class Program
 {
@@ -11,15 +11,10 @@ internal class Program
 
         builder.Services.AddCors(options =>
         {
-            options.AddDefaultPolicy(
-                policy =>
-                {
-                    policy
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowAnyOrigin();
-                }
-            );
+            options.AddDefaultPolicy(policy =>
+            {
+                policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+            });
         });
 
         builder.Services.AddEndpointsApiExplorer();
