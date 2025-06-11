@@ -56,6 +56,7 @@ async Task PublisherStartTask()
             port: 8208
         );
 
+
         Timer timer = new Timer(
             async void (_) =>
             {

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="8.0.2" />
+    <PackageReference Include="l.d.glsh.core" Version="1.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8" />
@@ -18,10 +19,6 @@
   <ItemGroup>
     <Folder Include="Hubs\" />
     <Folder Include="Backgrounds\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="../../Core/Core.csproj" />
   </ItemGroup>
 
 </Project>

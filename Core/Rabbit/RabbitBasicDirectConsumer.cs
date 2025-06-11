@@ -1,6 +1,4 @@
 ﻿using Core.Rabbit.Abstract;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 
 namespace Core.Rabbit;
 
