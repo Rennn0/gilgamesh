@@ -30,6 +30,7 @@ public abstract class RabbitRootPublisher : IAsyncDisposable
     {
         if (!Root.HasConnection())
             await Root.CreateConnectionAsync();
+
         Channel ??= await Root.Connection.CreateChannelAsync();
 
         byte[] msgBytes = Encoding.UTF8.GetBytes(message);
@@ -37,6 +38,7 @@ public abstract class RabbitRootPublisher : IAsyncDisposable
         {
             Persistent = true,
             ContentType = "text/plain",
+            DeliveryMode = DeliveryModes.Persistent
         };
 
         await Channel.BasicPublishAsync(
@@ -53,5 +55,6 @@ public abstract class RabbitRootPublisher : IAsyncDisposable
         GC.SuppressFinalize(this);
         if (Channel is not null)
             await Channel.DisposeAsync();
+
     }
 }

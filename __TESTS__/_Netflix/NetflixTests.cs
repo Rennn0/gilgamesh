@@ -319,5 +319,23 @@ namespace __TESTS__._Netflix
             Assert.AreEqual(5, k3);
             Assert.AreEqual(2, k4);
         }
+
+        [TestMethod]
+        public void FlagWords()
+        {
+            Feature feature = new Feature();
+            Assert.IsTrue(feature.IsFlagWord("moron", "morrrron"));
+            Assert.IsTrue(feature.IsFlagWord("noob", "nnnnoob"));
+            Assert.IsFalse(feature.IsFlagWord("nassar", "ass"));
+        }
+
+        [TestMethod]
+        public void CombineMessages()
+        {
+            Feature feature = new Feature();
+            List<List<string>> groups = feature.CombineMessages(["lmn", "mno", "azb", "bac", "yza", "bdfg"]);
+            foreach (List<string> g in groups)
+                Console.WriteLine("[{0}]", string.Join(", ", g));
+        }
     }
 }

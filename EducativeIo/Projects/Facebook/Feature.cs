@@ -143,6 +143,73 @@ namespace EducativeIo.Projects.Facebook
             arr.Reverse(0, n - 1); // [4,5,3,2,1]
             arr.Reverse(n, arr.Length - 1); // [4,5,1,2,3]
         }
+
+        // "moron", "morrrron"
+        public bool IsFlagWord(string original, string suspect)
+        {
+            if (string.IsNullOrWhiteSpace(original) || string.IsNullOrWhiteSpace(suspect)) return false;
+
+            int i = 0;
+            int j = 0;
+
+            while (i < original.Length && j < suspect.Length)
+            {
+                if (!original[i].Equals(suspect[j])) return false;
+
+                int li = RepeatedLength(original, i);
+                int lj = RepeatedLength(suspect, j);
+
+                if (!li.Equals(lj) && lj < 2 || lj >= 2 && lj < li) return false;
+
+                i += li;
+                j += lj;
+            }
+
+            return i == original.Length && j == suspect.Length;
+        }
+
+        private int RepeatedLength(string str, int i)
+        {
+            int temp = i;
+            while (temp < str.Length && str[temp] == str[i])
+            {
+                temp++;
+            }
+            return temp - i;
+        }
+
+        public List<List<string>> CombineMessages(List<string> messages)
+        {
+            Dictionary<string, List<string>> map = new Dictionary<string, List<string>>();
+            foreach (string message in messages)
+            {
+                string key = GetMessageKey(message);
+                if (map.TryGetValue(key, out List<string>? list))
+                {
+                    list.Add(message);
+                }
+                else
+                {
+                    map[key] = [message];
+                }
+            }
+
+            return [.. map.Values.ToList()];
+        }
+
+        private string GetMessageKey(string message)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            for (int i = 1; i < message.Length; i++)
+            {
+                int diff = message[i] - message[i - 1];
+
+                builder.Append(diff < 0 ? diff + 26 : diff);
+            }
+
+            return builder.ToString();
+        }
     }
 
     public static class Extensions
