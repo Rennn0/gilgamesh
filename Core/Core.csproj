@@ -5,8 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
-    <PackageId>l.d.glsh.core</PackageId>
-    <Version>1.0.2</Version>
+    <PackageId>Glmesh.Core</PackageId>
+    <Version>1.0.0</Version>
     <Authors>Luka Danelia</Authors>
     <Description>A fantastic class library for .NET applications.</Description>
     <RepositoryUrl>https://github.com/Rennn0/gilgamesh</RepositoryUrl> 
@@ -29,4 +29,5 @@
   <ItemGroup>
     <Folder Include="Guards\" />
   </ItemGroup>
+
 </Project>
