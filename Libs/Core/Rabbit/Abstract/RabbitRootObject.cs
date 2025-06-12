@@ -3,6 +3,11 @@ using RabbitMQ.Client;
 
 namespace Core.Rabbit.Abstract;
 
+/// <summary>
+///     main object that syncs rabbit connetion
+///     it can be used in some wrapper class that will implement 
+///     different behaviours and channel creation logic
+/// </summary>
 public class RabbitRootObject
 {
     private readonly ConnectionFactory _connectionFactory;

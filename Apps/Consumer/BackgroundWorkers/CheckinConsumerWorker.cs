@@ -1,8 +1,10 @@
 ﻿using System.Text;
+using Consumer.Settings;
 using Core.Rabbit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using RabbitMQ.Client.Events;
 
 namespace Consumer.BackgroundWorkers
@@ -11,32 +13,23 @@ namespace Consumer.BackgroundWorkers
     {
         private readonly ILogger<CheckinConsumerWorker> _logger;
         private readonly RabbitBasicDirectConsumer _consumer;
-
         private const int MessageReceivedEid = 2001;
         private const int StartedListeningEid = 1000;
 
         public CheckinConsumerWorker(
-            IConfiguration configuration,
-            ILogger<CheckinConsumerWorker> logger
+            ILogger<CheckinConsumerWorker> logger,
+            IOptions<RabbitMqSettings> rabbitSettings
         )
         {
-            string queue = configuration["RabbitMQ:Queue"] ?? throw new InvalidOperationException();
-            string host = configuration["RabbitMQ:Host"] ?? throw new InvalidOperationException();
-            string username =
-                configuration["RabbitMQ:Username"] ?? throw new InvalidOperationException();
-            string password =
-                configuration["RabbitMQ:Password"] ?? throw new InvalidOperationException();
-            int port = int.Parse(
-                configuration["RabbitMQ:Port"] ?? throw new InvalidOperationException()
-            );
+            RabbitMqSettings mqSettings = rabbitSettings.Value;
 
             _consumer = new RabbitBasicDirectConsumer(
                 nameof(CheckinConsumerWorker),
-                queue,
-                host,
-                username,
-                password,
-                port
+                mqSettings.Queue,
+                mqSettings.Host,
+                mqSettings.Username,
+                mqSettings.Password,
+                mqSettings.Port
             );
 
             _logger = logger;
@@ -46,18 +39,17 @@ namespace Consumer.BackgroundWorkers
         {
             await _consumer.StartListeningAsync();
 
-            _logger.LogInformation(new EventId(StartedListeningEid), "StartedListening");
+            _logger.LogDebug(new EventId(StartedListeningEid), "StartedListening");
 
             _consumer.AttachCallback(CallbackAsync);
         }
 
         private async Task CallbackAsync(object sender, BasicDeliverEventArgs @event)
         {
-            _logger.LogInformation(
+            _logger.LogDebug(
                 new EventId(MessageReceivedEid),
                 $"RECEIVED MESSAGE {Encoding.UTF8.GetString(@event.Body.ToArray())}"
             );
-
             await _consumer.AcknowledgeAsync(@event.DeliveryTag);
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Core.Guards;
+using Core.Rabbit.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -26,7 +27,16 @@ public abstract class RabbitRootConsumer
 
         _listening = false;
     }
+    /// <summary>
+    ///     Instantiates single connection to rabbit, creates channel and binds queue to it.
+    ///     To attach callbacks on incoming messages use AttachCallback method
+    /// </summary>
+    /// <param name="prefetchsize"></param>
+    /// <param name="prefetchcount"></param>
+    /// <param name="global"></param>
+    /// <returns></returns>
 
+    [Obsolete("Use ChannelCreationOptions instead")]
     public virtual async Task StartListeningAsync(uint prefetchsize = 0, ushort prefetchcount = 5, bool global = false)
     {
         if (!Root.HasConnection())
@@ -47,6 +57,36 @@ public abstract class RabbitRootConsumer
 
         Consumer = new AsyncEventingBasicConsumer(Channel);
         await Channel.BasicConsumeAsync(queue: Queue, autoAck: false, consumer: Consumer);
+
+        _listening = true;
+    }
+
+    /// <summary>
+    ///     Instantiates single connection to rabbit, creates channel and binds queue to it.
+    ///     To attach callbacks on incoming messages use AttachCallback method
+    /// </summary>
+    /// <param name="options"></param>
+    /// <returns></returns>
+    public virtual async Task StartListeningAsync(ChannelCreationOptions options = default)
+    {
+        if (!Root.HasConnection())
+            await Root.CreateConnectionAsync();
+
+        if (_listening)
+            return;
+
+        Channel = await Root.Connection.CreateChannelAsync();
+
+        await Channel.QueueDeclareAsync(
+            queue: Queue,
+            durable: options.Durable,
+            exclusive: options.Exclusive,
+            autoDelete: options.AutoAck
+        );
+        await Channel.BasicQosAsync(options.Prefetchsize, options.Prefetchcount, options.Global);
+
+        Consumer = new AsyncEventingBasicConsumer(Channel);
+        await Channel.BasicConsumeAsync(queue: Queue, autoAck: options.AutoAck, consumer: Consumer);
 
         _listening = true;
     }

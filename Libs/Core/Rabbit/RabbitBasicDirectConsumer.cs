@@ -2,6 +2,9 @@
 
 namespace Core.Rabbit;
 
+/// <summary>
+///     Simple direct consumer that will create Q and start listening to incoming messages
+/// </summary>
 public class RabbitBasicDirectConsumer : RabbitRootConsumer, IAsyncDisposable
 {
     public RabbitBasicDirectConsumer(
