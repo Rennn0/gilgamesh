@@ -5,7 +5,7 @@ using RabbitMQ.Client.Events;
 
 namespace Core.Rabbit.Abstract;
 
-public abstract class RabbitRootConsumer
+public abstract class RabbitRootConsumer : IDisposable
 {
     protected readonly string Queue;
     protected AsyncEventingBasicConsumer? Consumer;
@@ -112,5 +112,13 @@ public abstract class RabbitRootConsumer
         {
             await Channel.BasicNackAsync(deliveryTag, multiple: false, requeue: requeue);
         }
+    }
+
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        Consumer = null;
+        Channel?.Dispose();
+        Channel = null;
     }
 }
