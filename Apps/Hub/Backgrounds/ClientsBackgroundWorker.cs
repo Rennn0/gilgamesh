@@ -9,44 +9,44 @@ namespace Hub.Backgrounds;
 
 public class ClientsBackgroundWorker : BackgroundService
 {
-    private readonly IServiceScopeFactory m_factory;
-    private readonly IHubContext<ClientsHub> m_hub;
-    private HashSet<int> m_clientIds;
+    private readonly IServiceScopeFactory _mFactory;
+    private readonly IHubContext<ClientsHub> _mHub;
+    private HashSet<int> _mClientIds;
 
     public ClientsBackgroundWorker(IServiceScopeFactory factory, IHubContext<ClientsHub> hub)
     {
-        m_factory = factory;
-        m_hub = hub;
-        m_clientIds = new HashSet<int>();
+        _mFactory = factory;
+        _mHub = hub;
+        _mClientIds = new HashSet<int>();
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            using IServiceScope scope = m_factory.CreateScope();
+            using IServiceScope scope = _mFactory.CreateScope();
             ApplicationContext db = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
             List<Client> clients = await db.Clients.ToListAsync(stoppingToken);
 
             HashSet<int> current = clients.Select(c => c.Id).ToHashSet();
-            IEnumerable<int> added = current.Except(m_clientIds);
-            IEnumerable<int> removed = m_clientIds.Except(current);
+            IEnumerable<int> added = current.Except(_mClientIds);
+            IEnumerable<int> removed = _mClientIds.Except(current);
 
             foreach (int id in added)
             {
-                m_clientIds.Add(id);
-                await m_hub.Clients.All.SendAsync("ClientAdded", id, stoppingToken);
+                _mClientIds.Add(id);
+                await _mHub.Clients.All.SendAsync("ClientAdded", id, stoppingToken);
 
-                await ServerEventsController.Publish($"Client {id} added");
+                await ServerEventsController.PublishAsync($"Client {id} added");
             }
 
             foreach (int id in removed)
             {
-                await m_hub.Clients.All.SendAsync("ClientRemoved", id, stoppingToken);
-                await ServerEventsController.Publish($"Client {id} removed");
+                await _mHub.Clients.All.SendAsync("ClientRemoved", id, stoppingToken);
+                await ServerEventsController.PublishAsync($"Client {id} removed");
             }
 
-            m_clientIds = current;
+            _mClientIds = current;
             await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
         }
     }

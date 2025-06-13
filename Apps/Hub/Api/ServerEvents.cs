@@ -8,20 +8,20 @@ namespace Hub.Api
     [ApiController]
     public class ServerEventsController : ControllerBase
     {
-        const int c_maxClients = 100;
-        private static readonly ConcurrentDictionary<Guid, HttpResponse> s_clients = new();
-        private readonly ILogger<ServerEventsController> m_logger;
+        const int CMaxClients = 100;
+        private static readonly ConcurrentDictionary<Guid, HttpResponse> SClients = new();
+        private readonly ILogger<ServerEventsController> _mLogger;
 
-        private static readonly ConcurrentDictionary<string, Channel<string>> s_channels = new();
-        private static readonly object s_lock = new();
+        private static readonly ConcurrentDictionary<string, Channel<string>> SChannels = new();
+        private static readonly object SLock = new();
 
         public ServerEventsController(ILogger<ServerEventsController> logger)
         {
-            m_logger = logger;
+            _mLogger = logger;
         }
 
         [HttpGet("subscribe/{clientId}")]
-        public async Task Subscribe(string clientId)
+        public async Task SubscribeAsync(string clientId)
         {
             Response.Headers.Append("Content-Type", "text/event-stream");
             Response.Headers.Append("Cache-Control", "no-cache");
@@ -34,7 +34,7 @@ namespace Hub.Api
                 {
                     try
                     {
-                        m_logger.LogInformation($"Client {clientId} heartbeat");
+                        _mLogger.LogInformation($"Client {clientId} heartbeat");
                         await Response.WriteAsync(
                             $"event:heartbeat\ndata:{DateTime.Now.ToLocalTime()}\n\n",
                             HttpContext.RequestAborted
@@ -43,11 +43,11 @@ namespace Hub.Api
                     }
                     catch (TaskCanceledException)
                     {
-                        m_logger.LogInformation($"Client {clientId} disconnected");
+                        _mLogger.LogInformation($"Client {clientId} disconnected");
                     }
                     catch (Exception e)
                     {
-                        m_logger.LogInformation($"Error {e.Message}");
+                        _mLogger.LogInformation($"Error {e.Message}");
                     }
                 },
                 null,
@@ -61,15 +61,15 @@ namespace Hub.Api
                     string message in channel.Reader.ReadAllAsync(HttpContext.RequestAborted)
                 )
                 {
-                    m_logger.LogInformation($"Client {clientId} received message: {message}");
+                    _mLogger.LogInformation($"Client {clientId} received message: {message}");
                     await Response.WriteAsync($"data:{message}\n\n", HttpContext.RequestAborted);
                     await Response.Body.FlushAsync(HttpContext.RequestAborted);
                 }
             }
             catch (Exception ex)
             {
-                m_logger.LogInformation($"Client {clientId} disconnected");
-                m_logger.LogInformation(ex, "Error in SSE connection");
+                _mLogger.LogInformation($"Client {clientId} disconnected");
+                _mLogger.LogInformation(ex, "Error in SSE connection");
             }
             finally
             {
@@ -82,9 +82,9 @@ namespace Hub.Api
         [HttpGet("publish/{clientId}")]
         public IActionResult Publish(string clientId, [FromQuery] string message)
         {
-            lock (s_lock)
+            lock (SLock)
             {
-                if (!s_channels.TryGetValue(clientId, out Channel<string>? channel))
+                if (!SChannels.TryGetValue(clientId, out Channel<string>? channel))
                     return NotFound();
 
                 channel.Writer.TryWrite(message);
@@ -95,9 +95,9 @@ namespace Hub.Api
         }
 
         [HttpGet]
-        public async Task Get()
+        public async Task GetAsync()
         {
-            if (s_clients.Count >= c_maxClients)
+            if (SClients.Count >= CMaxClients)
             {
                 Response.StatusCode = 509;
                 return;
@@ -110,8 +110,8 @@ namespace Hub.Api
 
             Guid guid = Guid.NewGuid();
 
-            s_clients.TryAdd(guid, Response);
-            m_logger.LogInformation($"Client connected: {guid}");
+            SClients.TryAdd(guid, Response);
+            _mLogger.LogInformation($"Client connected: {guid}");
             try
             {
                 while (!HttpContext.RequestAborted.IsCancellationRequested)
@@ -126,26 +126,26 @@ namespace Hub.Api
             }
             catch (TaskCanceledException)
             {
-                m_logger.LogInformation($"Client disconnected: {guid}");
+                _mLogger.LogInformation($"Client disconnected: {guid}");
             }
             catch (System.Exception ex)
             {
-                m_logger.LogError(ex, "Error in SSE connection");
+                _mLogger.LogError(ex, "Error in SSE connection");
             }
             finally
             {
-                s_clients.TryRemove(guid, out _);
+                SClients.TryRemove(guid, out _);
                 await Response.CompleteAsync();
             }
         }
 
-        public static async Task Publish(string msg)
+        public static async Task PublishAsync(string msg)
         {
-            if (s_clients.IsEmpty)
+            if (SClients.IsEmpty)
                 return;
 
             Stack<Guid> toRemove = new Stack<Guid>();
-            IEnumerable<Task> publishTasks = s_clients.Select(async kvp =>
+            IEnumerable<Task> publishTasks = SClients.Select(async kvp =>
             {
                 try
                 {
@@ -161,18 +161,18 @@ namespace Hub.Api
 
             foreach (Guid guid in toRemove)
             {
-                s_clients.TryRemove(guid, out _);
+                SClients.TryRemove(guid, out _);
             }
         }
 
         private static Channel<string> GetOrCreateChannel(string client)
         {
-            lock (s_lock)
+            lock (SLock)
             {
-                if (s_channels.TryGetValue(client, out Channel<string>? channel))
+                if (SChannels.TryGetValue(client, out Channel<string>? channel))
                     return channel;
                 channel = Channel.CreateUnbounded<string>();
-                s_channels[client] = channel;
+                SChannels[client] = channel;
 
                 return channel;
             }
@@ -180,12 +180,12 @@ namespace Hub.Api
 
         private void RemoveChannel(string client)
         {
-            lock (s_lock)
+            lock (SLock)
             {
-                if (!s_channels.TryGetValue(client, out Channel<string>? channel))
+                if (!SChannels.TryGetValue(client, out Channel<string>? channel))
                     return;
                 channel.Writer.TryComplete();
-                s_channels.TryRemove(client, out _);
+                SChannels.TryRemove(client, out _);
             }
         }
     }

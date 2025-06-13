@@ -10,45 +10,45 @@ namespace Hub.Api
     [ApiController]
     public class ClientsController : ControllerBase
     {
-        private readonly ApplicationContext m_db;
-        private readonly ILogger<ClientsController> m_logger;
+        private readonly ApplicationContext _mDb;
+        private readonly ILogger<ClientsController> _mLogger;
 
         public ClientsController(ApplicationContext dbContext, ILogger<ClientsController> logger)
         {
-            m_db = dbContext;
-            m_logger = logger;
+            _mDb = dbContext;
+            _mLogger = logger;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] Client client)
+        public async Task<IActionResult> AddAsync([FromBody] Client client)
         {
-            m_db.Clients.Add(client);
-            await m_db.SaveChangesAsync();
+            _mDb.Clients.Add(client);
+            await _mDb.SaveChangesAsync();
             return Ok(client);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            Client? msg = await m_db.Clients.FindAsync(id);
+            Client? msg = await _mDb.Clients.FindAsync(id);
             if (msg == null)
                 return NotFound();
-            m_db.Clients.Remove(msg);
-            await m_db.SaveChangesAsync();
+            _mDb.Clients.Remove(msg);
+            await _mDb.SaveChangesAsync();
             return Ok();
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAllAsync()
         {
-            return Ok(await m_db.Clients.ToListAsync());
+            return Ok(await _mDb.Clients.ToListAsync());
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> Excel()
+        public async Task<IActionResult> ExcelAsync()
         {
             var tempFilePath = Path.Combine(Path.GetTempPath(), $"clients_{Guid.NewGuid()}.xlsx");
-            m_logger.LogInformation($"Temp file path: {tempFilePath}");
+            _mLogger.LogInformation($"Temp file path: {tempFilePath}");
 
             ExcelPackage.License.SetNonCommercialPersonal("Foo");
             using (var package = new ExcelPackage())
@@ -86,7 +86,7 @@ namespace Hub.Api
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> DownloadLargeFile()
+        public async Task<IActionResult> DownloadLargeFileAsync()
         {
             var filePath = @"/home/luka/Downloads/clients.xlsx";
             var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
