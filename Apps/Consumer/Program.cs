@@ -14,6 +14,7 @@ IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureAppConfiguration(
         (context, config) =>
         {
+            // config.SetBasePath(AppContext.BaseDirectory);
             config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
         }
     )
@@ -22,6 +23,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.Configure<RabbitMqSettings>(context.Configuration.GetSection("RabbitMq"));
 
         services.AddHostedService<CheckinConsumerWorker>();
+        services.AddHostedService<SearchEngineWorker>();
     })
     .Build();
 
