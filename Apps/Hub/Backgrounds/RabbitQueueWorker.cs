@@ -1,4 +1,3 @@
-
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Text;
@@ -22,29 +21,34 @@ namespace Hub.Backgrounds
 
             IsConnected = false;
         }
+
         public static bool IsConnected { get; private set; }
+
         public override Task StartAsync(CancellationToken cancellationToken)
         {
             return base.StartAsync(cancellationToken);
         }
+
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             await InitializeRabbitMqAsync(stoppingToken);
             Guard.AgainstNull(_consumer);
             if (!IsConnected || !_consumer.IsReady)
             {
-                Log("RabbitMQ channel is not open after initialization attempts. Cannot start consumer.");
+                Log(
+                    "RabbitMQ channel is not open after initialization attempts. Cannot start consumer."
+                );
                 return;
             }
 
-            _consumer.AttachCallback(BasicConsumerCallback);
+            _consumer.AttachCallback(BasicConsumerCallbackAsync);
 
             TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
             stoppingToken.Register(() => tcs.SetResult(true));
             await tcs.Task;
         }
 
-        private async Task BasicConsumerCallback(object sender, BasicDeliverEventArgs @event)
+        private async Task BasicConsumerCallbackAsync(object sender, BasicDeliverEventArgs @event)
         {
             Guard.AgainstNull(_consumer);
 
@@ -58,7 +62,6 @@ namespace Hub.Backgrounds
             }
             catch (OperationCanceledException)
             {
-
                 _logger.LogWarning("Message processing was cancelled due to application shutdown.");
                 await _consumer.NegativeAcknowledgeAsync(@event.DeliveryTag);
             }
@@ -82,7 +85,14 @@ namespace Hub.Backgrounds
                 try
                 {
                     Log("Rabbit starting...");
-                    _consumer = new RabbitBasicDirectConsumer(nameof(RabbitQueueWorker), "Q_1", "localhost", "guest", "guest", 5672);
+                    _consumer = new RabbitBasicDirectConsumer(
+                        nameof(RabbitQueueWorker),
+                        "Q_1",
+                        "localhost",
+                        "guest",
+                        "guest",
+                        5672
+                    );
 
                     await _consumer.StartListeningAsync();
                     Log("Rabbit started successfully");
@@ -102,17 +112,22 @@ namespace Hub.Backgrounds
 
                     if (retryCount >= maxRetries)
                     {
-                        Log($"Max RabbitMQ connection retries ({maxRetries}) reached. Consumer will not start.");
+                        Log(
+                            $"Max RabbitMQ connection retries ({maxRetries}) reached. Consumer will not start."
+                        );
                         return;
                     }
 
                     delay = TimeSpan.FromSeconds(delay.TotalSeconds * 1.3 + jitter.Next(0, 10));
-                    Log($"Failed to initialize RabbitMQ: {e.Message} (attempt {retryCount}/{maxRetries}). Retrying in {delay.TotalSeconds} seconds...");
+                    Log(
+                        $"Failed to initialize RabbitMQ: {e.Message} (attempt {retryCount}/{maxRetries}). Retrying in {delay.TotalSeconds} seconds..."
+                    );
 
                     await Task.Delay(delay, cancellationToken);
                 }
             }
         }
+
         public override async Task StopAsync(CancellationToken cancellationToken)
         {
             Guard.AgainstNull(_consumer);
@@ -120,9 +135,16 @@ namespace Hub.Backgrounds
             await base.StopAsync(cancellationToken);
         }
 
-        private void Log(string message, [CallerLineNumber] int callerLine = 0, [CallerMemberName] string caller = "", [CallerFilePath] string callerFile = "")
+        private void Log(
+            string message,
+            [CallerLineNumber] int callerLine = 0,
+            [CallerMemberName] string caller = "",
+            [CallerFilePath] string callerFile = ""
+        )
         {
-            _logger.LogInformation($"{DateTimeOffset.Now:G}_{callerFile}_{caller}_{callerLine}:{Environment.NewLine}{message}");
+            _logger.LogInformation(
+                $"{DateTimeOffset.Now:G}_{callerFile}_{caller}_{callerLine}:{Environment.NewLine}{message}"
+            );
         }
     }
 }
