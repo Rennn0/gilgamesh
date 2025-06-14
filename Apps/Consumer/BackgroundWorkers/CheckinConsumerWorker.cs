@@ -23,7 +23,7 @@ namespace Consumer.BackgroundWorkers
         )
         {
             RabbitMqSettings mqSettings = rabbitSettings.Value;
-
+            
             _consumer = new RabbitBasicDirectConsumer(
                 nameof(CheckinConsumerWorker),
                 mqSettings.Queue,

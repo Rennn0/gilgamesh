@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using Core;
 using EducativeIo.Bst;
 
 namespace __TESTS__;
@@ -350,40 +349,35 @@ public class TreeTests
     [TestMethod]
     public void KthDistance()
     {
-        using (new ScopedTimer())
-        {
-            Tree tree = new Tree();
-            tree.Insert(6);
-            tree.Insert(4);
-            tree.Insert(9);
-            tree.Insert(2);
-            tree.Insert(5);
-            tree.Insert(8);
-            tree.Insert(12);
-            tree.Insert(10);
-            tree.Insert(14);
+        Tree tree = new Tree();
+        tree.Insert(6);
+        tree.Insert(4);
+        tree.Insert(9);
+        tree.Insert(2);
+        tree.Insert(5);
+        tree.Insert(8);
+        tree.Insert(12);
+        tree.Insert(10);
+        tree.Insert(14);
 
-            Assert.AreEqual("10 14 ", tree.FindKNodes(3));
-        }
+        Assert.AreEqual("10 14 ", tree.FindKNodes(3));
     }
 
     [TestMethod]
     public void KthDistanceRecursive()
     {
-        using (new ScopedTimer())
-        {
-            Tree tree = new Tree();
-            tree.Insert(6);
-            tree.Insert(4);
-            tree.Insert(9);
-            tree.Insert(2);
-            tree.Insert(5);
-            tree.Insert(8);
-            tree.Insert(12);
-            tree.Insert(10);
-            tree.Insert(14);
 
-            Assert.AreEqual("10 14 ", tree.FindKNodesRecursive(3));
-        }
+        Tree tree = new Tree();
+        tree.Insert(6);
+        tree.Insert(4);
+        tree.Insert(9);
+        tree.Insert(2);
+        tree.Insert(5);
+        tree.Insert(8);
+        tree.Insert(12);
+        tree.Insert(10);
+        tree.Insert(14);
+
+        Assert.AreEqual("10 14 ", tree.FindKNodesRecursive(3));
     }
 }

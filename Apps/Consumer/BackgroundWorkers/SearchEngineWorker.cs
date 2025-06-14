@@ -25,7 +25,7 @@ namespace Consumer.BackgroundWorkers
         {
             var sw = Stopwatch.StartNew();
             using SqlConnection connection = new SqlConnection(_connectionString);
-            await connection.OpenAsync();
+            await connection.OpenAsync(stoppingToken);
             const string sql = "select * from MOCK_DATA";
             using SqlCommand command = new SqlCommand(sql, connection);
             using var reader = await command.ExecuteReaderAsync(stoppingToken);
@@ -57,7 +57,7 @@ namespace Consumer.BackgroundWorkers
             _logger.LogCritical($"ESTIMATED SIZE {inKbs} kbs, {l1.Count}, {s.Length}");
         }
 
-        internal class Model
+        private class Model
         {
             internal string? CompanyName { get; set; }
             internal int EmployeeCount { get; set; }
