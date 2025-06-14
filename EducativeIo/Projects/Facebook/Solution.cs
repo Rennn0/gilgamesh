@@ -25,6 +25,51 @@ namespace EducativeIo.Projects.Facebook
             return islands;
         }
 
+        public static int FindProvincesNum(int[][] matrix)
+        {
+            if (matrix.Length.Equals(0) || matrix[0].Length.Equals(0)) return -1;
+            bool[] visited = new bool[matrix.Length];
+            int provinces = 0;
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                if (!visited[i])
+                {
+                    provinces++;
+                    DFS(i);
+                }
+            }
+            return provinces;
+            void DFS(int city)
+            {
+                visited[city] = true;
+                for (int i = 0; i < matrix.Length; i++)
+                {
+                    if (!visited[i] && matrix[city][i].Equals(1))
+                    {
+                        DFS(i);
+                    }
+                }
+            }
+        }
+
+        public static int CountConnectedComp(int[][] edges, int vertices)
+        {
+            int[][] matrix = new int[vertices][];
+            for (int i = 0; i < vertices; i++)
+            {
+                matrix[i] = new int[vertices];
+                matrix[i][i] = 1;
+            }
+
+            for (int i = 0; i < edges.Length; i++)
+            {
+                matrix[edges[i][0]][edges[i][1]] = 1;
+                matrix[edges[i][1]][edges[i][0]] = 1;
+            }
+
+            return FindProvincesNum(matrix);
+        }
+
         private static void DFS(string[][] grid, int r, int c)
         {
             int row = grid.Length;
@@ -44,5 +89,6 @@ namespace EducativeIo.Projects.Facebook
             DFS(grid, r + 1, c - 1);
             DFS(grid, r + 1, c + 1);
         }
+
     }
 }
