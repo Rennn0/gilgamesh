@@ -2,7 +2,7 @@ namespace EducativeIo.Projects.Facebook
 {
     public partial class Solution
     {
-        public int NumIslands(string[][] grid)
+        public static int NumIslands(string[][] grid)
         {
             if (grid.Length.Equals(0) || grid[0].Length.Equals(0)) return -1;
 
@@ -25,7 +25,7 @@ namespace EducativeIo.Projects.Facebook
             return islands;
         }
 
-        private void DFS(string[][] grid, int r, int c)
+        private static void DFS(string[][] grid, int r, int c)
         {
             int row = grid.Length;
             int col = grid[0].Length;
@@ -38,6 +38,11 @@ namespace EducativeIo.Projects.Facebook
             DFS(grid, r + 1, c);
             DFS(grid, r, c - 1);
             DFS(grid, r, c + 1);
+
+            DFS(grid, r - 1, c - 1);
+            DFS(grid, r - 1, c + 1);
+            DFS(grid, r + 1, c - 1);
+            DFS(grid, r + 1, c + 1);
         }
     }
 }
