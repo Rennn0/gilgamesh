@@ -70,6 +70,32 @@ namespace EducativeIo.Projects.Facebook
             return FindProvincesNum(matrix);
         }
 
+        public static int SearchRotated(int[] arr, int k)
+        {
+            if (arr.Length.Equals(0)) return -1;
+            return SearchRotated(arr, 0, arr.Length - 1, k);
+        }
+
+        public static int SearchRotated(int[] arr, int l, int r, int k)
+        {
+            if (l > r) return -1;
+
+            int mid = l + (r - l) / 2;
+
+            if (arr[mid].Equals(k)) return mid;
+
+            if (arr[l] <= arr[mid] && k <= arr[mid] && k >= arr[l])
+                return SearchRotated(arr, l, mid - 1, k);
+            else if (arr[r] >= arr[mid] && k >= arr[mid] && k <= arr[r])
+                return SearchRotated(arr, mid + 1, r, k);
+            else if (arr[l] >= arr[mid])
+                return SearchRotated(arr, l, mid - 1, k);
+            else if (arr[r] <= arr[mid])
+                return SearchRotated(arr, mid + 1, r, k);
+            return -1;
+        }
+
+
         private static void DFS(string[][] grid, int r, int c)
         {
             int row = grid.Length;
@@ -89,6 +115,14 @@ namespace EducativeIo.Projects.Facebook
             DFS(grid, r + 1, c - 1);
             DFS(grid, r + 1, c + 1);
         }
+
+    }
+
+    public abstract class SomeDomain
+    {
+        public int SpecialNumber { get; set; }
+        public string? Title { get; set; }
+        public DateTimeOffset? SpecialDate { get; set; }
 
     }
 }
