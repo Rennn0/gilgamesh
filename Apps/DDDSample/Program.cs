@@ -60,17 +60,30 @@ namespace Apps
 
             ServiceProvider services = serviceDescriptors.BuildServiceProvider();
             var store = services.GetRequiredService<IEventStore>();
-
+            Guid g;
             await using (DomainSession<SomeDomain> session = new DomainSession<SomeDomain>(new SomeDomain(), store))
             {
-                session.Domain.ChangeTitle("opa session");
+                session.Domain.ChangeTitle("SESSIONX1");
+
+                session.Domain.ChangeTitle("SESSIONX2");
+
+                session.Domain.ChangeTitle("SESSIONX3");
+
+                session.Domain.ChangeTitle("SESSIONX4");
+
+                session.Domain.ChangeSpecialNumber(4);
+
+                g = session.Domain.Correlation;
                 Console.WriteLine(session.Domain.Correlation);
             }
+
+            SomeDomain someDomain = await RootDomain.ReflectAsync<SomeDomain>(store, Guid.Parse("9A08A3AF-8479-4021-B05A-287C40C66354"));
+            Console.WriteLine(someDomain.Title);
         }
 
         private static void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = "Server=localhost;Database=gmesh;User=sa;Password=Budh@000;TrustServerCertificate=True;";
+            string connectionString = Environment.GetEnvironmentVariable("SQL_LOCAL_CONNECTION") ?? throw new ArgumentNullException();
             services.WithEventStoreMsSql(connectionString);
         }
     }

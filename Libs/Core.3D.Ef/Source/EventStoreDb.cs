@@ -25,8 +25,7 @@ namespace Core._3D.Ef
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<EventModel>()
-                .HasIndex(e => new { e.Correlation, e.Timestamp })
-                .IsUnique();
+                .HasIndex(e => new { e.Correlation, e.SequenceNumber });
 
             base.OnModelCreating(modelBuilder);
         }
@@ -46,6 +45,7 @@ namespace Core._3D.Ef
 
         public string EventDataJson { get; set; } = string.Empty;
 
+        public int SequenceNumber { get; set; }
         public long Timestamp { get; set; }
     }
 }

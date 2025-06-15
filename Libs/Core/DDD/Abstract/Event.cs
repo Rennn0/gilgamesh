@@ -4,10 +4,10 @@ namespace Core.DDD.Abstract
 {
     public abstract record Event : IEvent
     {
-        public DateTimeOffset Timestamp { get; }
+        public DateTimeOffset Ts { get; }
         protected Event()
         {
-            Timestamp = DateTimeOffset.UtcNow;
+            Ts = DateTimeOffset.UtcNow;
         }
     }
 

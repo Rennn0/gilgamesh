@@ -12,10 +12,10 @@ namespace Core._3D.Ef
         {
             _context = context;
         }
-        public async Task<List<IEvent>> LoadEventsAync(Guid correlation)
+        public async Task<IList<IEvent>> LoadEventsAync(Guid correlation)
         {
             List<EventModel> eventRecords = await _context.Events.Where(e => e.Correlation == correlation)
-                .OrderBy(e => e.Timestamp).ToListAsync();
+                .OrderBy(e => e.SequenceNumber).ToListAsync();
 
             List<IEvent> events = [];
             foreach (EventModel data in eventRecords)
@@ -35,18 +35,20 @@ namespace Core._3D.Ef
             return events;
         }
 
-        public async Task SaveChangesAsync(Guid correlation, IReadOnlyCollection<IEvent> events)
+
+        public async Task SaveChangesAsync(Guid correlation, IList<(int seqNum, IEvent e)> events)
         {
             if (events.Count == 0) return;
 
-            foreach (IEvent @event in events)
+            foreach ((int seqNum, IEvent @event) in events)
             {
                 EventModel eventData = new EventModel
                 {
                     Correlation = correlation,
                     EventType = @event.GetType().AssemblyQualifiedName ?? "",
                     EventDataJson = JsonConvert.SerializeObject(@event, Formatting.Indented),
-                    Timestamp = @event.Timestamp.ToUnixTimeMilliseconds() * 1000 + @event.Timestamp.Ticks % TimeSpan.TicksPerSecond / 10
+                    SequenceNumber = seqNum,
+                    Timestamp = @event.Ts.ToUnixTimeMilliseconds()
                 };
                 _context.Events.Add(eventData);
             }

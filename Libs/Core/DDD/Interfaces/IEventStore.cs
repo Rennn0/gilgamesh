@@ -2,7 +2,7 @@ namespace Core.DDD.Interfaces
 {
     public interface IEventStore
     {
-        Task SaveChangesAsync(Guid correlation, IReadOnlyCollection<IEvent> events);
-        Task<List<IEvent>> LoadEventsAync(Guid correlation);
+        Task SaveChangesAsync(Guid correlation, IList<(int seqNum, IEvent e)> events);
+        Task<IList<IEvent>> LoadEventsAync(Guid correlation);
     }
 }
