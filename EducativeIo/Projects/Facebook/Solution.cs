@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace EducativeIo.Projects.Facebook
 {
     public partial class Solution
@@ -95,7 +97,56 @@ namespace EducativeIo.Projects.Facebook
             return -1;
         }
 
+        public static int ExpressiveWords(string s, string[] words)
+        {
+            int c = 0;
 
+            foreach (string word in words)
+            {
+                if (IsFlagWord(word, s)) c++;
+            }
+
+            return c;
+        }
+
+        // reno rennno
+        private static bool IsFlagWord(string og, string sus)
+        {
+            if (string.IsNullOrWhiteSpace(og) || string.IsNullOrWhiteSpace(sus)) return false;
+
+            const int seqSize = 3;
+            int ogLen = og.Length;
+            int susLen = sus.Length;
+
+            int ogIdx = 0;
+            int susIdx = 0;
+
+            while (ogIdx < ogLen && susIdx < susLen)
+            {
+                if (og[ogIdx] != sus[susIdx]) return false;
+
+                int ogSeq = RepeatedSequence(og, ogIdx);
+                int susSeq = RepeatedSequence(sus, susIdx);
+
+                if (ogSeq != susSeq && susSeq < seqSize || susSeq >= seqSize && susSeq < ogSeq) return false;
+
+                ogIdx += ogSeq;
+                susIdx += susSeq;
+            }
+            return ogIdx == og.Length && susIdx == susLen;
+        }
+
+        // rennnoo 0=1,1=1,2=3
+        private static int RepeatedSequence(string s, int i)
+        {
+            int temp = i;
+            while (temp < s.Length && s[temp] == s[i])
+            {
+                temp++;
+            }
+
+            return temp - i;
+        }
         private static void DFS(string[][] grid, int r, int c)
         {
             int row = grid.Length;
@@ -116,13 +167,37 @@ namespace EducativeIo.Projects.Facebook
             DFS(grid, r + 1, c + 1);
         }
 
-    }
+        public static List<List<string>> GroupStrings(string[] strs)
+        {
+            Dictionary<string, List<string>> map = [];
 
-    public abstract class SomeDomain
-    {
-        public int SpecialNumber { get; set; }
-        public string? Title { get; set; }
-        public DateTimeOffset? SpecialDate { get; set; }
+            foreach (string s in strs)
+            {
+                string key = ShiftedKey(s);
+                if (map.TryGetValue(key, out List<string>? value))
+                {
+                    value.Add(s);
+                }
+                else
+                {
+                    map[key] = [s];
+                }
+            }
 
+            return [.. map.Values];
+        }
+
+        private static string ShiftedKey(string str)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < str.Length - 1; i++)
+            {
+                int c = str[i + 1] - str[i];
+                if (c < 0) c += 26;
+                stringBuilder.Append($"{c};");
+            }
+
+            return stringBuilder.ToString();
+        }
     }
 }

@@ -85,5 +85,20 @@ namespace __TESTS__.Facebook
                     [6, 7]
                 ], 8));
         }
+
+        [TestMethod]
+        public void ExpressiveWords()
+        {
+            Assert.AreEqual(0, Solution.ExpressiveWords("hurry", ["hury"]));
+
+            Assert.AreEqual(1, Solution.ExpressiveWords("heeellooo", ["hello", "hi", "helo"]));
+        }
+
+        [TestMethod]
+        public void GroupWords()
+        {
+            List<List<string>> result = Solution.GroupStrings(["abc", "bcd", "acef", "xyz", "az", "ba", "a", "z"]);
+            Assert.AreEqual(3, result.Count);
+        }
     }
 }
