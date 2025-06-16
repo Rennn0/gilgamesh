@@ -5,20 +5,21 @@ namespace Core.DDD.Generic
 {
     public class DomainSession<T> : IAsyncDisposable where T : RootDomain
     {
-        private readonly T _domain;
+        private T? _domain;
         private readonly IEventStore _store;
-        public DomainSession(T domain, IEventStore store)
+        public DomainSession(IEventStore store)
         {
-            _domain = domain;
             _store = store;
         }
 
-        public T Domain => _domain;
+        public T Domain => _domain ?? throw new NullReferenceException(nameof(_domain));
 
+        public void AttachDomain(T domain) => _domain = domain;
         public async ValueTask DisposeAsync()
         {
             GC.SuppressFinalize(this);
-            await _domain.CommitEventsAsync(_store);
+            if (_domain is not null)
+                await _domain.CommitEventsAsync(_store);
         }
     }
 }

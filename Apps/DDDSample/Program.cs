@@ -58,13 +58,14 @@ namespace Apps
 
             ServiceProvider services = serviceDescriptors.BuildServiceProvider();
             var store = services.GetRequiredService<IEventStore>();
-            await using (DomainSession<SomeDomain> session = new DomainSession<SomeDomain>(await RootDomain.ReflectAsync<SomeDomain>(store, "BCC64348-17BF-4FC4-A20D-C1C6EF71AEEE"), store))
+            var session = services.GetRequiredService<DomainSession<SomeDomain>>();
+            await using (session)
             {
+                session.AttachDomain(await RootDomain.ReflectAsync<SomeDomain>(store, "BCC64348-17BF-4FC4-A20D-C1C6EF71AEEE"));
+
                 session.Domain.ChangeSpecialNumber(54);
 
-                session.Domain.ChangeTitle("kartofili");
-
-                session.Domain.ChangeSpecialNumber(101234);
+                session.Domain.ChangeTitle("xaxvi");
             }
 
             SomeDomain someDomain = await RootDomain.ReflectAsync<SomeDomain>(store, "BCC64348-17BF-4FC4-A20D-C1C6EF71AEEE");
@@ -76,6 +77,8 @@ namespace Apps
         {
             string connectionString = Environment.GetEnvironmentVariable("SQL_LOCAL_CONNECTION") ?? throw new ArgumentNullException();
             services.WithEventStoreMsSql(connectionString);
+
+            services.AddTransient(typeof(DomainSession<>));
         }
     }
 }
