@@ -20,7 +20,7 @@ namespace Core.DDD.Abstract
         {
             if (!events.Any()) throw new InvalidOperationException();
 
-            foreach (IEvent @event in events.OrderBy(e => e.Ts))
+            foreach (IEvent @event in events)
             {
                 ApplyEvent(@event);
             }
@@ -31,13 +31,18 @@ namespace Core.DDD.Abstract
             await eventStore.SaveChangesAsync(Correlation, _uncommitedEvents);
             _uncommitedEvents.Clear();
         }
+        public static Task<T> ReflectAsync<T>(IEventStore eventStore, string correlation) where T : RootDomain
+        => ReflectAsync<T>(eventStore, Guid.Parse(correlation));
         public static async Task<T> ReflectAsync<T>(IEventStore eventStore, Guid correlation) where T : RootDomain
         {
-            IList<IEvent> events = await eventStore.LoadEventsAync(correlation);
+            IList<(int seqNum, IEvent e)> events = await eventStore.LoadEventsAync(correlation);
             if (events.Count == 0) throw new InvalidOperationException();
 
-            System.Reflection.ConstructorInfo constructor = typeof(T).GetConstructor([typeof(IEnumerable<IEvent>), typeof(Guid)]) ?? throw new InvalidOperationException();
-            return (T)constructor.Invoke([events, correlation]);
+            System.Reflection.ConstructorInfo constructor = typeof(T).GetConstructor([typeof(IEnumerable<IEvent>)]) ?? throw new InvalidOperationException();
+
+            T domain = (T)constructor.Invoke([events.Select(evs => evs.e)]);
+            domain.SequenceNumber = events.Max(x => x.seqNum);
+            return domain;
         }
 
         private void ApplyEvent(IEvent @event)

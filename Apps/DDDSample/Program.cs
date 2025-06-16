@@ -20,10 +20,8 @@ namespace Apps
             ApplyNewEvent(new SomeDomainCreatedEvent(Correlation));
         }
 
-        public SomeDomain(IEnumerable<IEvent> events, Guid correlation) : base(events)
-        {
-            Correlation = correlation;
-        }
+        public SomeDomain(IEnumerable<IEvent> events) : base(events)
+        { }
 
         public void ChangeSpecialNumber(int num)
         {
@@ -60,24 +58,17 @@ namespace Apps
 
             ServiceProvider services = serviceDescriptors.BuildServiceProvider();
             var store = services.GetRequiredService<IEventStore>();
-            Guid g;
-            await using (DomainSession<SomeDomain> session = new DomainSession<SomeDomain>(new SomeDomain(), store))
+            await using (DomainSession<SomeDomain> session = new DomainSession<SomeDomain>(await RootDomain.ReflectAsync<SomeDomain>(store, "BCC64348-17BF-4FC4-A20D-C1C6EF71AEEE"), store))
             {
-                session.Domain.ChangeTitle("SESSIONX1");
+                session.Domain.ChangeSpecialNumber(54);
 
-                session.Domain.ChangeTitle("SESSIONX2");
+                session.Domain.ChangeTitle("kartofili");
 
-                session.Domain.ChangeTitle("SESSIONX3");
-
-                session.Domain.ChangeTitle("SESSIONX4");
-
-                session.Domain.ChangeSpecialNumber(4);
-
-                g = session.Domain.Correlation;
-                Console.WriteLine(session.Domain.Correlation);
+                session.Domain.ChangeSpecialNumber(101234);
             }
 
-            SomeDomain someDomain = await RootDomain.ReflectAsync<SomeDomain>(store, Guid.Parse("9A08A3AF-8479-4021-B05A-287C40C66354"));
+            SomeDomain someDomain = await RootDomain.ReflectAsync<SomeDomain>(store, "BCC64348-17BF-4FC4-A20D-C1C6EF71AEEE");
+            Console.WriteLine(someDomain.SpecialNumber);
             Console.WriteLine(someDomain.Title);
         }
 

@@ -12,12 +12,12 @@ namespace Core._3D.Ef
         {
             _context = context;
         }
-        public async Task<IList<IEvent>> LoadEventsAync(Guid correlation)
+        public async Task<IList<(int seqNum,IEvent e)>> LoadEventsAync(Guid correlation)
         {
             List<EventModel> eventRecords = await _context.Events.Where(e => e.Correlation == correlation)
                 .OrderBy(e => e.SequenceNumber).ToListAsync();
 
-            List<IEvent> events = [];
+            List<(int seqNum,IEvent e)> events = [];
             foreach (EventModel data in eventRecords)
             {
                 Type? type = Type.GetType(data.EventType);
@@ -29,7 +29,7 @@ namespace Core._3D.Ef
 
                 IEvent? @event = (IEvent?)JsonConvert.DeserializeObject(data.EventDataJson, type);
                 if (@event is null) continue;
-                events.Add(@event);
+                events.Add((data.SequenceNumber,@event));
             }
 
             return events;

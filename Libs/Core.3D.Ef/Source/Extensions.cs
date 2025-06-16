@@ -11,7 +11,7 @@ namespace Core._3D.Ef
             services.AddDbContext<EventStoreContext>(options =>
             {
                 options.UseSqlServer(connectionString);
-                options.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+                // options.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
             });
 
             services.AddSingleton<IEventStore, EventStore>();
