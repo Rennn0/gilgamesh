@@ -34,7 +34,26 @@ namespace EducativeIo.Projects.SE
             Guard.AgainstNull(_acs);
             _acs.ResetSearch();
         }
+        public bool BrokenQuery(string query, string[] words)
+        {
+            HashSet<string> wordsSet = [.. words];
+            int length = query.Length;
+            bool[] dp = new bool[length + 1];
+            dp[0] = true;
+            for (int i = 1; i <= length; i++)
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    string sub = query[j..i];
+                    if (dp[j] && wordsSet.Contains(sub))
+                    {
+                        dp[i] = true;
+                    }
+                }
+            }
 
+            return dp[length];
+        }
         private class WordDictionary
         {
             private Node _root;

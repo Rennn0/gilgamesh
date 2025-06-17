@@ -43,5 +43,14 @@ namespace __TESTS__.SE
             List<string> aa = searchEngine.Complete('a');
             Assert.AreEqual(1, aa.Count);
         }
+
+        [TestMethod]
+        public void BrokenQuery()
+        {
+            SearchEngine searchEngine = new SearchEngine();
+            Assert.IsTrue(searchEngine.BrokenQuery("vegancookbook", ["i", "cream", "cook", "scream", "ice", "cat", "book", "icecream", "vegan"]));
+            Assert.IsTrue(searchEngine.BrokenQuery("catice", ["i", "cream", "cook", "scream", "ice", "cat", "book", "icecream", "vegan"]));
+            Assert.IsFalse(searchEngine.BrokenQuery("iscreamcooktail", ["i", "cream", "cook", "scream", "ice", "cat", "book", "icecream", "vegan"]));
+        }
     }
 }
