@@ -21,5 +21,27 @@ namespace __TESTS__.SE
             Assert.IsFalse(searchEngine.StartsWith("anyone"));
             Assert.IsFalse(searchEngine.StartsWith("abcd"));
         }
+
+
+        [TestMethod]
+        public void Autocomplete()
+        {
+            // string[] sentences = ["beautiful", "best quotes", "best friend", "best birthday wishes", "instagram", "internet"];
+            // int[] times = [30, 14, 21, 10, 10, 15];
+
+            string[] sentences = ["abc", "aad", "adef"];
+            int[] times = [30, 14, 40];
+
+            SearchEngine searchEngine = new SearchEngine();
+            searchEngine.StartAutoComplete(sentences, times);
+
+            List<string> b = searchEngine.Complete('b');
+            Assert.AreEqual(0, b.Count);
+            searchEngine.ResetSearch();
+            List<string> a = searchEngine.Complete('a');
+            Assert.AreEqual(2, a.Count);
+            List<string> aa = searchEngine.Complete('a');
+            Assert.AreEqual(1, aa.Count);
+        }
     }
 }

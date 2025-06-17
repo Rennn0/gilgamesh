@@ -1,8 +1,11 @@
+using Core.Guards;
+
 namespace EducativeIo.Projects.SE
 {
     public class SearchEngine
     {
         private readonly WordDictionary _wd;
+        private AutoCompleteSystem? _acs;
         public SearchEngine()
         {
             _wd = new WordDictionary();
@@ -10,6 +13,27 @@ namespace EducativeIo.Projects.SE
         public void Insert(string word) => _wd.Insert(word);
         public bool ContainsWord(string word) => _wd.ContainsWord(word);
         public bool StartsWith(string word) => _wd.StartsWith(word);
+        public SearchEngine StartAutoComplete(string[] sentences, int[] times)
+        {
+            _acs = new AutoCompleteSystem(sentences, times);
+            return this;
+        }
+        public SearchEngine AddSentence(string sentence, int t)
+        {
+            Guard.AgainstNull(_acs);
+            _acs.Add(sentence, t);
+            return this;
+        }
+        public List<string> Complete(char c)
+        {
+            Guard.AgainstNull(_acs);
+            return _acs.AutoComplete(c);
+        }
+        public void ResetSearch()
+        {
+            Guard.AgainstNull(_acs);
+            _acs.ResetSearch();
+        }
 
         private class WordDictionary
         {
@@ -61,9 +85,80 @@ namespace EducativeIo.Projects.SE
             private Node _root;
             private Node _current;
             private string _keyWord;
-            public AutoCompleteSystem(string[] sentences,int[] times)
+            private readonly char _delimeter;
+            public AutoCompleteSystem(string[] sentences, int[] times)
             {
+                if (sentences.Length != times.Length) throw new InvalidOperationException();
 
+                _root = new Node();
+                _current = _root;
+                _keyWord = string.Empty;
+                _delimeter = '#';
+
+                for (int i = 0; i < sentences.Length; i++)
+                {
+                    Add(sentences[i], times[i]);
+                }
+            }
+
+            public void Add(string sentence, int t)
+            {
+                Node node = _root;
+                List<Node> visited = [];
+                foreach (char c in sentence.ToCharArray())
+                {
+                    if (!node.Children.TryGetValue(c, out Node? value))
+                    {
+                        node.Children[c] = new Node();
+                    }
+                    node = node.Children[c];
+                    visited.Add(node);
+                }
+
+                node.MarkEndWord();
+                node.Data = sentence;
+                node.Rank += t;
+
+                foreach (Node n in visited)
+                {
+                    n.Update(node);
+                }
+            }
+            public void ResetSearch()
+            {
+                _current = _root;
+                _keyWord = string.Empty;
+            }
+            public List<string> AutoComplete(char c)
+            {
+                List<string> res = [];
+                if (c == _delimeter)
+                {
+                    Add(_keyWord, 1);
+                    _keyWord = string.Empty;
+                    _current = _root;
+                    return res;
+                }
+
+                _keyWord += c;
+                if (_current is not null)
+                {
+                    if (!_current.Children.ContainsKey(c))
+                        return res;
+                    else
+                        _current = _current.Children[c];
+                }
+                else
+                {
+                    return res;
+                }
+
+                foreach (Node node in _current.Hot)
+                {
+                    res.Add(node.Data);
+                }
+
+                return res;
             }
         }
         private class Node : IComparable<Node>
@@ -73,13 +168,13 @@ namespace EducativeIo.Projects.SE
             public int Rank { get; set; }
             public string Data { get; set; }
             public List<Node> Hot { get; set; }
-            private const int HotCount = 3;
+            private const int HotCount = 2;
             public Node()
             {
                 Children = [];
                 IsEndWord = false;
                 Rank = -1;
-                Data = "";
+                Data = string.Empty;
                 Hot = [];
             }
             public bool MarkEndWord() => IsEndWord = true;
