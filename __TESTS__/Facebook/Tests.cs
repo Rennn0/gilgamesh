@@ -98,7 +98,7 @@ namespace __TESTS__.Facebook
         public void GroupWords()
         {
             List<List<string>> result = Solution.GroupStrings(["abc", "bcd", "acef", "xyz", "az", "ba", "a", "z"]);
-            Assert.AreEqual(3, result.Count);
+            Assert.AreEqual(4, result.Count);
         }
     }
 }
