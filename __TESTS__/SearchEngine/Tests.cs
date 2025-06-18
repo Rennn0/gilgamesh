@@ -77,5 +77,25 @@ namespace __TESTS__.SE
             int[] ranking = searchEngine.Ranking([1, 4, 6, 9]);
             CollectionAssert.AreEquivalent(new int[] { 216, 54, 36, 24 }, ranking);
         }
+
+        [TestMethod]
+        public void Ptree()
+        {
+            Solution.PrefixTree<string> prefixTree = new Solution.PrefixTree<string>();
+            prefixTree.Insert("luka", "{some json crack}");
+            prefixTree.Insert("danelia", "{some json crack AGAIN}");
+            prefixTree.Insert("lukito", "{some AGAIN}");
+
+            prefixTree.Search("luka", out string? r1);
+            prefixTree.Search("lukito", out string? r2);
+            prefixTree.Search("danelia", out string? r3);
+            prefixTree.Search("lukaaaaa", out string? r4);
+
+
+            Assert.AreEqual("{some json crack}", r1);
+            Assert.AreEqual("{some AGAIN}", r2);
+            Assert.AreEqual("{some json crack AGAIN}", r3);
+            Assert.AreEqual(null, r4);
+        }
     }
 }
