@@ -56,6 +56,25 @@ namespace EducativeIo.Projects.SE
 
             return dp[length];
         }
+        public int[] Ranking(int[] scores)
+        {
+            int size = scores.Length;
+            int[] rankings = new int[size];
+            rankings[0] = 1;
+            for (int i = 1; i < size; i++)
+            {
+                rankings[i] = scores[i - 1] * rankings[i - 1];
+            }
+
+            int right = 1;
+            for (int i = size - 1; i >= 0; i--)
+            {
+                rankings[i] = rankings[i] * right;
+                right *= scores[i];
+            }
+
+            return rankings;
+        }
         private class WordDictionary
         {
             private readonly Node _root;

@@ -43,6 +43,7 @@ internal class Solution
 
     public static void Main(string[] args)
     {
+        Console.WriteLine("Hi mom");
         // new Thread(Ping) { IsBackground = true }.Start();
         // new Thread(Pong) { IsBackground = true }.Start();
 
@@ -514,7 +515,10 @@ public class MyAwaiter : INotifyCompletion
 
 public class TcsTst
 {
-    private TaskCompletionSource<int> _tcs { get; }
+    private TaskCompletionSource<int> _tcs
+    {
+        get;
+    }
 
     public TcsTst()
     {

@@ -69,5 +69,13 @@ namespace __TESTS__.SE
             query = "icecreamvegan";
             List<string> q2 = searchEngine.BreakQuery(query, dict);
         }
+
+        [TestMethod]
+        public void Ranking()
+        {
+            SearchEngine searchEngine = new SearchEngine();
+            int[] ranking = searchEngine.Ranking([1, 4, 6, 9]);
+            CollectionAssert.AreEquivalent(new int[] { 216, 54, 36, 24 }, ranking);
+        }
     }
 }
