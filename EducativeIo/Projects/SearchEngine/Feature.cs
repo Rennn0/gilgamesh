@@ -13,6 +13,8 @@ namespace EducativeIo.Projects.SE
         public void Insert(string word) => _wd.Insert(word);
         public bool ContainsWord(string word) => _wd.ContainsWord(word);
         public bool StartsWith(string word) => _wd.StartsWith(word);
+        public List<string> BreakQuery(string query, string[] sentences) => AutoCompleteSystem.BreakQuery(query, sentences);
+
         public SearchEngine StartAutoComplete(string[] sentences, int[] times)
         {
             _acs = new AutoCompleteSystem(sentences, times);
@@ -56,7 +58,7 @@ namespace EducativeIo.Projects.SE
         }
         private class WordDictionary
         {
-            private Node _root;
+            private readonly Node _root;
             public WordDictionary()
             {
                 _root = new Node();
@@ -67,9 +69,13 @@ namespace EducativeIo.Projects.SE
                 Node node = _root;
                 foreach (char c in word.ToCharArray())
                 {
-                    if (!node.Children.ContainsKey(c))
-                        node.Children[c] = new Node();
-                    node = node.Children[c];
+                    if (!node.Children.TryGetValue(c, out Node? value))
+                    {
+                        value = new Node();
+                        node.Children[c] = value;
+                    }
+
+                    node = value;
                 }
                 node.MarkEndWord();
             }
@@ -80,7 +86,10 @@ namespace EducativeIo.Projects.SE
                 foreach (char c in word.ToCharArray())
                 {
                     if (!node.Children.TryGetValue(c, out Node? value))
+                    {
                         return false;
+                    }
+
                     node = value;
                 }
                 return node.IsEndWord;
@@ -92,7 +101,10 @@ namespace EducativeIo.Projects.SE
                 foreach (char c in word.ToCharArray())
                 {
                     if (!node.Children.TryGetValue(c, out Node? value))
+                    {
                         return false;
+                    }
+
                     node = value;
                 }
 
@@ -107,7 +119,10 @@ namespace EducativeIo.Projects.SE
             private readonly char _delimeter;
             public AutoCompleteSystem(string[] sentences, int[] times)
             {
-                if (sentences.Length != times.Length) throw new InvalidOperationException();
+                if (sentences.Length != times.Length)
+                {
+                    throw new InvalidOperationException();
+                }
 
                 _root = new Node();
                 _current = _root;
@@ -162,10 +177,14 @@ namespace EducativeIo.Projects.SE
                 _keyWord += c;
                 if (_current is not null)
                 {
-                    if (!_current.Children.ContainsKey(c))
+                    if (!_current.Children.TryGetValue(c, out Node? value))
+                    {
                         return res;
+                    }
                     else
-                        _current = _current.Children[c];
+                    {
+                        _current = value;
+                    }
                 }
                 else
                 {
@@ -179,14 +198,66 @@ namespace EducativeIo.Projects.SE
 
                 return res;
             }
+
+            public static List<string> BreakQuery(string query, string[] sentences)
+            {
+                HashSet<string> hashSet = [.. sentences];
+                return BreakQueryHelper(query, hashSet, []);
+            }
+            private static List<string> BreakQueryHelper(string query, HashSet<string> sentences, Dictionary<string, List<string>> map)
+            {
+                if (map.TryGetValue(query, out List<string>? value))
+                {
+                    return value;
+                }
+
+                List<string> res = [];
+
+                if (query.Length == 0)
+                {
+                    res.Add("");
+                    return res;
+                }
+
+                foreach (string word in sentences)
+                {
+                    if (!query.StartsWith(word))
+                    {
+                        continue;
+                    }
+
+                    List<string> sublist = BreakQueryHelper(query[word.Length..], sentences, map);
+                    foreach (string sub in sublist)
+                    {
+                        res.Add($"{word}{(string.IsNullOrEmpty(sub) ? "" : " ")}{sub}");
+                    }
+                }
+                map[query] = res;
+                return res;
+            }
         }
         private class Node : IComparable<Node>
         {
-            public Dictionary<char, Node> Children { get; }
-            public bool IsEndWord { get; set; }
-            public int Rank { get; set; }
-            public string Data { get; set; }
-            public List<Node> Hot { get; set; }
+            public Dictionary<char, Node> Children
+            {
+                get;
+            }
+            public bool IsEndWord
+            {
+                get; set;
+            }
+            public int Rank
+            {
+                get; set;
+            }
+            public string Data
+            {
+                get; set;
+            }
+            public List<Node> Hot
+            {
+                get; set;
+            }
             private const int HotCount = 2;
             public Node()
             {
@@ -200,10 +271,15 @@ namespace EducativeIo.Projects.SE
 
             public int CompareTo(Node? other)
             {
-                if (other is null) return 1;
+                if (other is null)
+                {
+                    return 1;
+                }
 
                 if (Rank == other.Rank)
+                {
                     return Data.CompareTo(other.Data);
+                }
 
                 return other.Rank - Rank;
             }

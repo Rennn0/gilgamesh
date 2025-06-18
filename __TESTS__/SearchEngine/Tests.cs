@@ -10,7 +10,10 @@ namespace __TESTS__.SE
         {
             SearchEngine searchEngine = new SearchEngine();
             string[] strings = ["the", "a", "there", "answer", "any", "by", "bye", "their", "abc"];
-            foreach (string s in strings) searchEngine.Insert(s);
+            foreach (string s in strings)
+            {
+                searchEngine.Insert(s);
+            }
 
             Assert.IsTrue(searchEngine.ContainsWord("any"));
             Assert.IsTrue(searchEngine.ContainsWord("answer"));
@@ -51,6 +54,20 @@ namespace __TESTS__.SE
             Assert.IsTrue(searchEngine.BrokenQuery("vegancookbook", ["i", "cream", "cook", "scream", "ice", "cat", "book", "icecream", "vegan"]));
             Assert.IsTrue(searchEngine.BrokenQuery("catice", ["i", "cream", "cook", "scream", "ice", "cat", "book", "icecream", "vegan"]));
             Assert.IsFalse(searchEngine.BrokenQuery("iscreamcooktail", ["i", "cream", "cook", "scream", "ice", "cat", "book", "icecream", "vegan"]));
+        }
+
+        [TestMethod]
+        public void Query()
+        {
+            SearchEngine searchEngine = new SearchEngine();
+            string query = "vegancookbook";
+            string[] dict = ["an", "book", "car", "cat", "cook", "cookbook", "crash",
+                "cream", "high", "highway", "i", "ice", "icecream", "low",
+                "scream", "veg", "vegan", "way"];
+
+            List<string> q1 = searchEngine.BreakQuery(query, dict);
+            query = "icecreamvegan";
+            List<string> q2 = searchEngine.BreakQuery(query, dict);
         }
     }
 }

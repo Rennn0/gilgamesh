@@ -3,6 +3,9 @@ namespace Core.DDD.Interfaces
 {
     public interface IEvent
     {
-        DateTimeOffset Ts { get; }
+        public DateTimeOffset Ts
+        {
+            get;
+        }
     }
 }
