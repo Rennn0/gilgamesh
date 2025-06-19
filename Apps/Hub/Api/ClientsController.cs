@@ -3,6 +3,8 @@ using Hub.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
+using Stripe;
+using Stripe.Checkout;
 
 namespace Hub.Api
 {
@@ -17,6 +19,70 @@ namespace Hub.Api
         {
             _mDb = dbContext;
             _mLogger = logger;
+        }
+        [HttpGet("success/{token:guid}")]
+        public IActionResult SuccessfullPayment(Guid token)
+        {
+            Console.WriteLine($"{token} succed");
+            const string domain = "http://172.17.0.1:5500/Apps/Client/success.html";
+            Response.Headers.Append("Location", domain);
+            return new StatusCodeResult(303);
+        }
+
+        [HttpGet("fail/{token:guid}")]
+        public IActionResult FailedPayment(Guid token)
+        {
+            Console.WriteLine($"{token} faile");
+            const string domain = "http://172.17.0.1:5500/Apps/Client/cancel.html";
+            Response.Headers.Append("Location", domain);
+            return new StatusCodeResult(303);
+        }
+
+        [HttpPost("checkout")]
+        public IActionResult Checkout()
+        {
+            Guid token = Guid.NewGuid();
+            Console.WriteLine($"{token} started");
+            SessionCreateOptions options = new SessionCreateOptions
+            {
+                LineItems = new List<SessionLineItemOptions>
+                {
+                    new SessionLineItemOptions
+                    {
+                        Price = "price_1Rbo23HBZMMNglkKvqQS2vV0",
+                        Quantity = new Random().Next(30,50)
+                    },
+                },
+                Mode = "payment",
+                SuccessUrl = $"http://localhost:5076/api/clients/success/{token}",
+                CancelUrl = $"http://localhost:5076/api/clients/fail/{token}"
+            };
+            SessionService sessionService = new SessionService();
+            Session session = sessionService.Create(options);
+            Response.Headers.Append("Location", session.Url);
+            return new StatusCodeResult(303);
+        }
+
+        [HttpGet("product")]
+        public IActionResult Product(string name)
+        {
+            ProductCreateOptions options = new ProductCreateOptions { Name = name };
+            ProductService productService = new ProductService();
+            Product product = productService.Create(options);
+            return Ok(product);
+        }
+
+        [HttpGet("price")]
+        public IActionResult Price(ushort amount)
+        {
+            PriceCreateOptions options = new PriceCreateOptions
+            {
+                Currency = "gel",
+                UnitAmount = amount,
+                Product = "prod_SWrgiWMSSCoYJ4"
+            };
+            PriceService priceService = new PriceService();
+            return Ok(priceService.Create(options));
         }
 
         [HttpPost]
@@ -102,3 +168,54 @@ namespace Hub.Api
         }
     }
 }
+
+
+// {
+//   "id": "prod_SWrgiWMSSCoYJ4",
+//   "object": "product",
+//   "active": true,
+//   "created": 1750360602,
+//   "default_price": null,
+//   "description": null,
+//   "images": [],
+//   "livemode": false,
+//   "marketing_features": [],
+//   "metadata": {},
+//   "name": "vashli",
+//   "package_dimensions": null,
+//   "shippable": null,
+//   "statement_descriptor": null,
+//   "tax_code": null,
+//   "type": "service",
+//   "unit_label": null,
+//   "updated": 1750360602,
+//   "url": null
+// }
+
+// {
+//   "id": "price_1Rbo23HBZMMNglkKvqQS2vV0",
+//   "object": "price",
+//   "active": true,
+//   "billing_scheme": "per_unit",
+//   "created": 1750360915,
+//   "currency": "gel",
+//   "currency_options": null,
+//   "custom_unit_amount": null,
+//   "livemode": false,
+//   "lookup_key": null,
+//   "metadata": {},
+//   "nickname": null,
+//   "product": "prod_SWrgiWMSSCoYJ4",
+//   "recurring": null,
+//   "tax_behavior": "unspecified",
+//   "tiers": null,
+//   "tiers_mode": null,
+//   "transform_quantity": null,
+//   "type": "one_time",
+//   "unit_amount": 13,
+//   "unit_amount_decimal": 13
+// }
+
+/*
+    https://checkout.stripe.com/c/pay/cs_test_a1SWE0fW7HcxhPEQydJPQzFtVZ6HwoqpEUlws1Wugn39yfPJkP8pWlbhTG#fidkdWxOYHwnPyd1blpxYHZxWjA0VGlnYzNNR19ISEtiaW5OXzJiV102RE5GfzdrNnFRSzBiaDNcaWpuTXxCV21Va1N%2FNERJbndDSlZuQWZMYDFidWhxQklzUWRQfXA1RkgwMWJAfURXZ05uNTUzQ0AwdGg0NScpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl
+*/

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <title>Excel Download Test</title>
@@ -12,7 +12,7 @@
 </head>
 <body>
     <h1>Excel Download Test</h1>
-    
+
     <div class="progress-container">
         <h3>Download Progress</h3>
         <progress id="downloadProgress" value="0" max="100"></progress>
@@ -50,41 +50,41 @@
                 document.getElementById('downloadInfo').textContent = 'Preparing download...';
                 document.getElementById('progressText').textContent = '0%';
                 document.getElementById('downloadProgress').value = 0;
-                
+
                 const response = await fetch(API_ENDPOINT).catch(error => {
                     document.getElementById('downloadInfo').textContent = `Error: ${error.message}`;
                     throw error;
                 });
-                
+
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                
+
                 const contentLength = response.headers.get('Content-Length');
-                document.getElementById('downloadInfo').textContent = 
+                document.getElementById('downloadInfo').textContent =
                     `Downloading (Total size: ${contentLength ? formatBytes(contentLength) : 'unknown'})...`;
-                
+
                 let receivedLength = 0;
                 const chunks = [];
                 const reader = response.body.getReader();
-                
+
                 while (true) {
                     const { done, value } = await reader.read();
-                    
+
                     if (done) break;
-                    
+
                     chunks.push(value);
                     receivedLength += value.length;
-                    
+
                     if (contentLength) {
                         const percentComplete = Math.round((receivedLength / contentLength) * 100);
                         document.getElementById('progressText').textContent = `${percentComplete}%`;
                         document.getElementById('downloadProgress').value = percentComplete;
-                        document.getElementById('downloadInfo').textContent = 
+                        document.getElementById('downloadInfo').textContent =
                             `Downloaded ${formatBytes(receivedLength)} of ${formatBytes(contentLength)}`;
                     }
                 }
-                
+
                 // Combine all chunks
                 const blob = new Blob(chunks);
                 const url = window.URL.createObjectURL(blob);
@@ -93,12 +93,12 @@
                 a.download = 'clients_with_progress.xlsx';
                 document.body.appendChild(a);
                 a.click();
-                
+
                 // Cleanup
                 window.URL.revokeObjectURL(url);
                 document.body.removeChild(a);
                 document.getElementById('downloadInfo').textContent = 'Download complete!';
-                
+
             } catch (error) {
                 document.getElementById('downloadInfo').textContent = `Error: ${error.message}`;
                 console.error('Download error:', error);
@@ -106,4 +106,27 @@
         }
     </script>
 </body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Buy cool new product</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://js.stripe.com/basil/stripe.js"></script>
+  </head>
+  <body>
+    <section>
+      <div class="product">
+        <img src="https://i.imgur.com/EHyR2nP.png" alt="The cover of Stubborn Attachments" />
+        <div class="description">
+          <h3>Stubborn Attachments</h3>
+          <h5>$20.00</h5>
+        </div>
+      </div>
+      <form action="http://localhost:5076/api/clients/checkout" method="POST">
+        <button type="submit" id="checkout-button">Checkout</button>
+      </form>
+    </section>
+  </body>
 </html>

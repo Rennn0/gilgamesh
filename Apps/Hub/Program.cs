@@ -3,6 +3,7 @@ using Hub.Backgrounds;
 using Hub.Database;
 using Hub.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 
 namespace Hub;
 
@@ -11,6 +12,7 @@ internal class Program
     private static void Main(string[] args)
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+        StripeConfiguration.ApiKey = Environment.GetEnvironmentVariable("STRIPE_API_KEY");
 
         builder.Services.AddCors(options =>
         {
@@ -28,13 +30,13 @@ internal class Program
         // builder.Services.AddSignalR();
         // bRabbitMQ consumer is not connecteduilder.Services.AddHostedService<ClientsBackgroundWorker>();
 
-        builder.Services.AddHostedService<RabbitQueueWorker>();
+        // builder.Services.AddHostedService<RabbitQueueWorker>();
 
 
-        builder.Services.AddHealthChecks().AddCheck<RabbitQueueHc>(
-            nameof(RabbitQueueWorker),
-            Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Unhealthy,
-            ["ready", "rabbitmq"]);
+        // builder.Services.AddHealthChecks().AddCheck<RabbitQueueHc>(
+        //     nameof(RabbitQueueWorker),
+        //     Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Unhealthy,
+        //     ["ready", "rabbitmq"]);
 
         WebApplication app = builder.Build();
 
@@ -47,16 +49,16 @@ internal class Program
         app.UseCors();
 
         // app.MapHub<ClientsHub>("/hub/clients");
-        app.MapHealthChecks("/health/ready", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions()
-        {
-            Predicate = hc => hc.Tags.Contains("ready"),
-            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-        });
+        // app.MapHealthChecks("/health/ready", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions()
+        // {
+        //     Predicate = hc => hc.Tags.Contains("ready"),
+        //     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        // });
 
-        app.MapHealthChecks("/health/live", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions()
-        {
-            Predicate = (_) => false
-        });
+        // app.MapHealthChecks("/health/live", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions()
+        // {
+        //     Predicate = (_) => false
+        // });
 
         app.MapControllers();
         app.Run();
