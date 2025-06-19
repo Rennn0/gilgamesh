@@ -4,6 +4,31 @@ namespace EducativeIo.Projects.SE
 {
     public class Solution
     {
+        public int[] FindProduct(int[] arr)
+        {
+            if (arr.Length == 0)
+            {
+                return [];
+            }
+
+            int[] product = new int[arr.Length];
+            product[0] = 1;
+
+            for (int i = 1; i < arr.Length; i++)
+            {
+                product[i] = arr[i - 1] * product[i - 1];
+            }
+
+            int r = 1;
+
+            for (int i = arr.Length - 1; i >= 0; i--)
+            {
+                product[i] *= r;
+                r *= arr[i];
+            }
+
+            return product;
+        }
         public class PrefixTree<TNode>
         {
             private readonly PrefixTreeNode<TNode> _rootNode;
