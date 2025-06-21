@@ -123,10 +123,12 @@ namespace __TESTS__.SE
             int c2 = searchEngine.CoinChange2([4], 6);
             int c3 = searchEngine.CoinChange2([5], 5);
             int c4 = searchEngine.CoinChange2([1, 2, 5], 0);
+            int c5 = searchEngine.CoinChange2([2, 3, 6, 7], 7);
             Assert.AreEqual(4, c1);
             Assert.AreEqual(0, c2);
             Assert.AreEqual(1, c3);
             Assert.AreEqual(0, c4);
+            Assert.AreEqual(2, c5);
         }
     }
 }
