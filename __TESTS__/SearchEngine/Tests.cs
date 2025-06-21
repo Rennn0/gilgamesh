@@ -1,3 +1,4 @@
+using System.Runtime.Intrinsics.Arm;
 using EducativeIo.Projects.SE;
 
 namespace __TESTS__.SE
@@ -96,6 +97,36 @@ namespace __TESTS__.SE
             Assert.AreEqual("{some AGAIN}", r2);
             Assert.AreEqual("{some json crack AGAIN}", r3);
             Assert.AreEqual(null, r4);
+        }
+
+        [TestMethod]
+        public void Coins()
+        {
+            SearchEngine searchEngine = new SearchEngine();
+            int c1 = searchEngine.CoinChange([1, 3, 5], 11);
+            int c2 = searchEngine.CoinChange([2, 4, 6], 11);
+            int c3 = searchEngine.CoinChange([2, 3, 4, 6, 8], 8);
+            int c4 = searchEngine.CoinChange([2], 4);
+            int c5 = searchEngine.CoinChange([5], 3);
+            Assert.AreEqual(3, c1);
+            Assert.AreEqual(-1, c2);
+            Assert.AreEqual(1, c3);
+            Assert.AreEqual(2, c4);
+            Assert.AreEqual(-1, c5);
+        }
+
+        [TestMethod]
+        public void Coins2()
+        {
+            SearchEngine searchEngine = new SearchEngine();
+            int c1 = searchEngine.CoinChange2([1, 2, 5], 5);
+            int c2 = searchEngine.CoinChange2([4], 6);
+            int c3 = searchEngine.CoinChange2([5], 5);
+            int c4 = searchEngine.CoinChange2([1, 2, 5], 0);
+            Assert.AreEqual(4, c1);
+            Assert.AreEqual(0, c2);
+            Assert.AreEqual(1, c3);
+            Assert.AreEqual(0, c4);
         }
     }
 }

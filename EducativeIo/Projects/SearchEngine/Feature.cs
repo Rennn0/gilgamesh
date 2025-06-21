@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Formats.Tar;
 using Core.Guards;
 
 namespace EducativeIo.Projects.SE
@@ -14,7 +16,138 @@ namespace EducativeIo.Projects.SE
         public bool ContainsWord(string word) => _wd.ContainsWord(word);
         public bool StartsWith(string word) => _wd.StartsWith(word);
         public List<string> BreakQuery(string query, string[] sentences) => AutoCompleteSystem.BreakQuery(query, sentences);
+        public int CoinChange(int[] coins, int total)
+        {
+            CoinNode rootNode = new CoinNode(0, 0);
+            Queue<CoinNode> cq = new Queue<CoinNode>();
+            cq.Enqueue(rootNode);
 
+            while (cq.Count > 0)
+            {
+                CoinNode current = cq.Dequeue();
+
+                if (current.NodeValue == total)
+                {
+                    return current.Gen;
+                }
+
+                for (int i = 0; i < coins.Length; i++)
+                {
+                    CoinNode newNode = new CoinNode(current.NodeValue + coins[i], current.Gen + 1);
+                    if (newNode.NodeValue == total)
+                    {
+                        return newNode.Gen;
+                    }
+                    else if (newNode.NodeValue < total)
+                    {
+                        cq.Enqueue(newNode);
+                    }
+                }
+            }
+
+            return -1;
+        }
+
+        public int CoinChange2(int[] coins, int total)
+        {
+            CoinNode2 rootNode = new CoinNode2(new List<int>());
+            Queue<CoinNode2> cq = new Queue<CoinNode2>();
+            cq.Enqueue(rootNode);
+
+            List<List<int>> matrix = new List<List<int>>();
+
+            while (cq.Count > 0)
+            {
+                CoinNode2 current = cq.Dequeue();
+
+                for (int i = 0; i < coins.Length; i++)
+                {
+                    CoinNode2 newNode = new CoinNode2(current.Coins, coins[i]);
+                    int sum = newNode.Coins.Sum();
+                    if (sum == total)
+                    {
+                        matrix.Add(newNode.Coins);
+                    }
+                    else if (sum < total)
+                    {
+                        cq.Enqueue(newNode);
+                    }
+                }
+            }
+
+            HashSet<List<int>> filtered = new HashSet<List<int>>(matrix, new CoinComparer());
+
+            return filtered.Count;
+        }
+        public class CoinComparer : IEqualityComparer<List<int>>
+        {
+            public bool Equals(List<int>? x, List<int>? y)
+            {
+                if (x is null || y is null)
+                {
+                    return false;
+                }
+
+                if (x.Count != y.Count)
+                {
+                    return false;
+                }
+
+                for (int i = 0; i < x.Count; i++)
+                {
+                    if (x[i] != y[i])
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+            public int GetHashCode([DisallowNull] List<int> obj)
+            {
+                unchecked
+                {
+                    int hash = 19;
+                    foreach (int num in obj)
+                    {
+                        hash = hash * 31 + num.GetHashCode();
+                    }
+                    return hash;
+                }
+            }
+        }
+        private struct CoinNode
+        {
+            public int NodeValue
+            {
+                get;
+            }
+            public int Gen
+            {
+                get;
+            }
+            public CoinNode(int val, int gen)
+            {
+                NodeValue = val;
+                Gen = gen;
+            }
+        }
+        private struct CoinNode2
+        {
+            public List<int> Coins
+            {
+                get;
+            }
+            public CoinNode2(List<int> coins)
+            {
+                Coins = new List<int>(coins);
+            }
+            public CoinNode2(List<int> coins, int coin)
+            {
+                Coins = new List<int>(coins) { coin };
+                Coins.Sort();
+            }
+        }
         public SearchEngine StartAutoComplete(string[] sentences, int[] times)
         {
             _acs = new AutoCompleteSystem(sentences, times);
@@ -65,7 +198,6 @@ namespace EducativeIo.Projects.SE
             {
                 rankings[i] = scores[i - 1] * rankings[i - 1];
             }
-
             int right = 1;
             for (int i = size - 1; i >= 0; i--)
             {
