@@ -6,7 +6,11 @@ namespace EducativeIo.Projects.Facebook
     {
         public static int NumIslands(string[][] grid)
         {
-            if (grid.Length.Equals(0) || grid[0].Length.Equals(0)) return -1;
+            if (grid.Length.Equals(0) || grid[0].Length.Equals(0))
+            {
+                return -1;
+            }
+
 
             int islands = 0;
             int row = grid.Length;
@@ -29,7 +33,11 @@ namespace EducativeIo.Projects.Facebook
 
         public static int FindProvincesNum(int[][] matrix)
         {
-            if (matrix.Length.Equals(0) || matrix[0].Length.Equals(0)) return -1;
+            if (matrix.Length.Equals(0) || matrix[0].Length.Equals(0))
+            {
+                return -1;
+            }
+
             bool[] visited = new bool[matrix.Length];
             int provinces = 0;
             for (int i = 0; i < matrix.Length; i++)
@@ -74,17 +82,20 @@ namespace EducativeIo.Projects.Facebook
 
         public static int SearchRotated(int[] arr, int k)
         {
-            if (arr.Length.Equals(0)) return -1;
+            if (arr.Length.Equals(0))
+                return -1;
             return SearchRotated(arr, 0, arr.Length - 1, k);
         }
 
         public static int SearchRotated(int[] arr, int l, int r, int k)
         {
-            if (l > r) return -1;
+            if (l > r)
+                return -1;
 
             int mid = l + (r - l) / 2;
 
-            if (arr[mid].Equals(k)) return mid;
+            if (arr[mid].Equals(k))
+                return mid;
 
             if (arr[l] <= arr[mid] && k <= arr[mid] && k >= arr[l])
                 return SearchRotated(arr, l, mid - 1, k);
@@ -103,7 +114,8 @@ namespace EducativeIo.Projects.Facebook
 
             foreach (string word in words)
             {
-                if (IsFlagWord(word, s)) c++;
+                if (IsFlagWord(word, s))
+                    c++;
             }
 
             return c;
@@ -112,7 +124,8 @@ namespace EducativeIo.Projects.Facebook
         // reno rennno
         private static bool IsFlagWord(string og, string sus)
         {
-            if (string.IsNullOrWhiteSpace(og) || string.IsNullOrWhiteSpace(sus)) return false;
+            if (string.IsNullOrWhiteSpace(og) || string.IsNullOrWhiteSpace(sus))
+                return false;
 
             const int seqSize = 3;
             int ogLen = og.Length;
@@ -123,12 +136,14 @@ namespace EducativeIo.Projects.Facebook
 
             while (ogIdx < ogLen && susIdx < susLen)
             {
-                if (og[ogIdx] != sus[susIdx]) return false;
+                if (og[ogIdx] != sus[susIdx])
+                    return false;
 
                 int ogSeq = RepeatedSequence(og, ogIdx);
                 int susSeq = RepeatedSequence(sus, susIdx);
 
-                if (ogSeq != susSeq && susSeq < seqSize || susSeq >= seqSize && susSeq < ogSeq) return false;
+                if (ogSeq != susSeq && susSeq < seqSize || susSeq >= seqSize && susSeq < ogSeq)
+                    return false;
 
                 ogIdx += ogSeq;
                 susIdx += susSeq;
@@ -152,7 +167,10 @@ namespace EducativeIo.Projects.Facebook
             int row = grid.Length;
             int col = grid[0].Length;
 
-            if (r < 0 || r >= row || c < 0 || c >= col || !grid[r][c].Equals("1")) return;
+            if (r < 0 || r >= row || c < 0 || c >= col || !grid[r][c].Equals("1"))
+            {
+                return;
+            }
 
             grid[r][c] = "0";
 
@@ -161,10 +179,10 @@ namespace EducativeIo.Projects.Facebook
             DFS(grid, r, c - 1);
             DFS(grid, r, c + 1);
 
-            DFS(grid, r - 1, c - 1);
-            DFS(grid, r - 1, c + 1);
-            DFS(grid, r + 1, c - 1);
-            DFS(grid, r + 1, c + 1);
+            // DFS(grid, r - 1, c - 1);
+            // DFS(grid, r - 1, c + 1);
+            // DFS(grid, r + 1, c - 1);
+            // DFS(grid, r + 1, c + 1);
         }
 
         public static List<List<string>> GroupStrings(string[] strs)
@@ -193,7 +211,8 @@ namespace EducativeIo.Projects.Facebook
             for (int i = 0; i < str.Length - 1; i++)
             {
                 int c = str[i + 1] - str[i];
-                if (c < 0) c += 26;
+                if (c < 0)
+                    c += 26;
                 stringBuilder.Append($"{c};");
             }
 
