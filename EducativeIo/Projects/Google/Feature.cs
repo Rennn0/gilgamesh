@@ -161,6 +161,7 @@ namespace EducativeIo.Projects.Google
                 return;
             }
             int mid = start + (end - start) / 2;
+
             MergeSort(arr, start, mid);
             MergeSort(arr, mid + 1, end);
 
@@ -168,32 +169,24 @@ namespace EducativeIo.Projects.Google
             int right = mid + 1;
             int[] temp = new int[arr.Length];
 
-            for (int k = start; k <= end; k++)
+            for (int i = start; i <= end; i++)
             {
-                temp[k] = arr[k];
+                temp[i] = arr[i];
             }
 
-            for (int k = start; k <= end; k++)
+            for (int i = start; i <= end; i++)
             {
                 if (left <= mid && right <= end)
                 {
-                    arr[k] = Math.Min(temp[left], temp[right]);
-                    if (arr[k] == temp[left])
-                    {
-                        left++;
-                    }
-                    else
-                    {
-                        right++;
-                    }
+                    arr[i] = temp[left] < temp[right] ? temp[left++] : temp[right++];
                 }
                 else if (left <= mid && right > end)
                 {
-                    arr[k] = temp[left++];
+                    arr[i] = temp[left++];
                 }
                 else
                 {
-                    arr[k] = temp[right++];
+                    arr[i] = temp[right++];
                 }
             }
         }
