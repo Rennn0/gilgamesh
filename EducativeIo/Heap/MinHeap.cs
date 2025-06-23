@@ -51,14 +51,8 @@ public class MinHeap<T> where T : IComparable<T>
     {
         h = new List<T>();
     }
-    public int Size()
-    {
-        return h.Count;
-    }
-    public T GetMin()
-    {
-        return Size() <= 0 ? (T)Convert.ChangeType(-1, typeof(T)) : h[0];
-    }
+    public int Size() => h.Count;
+    public T GetMin() => Size() <= 0 ? (T) Convert.ChangeType(-1, typeof(T)) : h[0];
     public void Insert(T key)
     {
         h.Add(key);

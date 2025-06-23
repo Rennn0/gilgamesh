@@ -1,3 +1,5 @@
+using EducativeIo.Heap;
+
 namespace EducativeIo.Projects.Google
 {
     public class Feature
@@ -195,5 +197,79 @@ namespace EducativeIo.Projects.Google
                 }
             }
         }
+
+        public int MinMeetingRooms(int[][] meetingTimes)
+        {
+            if (meetingTimes.Length == 0)
+            {
+                return 0;
+            }
+            meetingTimes = meetingTimes.OrderBy(x => x[0]).ToArray();
+            MinHeap<int> minHeap = new MinHeap<int>();
+            minHeap.Insert(meetingTimes[0][1]);
+
+            for (int i = 1; i < meetingTimes.Length; i++)
+            {
+                int beginning = meetingTimes[i][0];
+                int ending = meetingTimes[i][1];
+                int earliestEnding = minHeap.GetMin();
+                if (earliestEnding <= beginning)
+                {
+                    minHeap.RemoveMin();
+                }
+                minHeap.Insert(ending);
+            }
+
+            return minHeap.Size();
+        }
+
+
+        public int SubrectangleSum(int[][] matrix)
+        {
+            int rows = matrix.Length;
+            int cols = matrix.Length;
+
+            int maxSum = int.MinValue;
+            for (int row = 0; row < rows; row++)
+            {
+                int[] temp = new int[cols];
+
+                for (int bottomRow = row; bottomRow < rows; bottomRow++)
+                {
+                    for (int col = 0; col < cols; col++)
+                    {
+                        temp[col] += matrix[bottomRow][col];
+                    }
+
+                    int currentMax = Kadane(temp);
+                    maxSum = Math.Max(maxSum, currentMax);
+                }
+            }
+            
+
+            return maxSum;
+        }
+
+        public int Kadane(int[] arr)
+        {
+            int localMax = 0;
+            int globalMax = int.MinValue;
+
+            for (int k = 0; k < arr.Length; k++)
+            {
+                localMax += arr[k];
+                if (localMax > globalMax)
+                {
+                    globalMax = localMax;
+                }
+                if (localMax < 0)
+                {
+                    localMax = 0;
+                }
+            }
+            return globalMax;
+        }
     }
+
+
 }

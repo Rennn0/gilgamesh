@@ -91,5 +91,38 @@ namespace __TESTS__.Google
             feature.MergeSort(arr, 0, arr.Length - 1);
             CollectionAssert.AreEquivalent(new int[] { 0, 1, 2, 3, 3, 4, 5, 10 }, arr);
         }
+
+        [TestMethod]
+        public void MinMeetingRooms()
+        {
+            Feature feature = new Feature();
+            int[][] meetings = [
+                [2, 8], [3, 4], [3, 9], [5, 11], [8, 20], [11, 15]
+            ];
+
+            Assert.AreEqual(3, feature.MinMeetingRooms(meetings));
+        }
+
+
+        [TestMethod]
+        public void MaxRectangleSum()
+        {
+            Feature feature = new Feature();
+            // List<List<int>> matrix = [
+            //     [0, -2, -7, 0],
+            //     [9,  2, -6, 2],
+            //     [-4, 1, -4, 1],
+            //     [-1, 8,  0, -2]
+            // ];
+
+            int[][] matrix = new int[4][];
+            matrix[0] = [0, -2, -7, 0];
+            matrix[1] = [9, 2, -6, 2];
+            matrix[2] = [-4, 1, -4, 1];
+            matrix[3] = [-1, 8, 0, -2];
+
+
+            Assert.AreEqual(15, feature.SubrectangleSum(matrix.ToArray()));
+        }
     }
 }

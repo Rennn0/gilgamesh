@@ -107,7 +107,9 @@ namespace EducativeIo.Projects.Netflix
             internal class NumHolder
             {
                 internal List<int> Nums = new List<int>();
-                private NumHolder() { }
+                private NumHolder()
+                {
+                }
                 public static NumHolder Instance = new NumHolder();
             }
 
@@ -155,7 +157,8 @@ namespace EducativeIo.Projects.Netflix
 
                 public void Push(int value)
                 {
-                    if (_mainStack.Count >= _capacity) return;
+                    if (_mainStack.Count >= _capacity)
+                        return;
 
                     _mainStack.Push(value);
 
@@ -179,7 +182,8 @@ namespace EducativeIo.Projects.Netflix
 
             public bool VerifySession(int[] pushed, int[] popped)
             {
-                if (pushed.Length != popped.Length) return false;
+                if (pushed.Length != popped.Length)
+                    return false;
 
                 int i = 0;
                 Stack<int> session = new Stack<int>();
@@ -211,7 +215,10 @@ namespace EducativeIo.Projects.Netflix
                     };
                 public string[] LetterCombinatios(string digits)
                 {
-                    if (string.IsNullOrWhiteSpace(digits)) throw new ArgumentException();
+                    if (string.IsNullOrWhiteSpace(digits))
+                    {
+                        throw new ArgumentException();
+                    }
 
                     List<string> result = new List<string>();
                     Stack<(int index, string combination)> stack = new Stack<(int index, string combination)>();
@@ -288,7 +295,8 @@ namespace EducativeIo.Projects.Netflix
 
                     int val = _freqValStackMap[_maxFreq].Pop();
                     _valFreqMap[val]--;
-                    if (_freqValStackMap[_maxFreq].IsEmpty()) _maxFreq--;
+                    if (_freqValStackMap[_maxFreq].IsEmpty())
+                        _maxFreq--;
                     return val;
                 }
             }
