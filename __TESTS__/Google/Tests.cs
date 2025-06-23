@@ -89,7 +89,12 @@ namespace __TESTS__.Google
             Feature feature = new Feature();
             int[] arr = [5, 1, 0, 2, 4, 3, 10, 3];
             feature.MergeSort(arr, 0, arr.Length - 1);
+
+            int[] arr2 = [-1, 0, 0, -1, 5, 4, -5];
+            feature.MergeSort(arr2, 0, arr2.Length - 1);
+
             CollectionAssert.AreEquivalent(new int[] { 0, 1, 2, 3, 3, 4, 5, 10 }, arr);
+            CollectionAssert.AreEquivalent(new int[] { -5, -1, -1, 0, 0, 4, 5 }, arr2);
         }
     }
 }
