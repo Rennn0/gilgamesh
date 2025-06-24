@@ -129,5 +129,25 @@ namespace __TESTS__.Google
 
             Assert.AreEqual(15, feature.SubrectangleSum(matrix.ToArray()));
         }
+
+        [TestMethod]
+        public void MergeMeetings()
+        {
+            Feature feature = new Feature();
+            List<List<int>> result = feature.MergeMeetings([
+                [1,4],
+                [2,5],
+                [6,8],
+                [7,9],
+                [10,13]
+            ]);
+            List<List<int>> expected = new List<List<int>>()
+            {
+                new(){1,5},
+                new(){6,9},
+                new(){10,13},
+            };
+            CollectionAssert.AreEquivalent(expected.Select(e => string.Join(',', e)).ToList(), result.Select(r => string.Join(',', r)).ToList());
+        }
     }
 }

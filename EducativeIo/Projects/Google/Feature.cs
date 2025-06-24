@@ -238,7 +238,7 @@ namespace EducativeIo.Projects.Google
                     maxSum = Math.Max(maxSum, currentMax);
                 }
             }
-            
+
 
             return maxSum;
         }
@@ -262,7 +262,25 @@ namespace EducativeIo.Projects.Google
             }
             return globalMax;
         }
+
+        public List<List<int>> MergeMeetings(int[][] meetings)
+        {
+            meetings = meetings.OrderBy(x => x[0]).ToArray();
+            List<List<int>> result = new List<List<int>>();
+
+            foreach (int[] meeting in meetings)
+            {
+                if (result.Count == 0 || result[^1][1] < meeting[0])
+                {
+                    result.Add(meeting.ToList());
+                }
+                else
+                {
+                    result[^1][1] = Math.Max(result[^1][1], meeting[1]);
+                }
+            }
+
+            return result;
+        }
     }
-
-
 }
