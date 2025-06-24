@@ -120,11 +120,7 @@ namespace __TESTS__.Google
             //     [-1, 8,  0, -2]
             // ];
 
-            int[][] matrix = new int[4][];
-            matrix[0] = [0, -2, -7, 0];
-            matrix[1] = [9, 2, -6, 2];
-            matrix[2] = [-4, 1, -4, 1];
-            matrix[3] = [-1, 8, 0, -2];
+            int[][] matrix = [[0, -2, -7, 0], [9, 2, -6, 2], [-4, 1, -4, 1], [-1, 8, 0, -2]];
 
 
             Assert.AreEqual(15, feature.SubrectangleSum(matrix.ToArray()));
@@ -148,6 +144,21 @@ namespace __TESTS__.Google
                 new(){10,13},
             };
             CollectionAssert.AreEquivalent(expected.Select(e => string.Join(',', e)).ToList(), result.Select(r => string.Join(',', r)).ToList());
+        }
+
+        [TestMethod]
+        public void CheckMeetings()
+        {
+            Feature feature = new Feature();
+            int[][] meetingTimes = [
+                [1, 3], [4, 6], [8, 10], [10, 12], [13, 15]
+            ];
+
+            int[] newMeeting = [7, 8];
+            Assert.IsTrue(feature.CheckMeetings(meetingTimes, newMeeting));
+
+            newMeeting = [9, 11];
+            Assert.IsFalse(feature.CheckMeetings(meetingTimes, newMeeting));
         }
     }
 }

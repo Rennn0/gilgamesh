@@ -282,5 +282,88 @@ namespace EducativeIo.Projects.Google
 
             return result;
         }
+
+        public bool CheckMeetings(int[][] meetings, int[] newMeeting)
+        {
+            MeetingTree meetingTree = new MeetingTree();
+            foreach (int[] meeting in meetings)
+            {
+                meetingTree.Add(meeting[0], meeting[1]);
+            }
+            return meetingTree.Add(newMeeting[0], newMeeting[1]);
+        }
+
+        public class MeetingTree
+        {
+            internal class MeetingTreeNode
+            {
+                public int Start
+                {
+                    get;
+                }
+                public int End
+                {
+                    get;
+                }
+
+                public MeetingTreeNode? Left
+                {
+                    get; internal set;
+                }
+                public MeetingTreeNode? Right
+                {
+                    get; internal set;
+                }
+
+                public MeetingTreeNode(int s, int e)
+                {
+                    Start = s;
+                    End = e;
+                }
+            }
+            private MeetingTreeNode? Root
+            {
+                get; set;
+            }
+            public MeetingTree()
+            {
+                Root = null;
+            }
+            public bool Add(int start, int end)
+            {
+                if (Root is null)
+                {
+                    Root = new MeetingTreeNode(start, end);
+                    return true;
+                }
+
+                return Add(Root, new MeetingTreeNode(start, end));
+            }
+            private bool Add(MeetingTreeNode currentTree, MeetingTreeNode newTree)
+            {
+                if (newTree.Start >= currentTree.End)
+                {
+                    if (currentTree.Right is null)
+                    {
+                        currentTree.Right = newTree;
+                        return true;
+                    }
+                    return Add(currentTree.Right, newTree);
+                }
+                else if (newTree.End <= currentTree.Start)
+                {
+                    if (currentTree.Left is null)
+                    {
+                        currentTree.Left = newTree;
+                        return true;
+                    }
+                    return Add(currentTree.Left, newTree);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
     }
 }
