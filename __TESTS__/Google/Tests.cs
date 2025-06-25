@@ -172,5 +172,21 @@ namespace __TESTS__.Google
             newMeeting = [9, 20];
             Assert.AreEqual(3, feature.AddAndMergeMeetings(meetingTimes, newMeeting).Count);
         }
+
+        [TestMethod]
+        public void MeetingsIntersection()
+        {
+            Feature feature = new Feature();
+
+            int[][] meetingsA = [[1, 3], [5, 6], [7, 9]];
+            int[][] meetingsB = [[2, 3], [5, 7]];
+
+            List<List<int>> intersecion = feature.MeetingsIntersection(meetingsA, meetingsB);
+            Assert.AreEqual(2, intersecion.Count);
+            Assert.AreEqual(2, intersecion[0][0]);
+            Assert.AreEqual(3, intersecion[0][1]);
+            Assert.AreEqual(5, intersecion[1][0]);
+            Assert.AreEqual(6, intersecion[1][1]);
+        }
     }
 }

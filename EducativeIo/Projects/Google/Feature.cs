@@ -401,5 +401,34 @@ namespace EducativeIo.Projects.Google
             }
             return result;
         }
+
+        public List<List<int>> MeetingsIntersection(int[][] meetingsA, int[][] meetingsB)
+        {
+            List<List<int>> intersections = [];
+            int left = 0;
+            int right = 0;
+            int leftLen = meetingsA.Length;
+            int rightLen = meetingsB.Length;
+            while (left < leftLen && right < rightLen)
+            {
+                int start = Math.Max(meetingsA[left][0], meetingsB[right][0]);
+                int end = Math.Min(meetingsA[left][1], meetingsB[right][1]);
+
+                if (start < end)
+                {
+                    intersections.Add([start, end]);
+                }
+
+                if (meetingsA[left][1] < meetingsB[right][1])
+                {
+                    left++;
+                }
+                else
+                {
+                    right++;
+                }
+            }
+            return intersections;
+        }
     }
 }
