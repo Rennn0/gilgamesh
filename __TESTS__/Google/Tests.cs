@@ -137,12 +137,12 @@ namespace __TESTS__.Google
                 [7,9],
                 [10,13]
             ]);
-            List<List<int>> expected = new List<List<int>>()
-            {
-                new(){1,5},
-                new(){6,9},
-                new(){10,13},
-            };
+            List<List<int>> expected =
+            [
+                [1,5],
+                [6,9],
+                [10,13],
+            ];
             CollectionAssert.AreEquivalent(expected.Select(e => string.Join(',', e)).ToList(), result.Select(r => string.Join(',', r)).ToList());
         }
 
@@ -159,6 +159,18 @@ namespace __TESTS__.Google
 
             newMeeting = [9, 11];
             Assert.IsFalse(feature.CheckMeetings(meetingTimes, newMeeting));
+        }
+
+        [TestMethod]
+        public void AddAndMergeMeetings()
+        {
+            Feature feature = new Feature();
+            int[][] meetingTimes = [
+            [1, 3], [4, 6], [8, 10], [10, 12], [13, 15], [16, 18]];
+            int[] newMeeting = [9, 13];
+            Assert.AreEqual(4, feature.AddAndMergeMeetings(meetingTimes, newMeeting).Count);
+            newMeeting = [9, 20];
+            Assert.AreEqual(3, feature.AddAndMergeMeetings(meetingTimes, newMeeting).Count);
         }
     }
 }

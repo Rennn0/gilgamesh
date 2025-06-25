@@ -365,5 +365,41 @@ namespace EducativeIo.Projects.Google
                 }
             }
         }
+
+        public List<List<int>> AddAndMergeMeetings(int[][] meetings, int[] newMeeting)
+        {
+            meetings = meetings.OrderBy(x => x[0]).ToArray();
+            List<List<int>> result = [];
+            int i = 0;
+            // emateba meetingebi romlebic ufro adre iwyeva
+            while (i < meetings.Length && meetings[i][0] < newMeeting[0])
+            {
+                result.Add(meetings[i].ToList());
+                i++;
+            }
+            // emateba axali meetingic
+            if (result.Count == 0 || result[^1][1] < newMeeting[0])
+            {
+                result.Add(newMeeting.ToList());
+            }
+            else
+            {
+                result[^1][1] = Math.Max(result[^1][1], newMeeting[1]);
+            }
+            // darchenili meetingebi
+            while (i < meetings.Length)
+            {
+                if (result[^1][1] < meetings[i][0])
+                {
+                    result.Add(meetings[i].ToList());
+                }
+                else
+                {
+                    result[^1][1] = Math.Max(result[^1][1], meetings[i][1]);
+                }
+                i++;
+            }
+            return result;
+        }
     }
 }
