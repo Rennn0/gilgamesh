@@ -120,7 +120,13 @@ namespace __TESTS__.Google
             //     [-1, 8,  0, -2]
             // ];
 
-            int[][] matrix = [[0, -2, -7, 0], [9, 2, -6, 2], [-4, 1, -4, 1], [-1, 8, 0, -2]];
+            int[][] matrix =
+            [
+                [0, -2, -7, 0],
+                [9, 2, -6, 2],
+                [-4, 1, -4, 1],
+                [-1, 8, 0, -2]
+            ];
 
 
             Assert.AreEqual(15, feature.SubrectangleSum(matrix.ToArray()));

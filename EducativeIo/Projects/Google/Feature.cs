@@ -248,8 +248,17 @@ namespace EducativeIo.Projects.Google
             int localMax = 0;
             int globalMax = int.MinValue;
 
+            bool allNegative = true;
+            int singleMax = int.MinValue;
+
             for (int k = 0; k < arr.Length; k++)
             {
+                if (arr[k] >= 0)
+                {
+                    allNegative = false;
+                }
+                singleMax = Math.Max(singleMax, arr[k]);
+
                 localMax += arr[k];
                 if (localMax > globalMax)
                 {
@@ -260,7 +269,7 @@ namespace EducativeIo.Projects.Google
                     localMax = 0;
                 }
             }
-            return globalMax;
+            return allNegative ? singleMax : globalMax;
         }
 
         public List<List<int>> MergeMeetings(int[][] meetings)
