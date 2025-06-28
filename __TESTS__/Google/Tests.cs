@@ -209,5 +209,15 @@ namespace __TESTS__.Google
 
             Assert.AreEqual(3, res.Length);
         }
+
+        [TestMethod]
+        public void Calendar()
+        {
+            Solution.MyCalendar calendar = new Solution.MyCalendar();
+
+            Assert.IsTrue(calendar.Book(2, 4));
+            Assert.IsTrue(calendar.Book(6, 8));
+            Assert.IsFalse(calendar.Book(3, 5));
+        }
     }
 }

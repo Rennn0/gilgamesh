@@ -30,5 +30,68 @@ namespace EducativeIo.Projects.Google
 
             return result.Select(l => l.ToArray()).ToArray();
         }
+
+        public class MyCalendar
+        {
+            internal class CalendarNode
+            {
+                internal int Start
+                {
+                    get;
+                }
+                internal int End
+                {
+                    get;
+                }
+                internal CalendarNode? Before
+                {
+                    get; set;
+                }
+                internal CalendarNode? After
+                {
+                    get; set;
+                }
+                public CalendarNode(int s, int e)
+                {
+                    Start = s;
+                    End = e;
+                }
+            }
+            private CalendarNode? _calendar;
+            public bool Book(int start, int end)
+            {
+                if (_calendar is null)
+                {
+                    _calendar = new CalendarNode(start, end);
+                    return true;
+                }
+
+                return Book(new CalendarNode(start, end), _calendar);
+            }
+
+            private bool Book(CalendarNode node, CalendarNode root)
+            {
+                if (root.End <= node.Start)
+                {
+                    if (root.After is null)
+                    {
+                        root.After = node;
+                        return true;
+                    }
+                    return Book(node, root.After);
+                }
+
+                if (root.Start >= node.End)
+                {
+                    if (root.Before is null)
+                    {
+                        root.Before = node;
+                        return true;
+                    }
+                    return Book(node, root.Before);
+                }
+                return false;
+            }
+        }
     }
 }
