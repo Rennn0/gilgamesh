@@ -199,5 +199,15 @@ namespace __TESTS__.Google
             Assert.AreEqual(6, intersecion[2][0]);
             Assert.AreEqual(7, intersecion[2][1]);
         }
+
+
+        [TestMethod]
+        public void MergeIntervals()
+        {
+            int[][] arr = [[1, 4], [2, 5], [6, 7], [7, 10], [11, 12]];
+            int[][] res = new Solution().MergeIntervals(arr);
+
+            Assert.AreEqual(3, res.Length);
+        }
     }
 }
