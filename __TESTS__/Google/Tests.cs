@@ -104,8 +104,11 @@ namespace __TESTS__.Google
             int[][] meetings = [
                 [2, 8], [3, 4], [3, 9], [5, 11], [8, 20], [11, 15]
             ];
-
+            int[][] meetings2 = [
+                [1, 4], [2, 5], [4, 8], [5, 6], [5, 8], [6, 7]
+            ];
             Assert.AreEqual(3, feature.MinMeetingRooms(meetings));
+            Assert.AreEqual(3, feature.MinMeetingRooms(meetings2));
         }
 
 
