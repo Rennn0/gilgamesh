@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using EducativeIo.Projects.Google;
 
@@ -228,6 +229,13 @@ namespace __TESTS__.Google
             int[][] a = [[1, 3], [5, 6], [7, 8], [8, 10], [12, 15]];
             int[][] b = [[2, 4], [7, 10]];
             int[][] res = solution.IntervalIntersection(a, b);
+        }
+
+        [TestMethod]
+        public void LongestConsecutiveSequence()
+        {
+            int[] arr = [19, 1, 4, 7, 3, -1, 0, 5, 8, -1, 6];
+            Assert.AreEqual(6, new Solution().LongestConsecutiveSequence(arr));
         }
     }
 }

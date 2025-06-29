@@ -191,5 +191,30 @@ namespace EducativeIo.Projects.Google
 
             return result;
         }
+
+        // -1 0 1 3 4 5 6 7
+        public int LongestConsecutiveSequence(int[] arr)
+        {   
+            new Feature().MergeSort(arr, 0, arr.Length - 1);
+            HashSet<int> hs = new HashSet<int>(arr);
+            int g = 0;
+            int c = 0;
+            for (int i = 1; i < arr.Length; i++)
+            {
+                if (arr[i] == arr[i - 1] + 1)
+                {
+                    c++;
+                }
+                else
+                {
+                    g = Math.Max(g, c);
+                    c = 0;
+                }
+            }
+
+            g = Math.Max(g, c);
+
+            return g + 1;
+        }
     }
 }
