@@ -93,5 +93,56 @@ namespace EducativeIo.Projects.Google
                 return false;
             }
         }
+
+        public int[][] InsertInterval(int[][] intervals, int[] newInterval)
+        {
+            List<List<int>> result = new List<List<int>>();
+            foreach (int[] i in intervals)
+            {
+                result.Add(i.ToList());
+            }
+            result.Add(newInterval.ToList());
+
+            int[][] res = MergeIntervals(result.Select(r => r.ToArray()).OrderBy(r => r[0]).ToArray());
+
+            return res;
+        }
+
+
+        // 1 2 3 4 5 6 7 8 9 10
+        // + + +   + +,+ + +
+        //
+        //   + + +   + +,+ + +
+        public int[][] IntervalIntersection(int[][] a, int[][] b)
+        {
+            List<List<int>> result = new List<List<int>>();
+            a = a.OrderBy(x => x[0]).ToArray();
+            b = b.OrderBy(x => x[0]).ToArray();
+
+            int i = 0;
+            int j = 0;
+
+            while (i < a.Length && j < b.Length)
+            {
+                int minEnd = Math.Min(a[i][1], b[j][1]);
+                int maxStart = Math.Max(a[i][0], b[j][0]);
+
+                if (maxStart < minEnd)
+                {
+                    result.Add(new List<int> { maxStart, minEnd });
+                }
+
+                if (a[i][1] < b[j][1])
+                {
+                    i++;
+                }
+                else
+                {
+                    j++;
+                }
+            }
+
+            return result.Select(r => r.ToArray()).ToArray();
+        }
     }
 }

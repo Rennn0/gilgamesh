@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using EducativeIo.Projects.Google;
 
 namespace __TESTS__.Google
@@ -218,6 +219,15 @@ namespace __TESTS__.Google
             Assert.IsTrue(calendar.Book(2, 4));
             Assert.IsTrue(calendar.Book(6, 8));
             Assert.IsFalse(calendar.Book(3, 5));
+        }
+
+        [TestMethod]
+        public void IntervalIntersection()
+        {
+            Solution solution = new Solution();
+            int[][] a = [[1, 3], [5, 6], [7, 8], [8, 10], [12, 15]];
+            int[][] b = [[2, 4], [7, 10]];
+            int[][] res = solution.IntervalIntersection(a, b);
         }
     }
 }
