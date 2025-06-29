@@ -144,5 +144,52 @@ namespace EducativeIo.Projects.Google
 
             return result.Select(r => r.ToArray()).ToArray();
         }
+        public class Interval
+        {
+            public int start;
+            public int end;
+
+            public Interval()
+            {
+            }
+            public Interval(int _start, int _end)
+            {
+                start = _start;
+                end = _end;
+            }
+        }
+        public List<Interval> EmployeeFreeTime(List<List<Interval>> schedule)
+        {
+            List<Interval> intervals = new List<Interval>();
+            foreach (List<Interval> s in schedule)
+            {
+                intervals.AddRange(s);
+            }
+
+            intervals = intervals.OrderBy(x => x.start).ThenBy(x => x.end).ToList();
+            List<Interval> result = new List<Interval>();
+            if (intervals.Count == 0)
+            {
+                return result;
+            }
+
+            int lastMergedEnd = intervals[0].end;
+
+            for (int i = 1; i < intervals.Count; i++)
+            {
+                if (lastMergedEnd >= intervals[i].start)
+                {
+                    lastMergedEnd = Math.Max(lastMergedEnd, intervals[i].end);
+                }
+                else
+                {
+                    result.Add(new Interval(lastMergedEnd, intervals[i].start));
+                    lastMergedEnd = intervals[i].end;
+                }
+            }
+
+
+            return result;
+        }
     }
 }
