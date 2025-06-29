@@ -5,12 +5,20 @@ namespace EducativeIo.Projects.StockScrapper
         public class TreeNode
         {
             public string Data;
+            public int Value;
             public List<TreeNode> Children;
             public TreeNode(string data)
             {
                 Data = data;
                 Children = new List<TreeNode>();
             }
+            public TreeNode(int val)
+            {
+                Value = val;
+                Data = string.Empty;
+                Children = new List<TreeNode>();
+            }
+            public static implicit operator TreeNode(int val) => new TreeNode(val);
         }
 
         public List<List<string>> Traverse(TreeNode root)
@@ -33,6 +41,38 @@ namespace EducativeIo.Projects.StockScrapper
             }
 
             return result;
+        }
+
+        public int LowestCommonAncestor(TreeNode root, TreeNode? a, TreeNode? b)
+        {
+            Dictionary<TreeNode, TreeNode?> parents = new Dictionary<TreeNode, TreeNode?>();
+            Stack<TreeNode> s = new Stack<TreeNode>();
+            s.Push(root);
+            parents[root] = null;
+
+            while (!parents.ContainsKey(a) || !parents.ContainsKey(b))
+            {
+                TreeNode node = s.Pop();
+                foreach (TreeNode child in node.Children)
+                {
+                    parents[child] = node;
+                    s.Push(child);
+                }
+            }
+
+            HashSet<TreeNode> ancestors = new HashSet<TreeNode>();
+            while (a != null)
+            {
+                ancestors.Add(a);
+                a = parents[a];
+            }
+
+            while (!ancestors.Contains(b))
+            {
+                b = parents[b];
+            }
+
+            return b.Value;
         }
     }
 }
