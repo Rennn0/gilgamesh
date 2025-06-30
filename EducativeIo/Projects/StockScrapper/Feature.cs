@@ -6,6 +6,7 @@ namespace EducativeIo.Projects.StockScrapper
         {
             public string Data;
             public int Value;
+            public TreeNode? Next;
             public List<TreeNode> Children;
             public TreeNode(string data)
             {
@@ -73,6 +74,46 @@ namespace EducativeIo.Projects.StockScrapper
             }
 
             return b.Value;
+        }
+
+        public TreeNode? TraverseDom(TreeNode? root)
+        {
+            ArgumentNullException.ThrowIfNull(root);
+
+            TreeNode? current = root;
+            TreeNode? leftMost = root;
+            TreeNode? previous = null;
+
+            while (leftMost is not null)
+            {
+                current = leftMost;
+                leftMost = null;
+                previous = null;
+
+                while (current is not null)
+                {
+                    Console.WriteLine($"Node {current.Value}");
+                    // [ ] do somethin with it
+
+                    foreach (TreeNode child in current.Children)
+                    {
+                        if (previous is not null)
+                        {
+                            previous.Next = child;
+                        }
+                        else
+                        {
+                            leftMost = child;
+                        }
+
+                        previous = child;
+                    }
+
+                    current = current.Next;
+                }
+            }
+
+            return root;
         }
     }
 }

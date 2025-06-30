@@ -44,6 +44,8 @@ namespace __TESTS__.StockScrapper
             Feature.TreeNode a = root.Children[0].Children[0].Children[0]; // 77
             Feature.TreeNode b = root.Children[0].Children[1].Children[1].Children[1]; // 64
 
+            feature.TraverseDom(root);
+
             Assert.AreEqual(22, feature.LowestCommonAncestor(root, a, b));
         }
     }
