@@ -245,31 +245,29 @@ namespace EducativeIo.Projects.Google
 
         public int Kadane(int[] arr)
         {
-            int localMax = 0;
-            int globalMax = int.MinValue;
-
-            bool allNegative = true;
-            int singleMax = int.MinValue;
-
-            for (int k = 0; k < arr.Length; k++)
+            if (arr.Length == 0)
             {
-                if (arr[k] >= 0)
+                return -1;
+            }
+            int localMax = arr[0];
+            int globalMax = arr[0];
+            for (int i = 1; i < arr.Length; i++)
+            {
+                if (localMax < 0)
                 {
-                    allNegative = false;
+                    localMax = arr[i];
                 }
-                singleMax = Math.Max(singleMax, arr[k]);
+                else
+                {
+                    localMax += arr[i];
+                }
 
-                localMax += arr[k];
-                if (localMax > globalMax)
+                if (globalMax < localMax)
                 {
                     globalMax = localMax;
                 }
-                if (localMax < 0)
-                {
-                    localMax = 0;
-                }
             }
-            return allNegative ? singleMax : globalMax;
+            return globalMax;
         }
 
         public List<List<int>> MergeMeetings(int[][] meetings)
