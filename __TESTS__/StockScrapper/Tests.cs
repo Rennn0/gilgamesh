@@ -48,6 +48,29 @@ namespace __TESTS__.StockScrapper
 
             Assert.AreEqual(22, feature.LowestCommonAncestor(root, a, b));
         }
-    }
 
+        [TestMethod]
+        public void LCA()
+        {
+            Solution.TreeNode root = new Solution.TreeNode(1);
+            Solution.TreeNode l1 = new Solution.TreeNode(2);
+            Solution.TreeNode r2 = new Solution.TreeNode(3);
+            root.left = l1;
+            root.right = r2;
+            Solution.TreeNode ll1 = new Solution.TreeNode(12);
+            Solution.TreeNode lr2 = new Solution.TreeNode(23);
+            l1.left = ll1;
+            l1.right = lr2;
+            Solution.TreeNode rl1 = new Solution.TreeNode(42);
+            Solution.TreeNode rr2 = new Solution.TreeNode(53);
+            r2.left = rl1;
+            r2.right = rr2;
+
+            Solution.TreeNode n1 = new Solution.TreeNode(6);
+            Solution.TreeNode n2 = new Solution.TreeNode(9);
+            lr2.right = n1;
+            rl1.left = n2;
+            Assert.AreEqual(1,Solution.LCA(root, n1, n2));
+        }
+    }
 }

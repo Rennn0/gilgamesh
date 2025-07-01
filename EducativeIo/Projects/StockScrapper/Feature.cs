@@ -2,7 +2,7 @@ namespace EducativeIo.Projects.StockScrapper
 {
     public class Feature
     {
-        public class TreeNode
+        public class  TreeNode
         {
             public string Data;
             public int Value;
