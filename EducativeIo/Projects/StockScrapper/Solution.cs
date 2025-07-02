@@ -116,6 +116,28 @@ namespace EducativeIo.Projects.StockScrapper
 
             return crawler2.data;
         }
+
+        public static int maxProfit(int[] arr)
+        {
+            int minPrice = arr[0];
+            int maxProfit = 0;
+            for (int i = 1; i < arr.Length; i++)
+            {
+                if (arr[i] < minPrice)
+                {
+                    minPrice = arr[i];
+                }
+                else
+                {
+                    int profit = arr[i] - minPrice;
+                    if (profit > maxProfit)
+                    {
+                        maxProfit = profit;
+                    }
+                }
+            }
+            return maxProfit;
+        }
     }
 }
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.

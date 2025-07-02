@@ -2,6 +2,7 @@
 using Hub.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging.Signing;
 using OfficeOpenXml;
 using Stripe;
 using Stripe.Checkout;
@@ -166,6 +167,39 @@ namespace Hub.Api
 
             return response;
         }
+
+        [HttpGet("spawn")]
+        public IActionResult Spawn(int retry)
+        {
+            TimerState state = new TimerState
+            {
+                MaxRetry = retry
+            };
+
+            Timer timer = new Timer((state) =>
+            {
+                if (state is not TimerState ts || ts.Timer is null)
+                {
+                    return;
+                }
+                Console.WriteLine($"Thread {Thread.CurrentThread.ManagedThreadId}, retry {ts.Counter}, max {ts.MaxRetry}");
+                if (ts.Increment() >= ts.MaxRetry)
+                {
+                    ts.Timer.Dispose();
+                }
+            }, state, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(2));
+            state.Timer = timer;
+
+            return Ok();
+        }
+    }
+
+    public class TimerState
+    {
+        public int MaxRetry;
+        public int Counter = 0;
+        public Timer? Timer;
+        public int Increment() => Interlocked.Increment(ref Counter);
     }
 }
 
