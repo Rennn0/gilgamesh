@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace EducativeIo.Heap;
 
 public class MaxHeap<T>
@@ -18,7 +20,7 @@ public class MaxHeap<T>
             MaxHeapify(0);
         }
     }
-
+    public List<T> AsList() => h;
     void PerlocateUp(int i)
     {
         if (i <= 0)
@@ -93,15 +95,9 @@ public class MaxHeap<T>
         h = new List<T>();
     }
 
-    public int Size()
-    {
-        return h.Count;
-    }
+    public int Size() => h.Count;
 
-    public T GetMax()
-    {
-        return Size() <= 0 ? (T)Convert.ChangeType(-1, typeof(T)) : h[0];
-    }
+    public T GetMax() => Size() <= 0 ? (T) Convert.ChangeType(-1, typeof(T)) : h[0];
 
     public void Insert(T key)
     {
@@ -133,20 +129,11 @@ public class MaxHeap<T>
         }
     }
 
-    public int Parent(int i)
-    {
-        return (i - 1) / 2;
-    }
+    public int Parent(int i) => (i - 1) / 2;
 
-    public int LChild(int i)
-    {
-        return i * 2 + 1;
-    }
+    public int LChild(int i) => i * 2 + 1;
 
-    public int RChild(int i)
-    {
-        return i * 2 + 2;
-    }
+    public int RChild(int i) => i * 2 + 2;
 
     public string AsString() => string.Join(',', h);
 }

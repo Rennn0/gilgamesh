@@ -2,7 +2,7 @@ namespace EducativeIo.Projects.StockScrapper
 {
     public class Feature
     {
-        public class  TreeNode
+        public class TreeNode
         {
             public string Data;
             public int Value;
@@ -51,7 +51,7 @@ namespace EducativeIo.Projects.StockScrapper
             s.Push(root);
             parents[root] = null;
 
-            while (!parents.ContainsKey(a) || !parents.ContainsKey(b))
+            while (a is not null && !parents.ContainsKey(a) || b is not null && !parents.ContainsKey(b))
             {
                 TreeNode node = s.Pop();
                 foreach (TreeNode child in node.Children)
@@ -68,12 +68,12 @@ namespace EducativeIo.Projects.StockScrapper
                 a = parents[a];
             }
 
-            while (!ancestors.Contains(b))
+            while (b is not null && !ancestors.Contains(b))
             {
                 b = parents[b];
             }
 
-            return b.Value;
+            return b?.Value ?? -1;
         }
 
         public TreeNode? TraverseDom(TreeNode? root)

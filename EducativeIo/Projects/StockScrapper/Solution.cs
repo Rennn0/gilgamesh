@@ -12,7 +12,7 @@ namespace EducativeIo.Projects.StockScrapper
             public int data;
             public TreeNode left;
             public TreeNode right;
-            public TreeNode next;
+            public TreeNode? next;
 
             public TreeNode(int d)
             {
