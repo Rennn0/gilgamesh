@@ -1,5 +1,7 @@
-﻿using Hub.Database;
+﻿using System.Threading.Tasks;
+using Hub.Database;
 using Hub.Entities;
+using Hub.Refit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging.Signing;
@@ -191,6 +193,13 @@ namespace Hub.Api
             state.Timer = timer;
 
             return Ok();
+        }
+
+        [HttpGet("refit")]
+        public async Task<IActionResult> Refit([FromServices] IDocsApi docsApi,[FromQuery]string page)
+        {
+            var doc = await docsApi.GetAsync(page);
+            return File(doc, "application/octet-stream");
         }
     }
 
