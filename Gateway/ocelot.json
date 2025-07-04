@@ -1,0 +1,21 @@
+{
+    "Routes": [
+        {
+            "UpstreamHttpMethod": [
+                "Get"
+            ],
+            "UpstreamPathTemplate": "/gateway/photos/{everything}",
+            "DownstreamPathTemplate": "/id/{everything}",
+            "DownstreamScheme": "https",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "picsum.photos",
+                    "Port": 443
+                }
+            ]
+        }
+    ],
+    "GlobalConfiguration": {
+        "BaseUrl": "https://localhost:5001"
+    }
+}
