@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using System.Text;
 using EducativeIo.Heap;
 
 namespace EducativeIo.Projects.Uber
@@ -56,6 +57,78 @@ namespace EducativeIo.Projects.Uber
             }
 
             return cost;
+        }
+
+        public double[] GetTotalCost(List<List<string>> map, double[] costs, List<string> drivers, string user)
+        {
+            Dictionary<string, Dictionary<string, double>> city = new Dictionary<string, Dictionary<string, double>>();
+            for (int i = 0; i < map.Count; i++)
+            {
+                List<string> checkpoints = map[i];
+                string source = checkpoints[0];
+                string destionation = checkpoints[1];
+                double pathCost = costs[i];
+                if (!city.ContainsKey(source))
+                {
+                    city[source] = new Dictionary<string, double>();
+                }
+
+                if (!city.ContainsKey(destionation))
+                {
+                    city[destionation] = new Dictionary<string, double>();
+                }
+                city[source][destionation] = pathCost;
+                city[destionation][source] = pathCost;
+            }
+
+            double[] results = new double[drivers.Count];
+
+            for (int i = 0; i < drivers.Count; i++)
+            {
+                string driver = drivers[i];
+                if (!city.ContainsKey(driver) || !city.ContainsKey(user))
+                {
+                    results[i] = -1d;
+                }
+                else
+                {
+                    HashSet<string> visited = new HashSet<string>();
+                    results[i] = BacktrackCity(city, driver, user, 0, visited);
+                }
+            }
+
+            return results;
+        }
+
+        private double BacktrackCity(Dictionary<string, Dictionary<string, double>> city, string driver, string user, double accumulatedSum, HashSet<string> visited)
+        {
+            visited.Add(driver);
+            double ret = -1d;
+
+            Dictionary<string, double> adjacents = city[driver];
+            if (adjacents.TryGetValue(user, out double value))
+            {
+                ret = accumulatedSum + value;
+            }
+            else
+            {
+                foreach (KeyValuePair<string, double> kvp in adjacents)
+                {
+                    string nextNode = kvp.Key;
+                    if (visited.Contains(nextNode))
+                    {
+                        continue;
+                    }
+                    ret = BacktrackCity(city, nextNode, user, accumulatedSum + kvp.Value, visited);
+                    if (ret != -1)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            visited.Remove(driver);
+            return ret;
         }
     }
 }

@@ -1,4 +1,5 @@
 using EducativeIo.Projects.Uber;
+using Microsoft.AspNetCore.Routing.Constraints;
 
 namespace __TESTS__.Uber
 {
@@ -32,6 +33,25 @@ namespace __TESTS__.Uber
             Feature feature = new();
             Assert.AreEqual(22, feature.PathCost([1, 2, 1, 3, 1, 2, 1, 4, 1, 0, 0, 2, 1, 4]));
             Assert.AreEqual(10, feature.PathCost([3, 2, 1, 0, 2, 1, 3, 2, 3, 3]));
+        }
+
+        [TestMethod]
+        public void SelectPath()
+        {
+            Feature feature = new();
+            List<List<string>> map = [
+                ["a","d"],
+                ["a","b"],
+                ["a","u"],
+                ["d","u"],
+                ["b","u"],
+                ["b","e"],
+                ["e","u"]
+            ];
+            List<string> drivers = ["a", "b", "e", "d"];
+            double[] costs = [3d, 4d, 17d, 40d, 10d, 1d, 3d];
+
+            double[] cost = feature.GetTotalCost(map, costs, drivers, "u");
         }
     }
 }
