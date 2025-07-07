@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using System.Text;
 using EducativeIo.Heap;
+using RabbitMQ.Client;
 
 namespace EducativeIo.Projects.Uber
 {
@@ -129,6 +130,56 @@ namespace EducativeIo.Projects.Uber
 
             visited.Remove(driver);
             return ret;
+        }
+
+        public int KthHighestRank(int[] ranks, int k)
+        {
+            MinHeap<int> mh = new MinHeap<int>();
+            for (int i = 0; i < k; i++)
+            {
+                mh.Insert(ranks[i]);
+            }
+
+            for (int i = k; i < ranks.Length; i++)
+            {
+                if (ranks[i] > mh.GetMin())
+                {
+                    mh.Poll();
+                    mh.Insert(ranks[i]);
+                }
+            }
+
+            return mh.GetMin();
+        }
+
+        public int OptimalPath(int[][] grid)
+        {
+            int row = grid.Length;
+            int col = grid[0].Length;
+
+            for (int r = 0; r < row; r++)
+            {
+                for (int c = 0; c < col; c++)
+                {
+                    if (r > 0 && c > 0)
+                    {
+                        grid[r][c] = Math.Min(grid[r][c] + grid[r - 1][c], grid[r][c] + grid[r][c - 1]);
+                    }
+                    else if (r > 0 || c > 0)
+                    {
+                        if (c > 0)
+                        {
+                            grid[r][c] += grid[r][c - 1];
+                        }
+                        else
+                        {
+                            grid[r][c] += grid[r - 1][c];
+                        }
+                    }
+                }
+            }
+
+            return grid[row - 1][col - 1];
         }
     }
 }
