@@ -53,5 +53,14 @@ namespace __TESTS__.Uber
 
             double[] cost = feature.GetTotalCost(map, costs, drivers, "u");
         }
+
+        [TestMethod]
+        public void KClosest()
+        {
+            int[][] res1 = new Solution().KClosest([[1, 3], [-2, 2]], 1);
+            Assert.AreEqual(1, res1.Length);
+            Assert.AreEqual(-2, res1[0][0]);
+            Assert.AreEqual(2, res1[0][1]);
+        }
     }
 }
