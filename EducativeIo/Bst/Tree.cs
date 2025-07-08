@@ -85,6 +85,27 @@ public partial class Tree
         return result;
     }
 
+    public int Diameter()
+    {
+        int dia = 0;
+        dfs(m_root, ref dia);
+        return dia;
+        static int dfs(Node? node, ref int d)
+        {
+            if (node == null)
+            {
+                return 0;
+            }
+
+            int ltree = dfs(node.Left, ref d);
+            int rtree = dfs(node.Right, ref d);
+
+            d = Math.Max(d, ltree + rtree);
+
+            return Math.Max(ltree, rtree) + 1;
+        }
+    }
+
     private void FindKNodesRecursive(Node? node, int i, ref string result)
     {
         if (node == null)
