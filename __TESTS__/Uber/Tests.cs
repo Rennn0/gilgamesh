@@ -62,5 +62,32 @@ namespace __TESTS__.Uber
             Assert.AreEqual(-2, res1[0][0]);
             Assert.AreEqual(2, res1[0][1]);
         }
+
+        [TestMethod]
+        public void TrapWater() => Assert.AreEqual(6, new Solution().TrapWater([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]));
+
+        [TestMethod]
+        public void Frequencies()
+        {
+            Dictionary<int, int> frequencies = new Dictionary<int, int>();
+            int[] distribution1 = new int[] { 1, 12, 3, 4, 15 };
+            foreach (int d in distribution1)
+            {
+                frequencies[d] = 0;
+            }
+            Solution.WeightedProbability sol = new Solution.WeightedProbability(distribution1);
+            for (int i = 0; i < 100; i++)
+            {
+                int index = sol.PickIndex();
+                if (index >= 0 && index < distribution1.Length)
+                {
+                    int element = distribution1[index];
+                    frequencies[element] += 1;
+                }
+            }
+
+            Console.WriteLine(string.Join(',', frequencies.Keys));
+            Console.WriteLine(string.Join(',', frequencies.Values));
+        }
     }
 }
