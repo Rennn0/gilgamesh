@@ -88,6 +88,17 @@ namespace __TESTS__.Uber
 
             Console.WriteLine(string.Join(',', frequencies.Keys));
             Console.WriteLine(string.Join(',', frequencies.Values));
+
+            Console.WriteLine("BEFORE");
+            using (Array<int> nums = new Array<int>([4, 3, 1, 9, 4]))
+            {
+                foreach (int num in nums)
+                {
+                    Console.WriteLine(num);
+                }
+            }
+            Console.WriteLine("AFTER");
+
         }
     }
 }

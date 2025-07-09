@@ -1,3 +1,6 @@
+using System.Buffers;
+using System.Collections;
+using System.Collections.ObjectModel;
 using EducativeIo.Heap;
 
 namespace EducativeIo.Projects.Uber
@@ -121,6 +124,46 @@ namespace EducativeIo.Projects.Uber
                 return left;
             }
         }
+    }
 
+    public class Array<T> : IDisposable, IEnumerable<T>
+    {
+        private readonly T[] _array;
+        private readonly int _length;
+        public Array(int length)
+        {
+            _length = length;
+            _array = ArrayPool<T>.Shared.Rent(length);
+        }
+
+        public Array(IEnumerable<T> source)
+        {
+            T[] temp = source.ToArray();
+            _length = temp.Length;
+            _array = ArrayPool<T>.Shared.Rent(_length);
+            Array.Copy(temp, _array, _length);
+        }
+
+        public T this[int index]
+        {
+            get => _array[index];
+            set => _array[index] = value;
+        }
+        public ReadOnlyCollection<T> Source => _array.AsReadOnly();
+        public void Dispose()
+        {
+            Console.WriteLine("DISPOSED");
+            GC.SuppressFinalize(this);
+            ArrayPool<T>.Shared.Return(_array, true);
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            for (int i = 0; i < _length; i++)
+            {
+                yield return _array[i];
+            }
+        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
