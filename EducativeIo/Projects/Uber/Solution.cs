@@ -124,6 +124,56 @@ namespace EducativeIo.Projects.Uber
                 return left;
             }
         }
+
+        public int FindKthLargest(int[] arr, int k)
+        {
+            MinHeap<int> mh = new MinHeap<int>();
+            for (int i = 0; i < k; i++)
+            {
+                mh.Insert(arr[i]);
+            }
+
+            for (int i = k; i < arr.Length; i++)
+            {
+                if (mh.GetMin() < arr[i])
+                {
+                    mh.Poll();
+                    mh.Insert(arr[i]);
+                }
+            }
+
+            return mh.GetMin();
+        }
+
+        public int MinPathSum(int[][] arr)
+        {
+            int rows = arr.Length;
+            int columns = arr[0].Length;
+
+            for (int row = 0; row < rows; row++)
+            {
+                for (int col = 0; col < columns; col++)
+                {
+                    if (row > 0 && col > 0)
+                    {
+                        arr[row][col] = Math.Min(arr[row][col] + arr[row - 1][col], arr[row][col] + arr[row][col - 1]);
+                    }
+                    else if (row > 0 || col > 0)
+                    {
+                        if (row > 0)
+                        {
+                            arr[row][col] += arr[row - 1][col];
+                        }
+                        else
+                        {
+                            arr[row][col] += arr[row][col - 1];
+                        }
+                    }
+                }
+            }
+
+            return arr[rows - 1][columns - 1];
+        }
     }
 
     public class Array<T> : IDisposable, IEnumerable<T>
@@ -166,4 +216,5 @@ namespace EducativeIo.Projects.Uber
         }
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
+
 }

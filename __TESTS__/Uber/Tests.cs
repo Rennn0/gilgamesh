@@ -98,7 +98,17 @@ namespace __TESTS__.Uber
                 }
             }
             Console.WriteLine("AFTER");
-
         }
+
+        [TestMethod]
+        public void FindKthLargest()
+        {
+            Assert.AreEqual(5, new Solution().FindKthLargest([3, 2, 1, 5, 6, 4], 2));
+            Assert.AreEqual(6, new Solution().FindKthLargest([3, 2, 1, 5, 6, 4], 1));
+            Assert.AreEqual(4, new Solution().FindKthLargest([3, 2, 1, 5, 6, 4], 3));
+        }
+
+        [TestMethod]
+        public void MinPathSum() => Assert.AreEqual(14, new Solution().MinPathSum([[1, 3, 7], [8, 5, 4], [4, 9, 1]]));
     }
 }
