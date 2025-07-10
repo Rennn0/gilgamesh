@@ -68,6 +68,6 @@ internal class Program
         // });
 
         app.MapControllers();
-        app.RunAsync();
+        app.Run();
     }
 }

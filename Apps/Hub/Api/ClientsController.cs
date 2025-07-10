@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Text.Json;
+using System.Threading.Tasks;
 using Hub.Database;
 using Hub.Entities;
 using Hub.Refit;
+using MessagePack;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging.Signing;
@@ -196,8 +198,23 @@ namespace Hub.Api
         }
 
         [HttpGet("refit")]
-        public async Task<IActionResult> Refit([FromServices] IDocsApi docsApi,[FromQuery]string page)
+        public async Task<IActionResult> Refit([FromServices] IDocsApi docsApi, [FromQuery] string page)
         {
+            Client obj = new Client { Id = 4, Name = Guid.NewGuid().ToString("d") };
+            byte[] clientSerialized = MessagePackSerializer.Serialize(obj);
+
+            Client clientDeserialized = MessagePackSerializer.Deserialize<Client>(clientSerialized);
+
+            string jss = MessagePackSerializer.ToJson(clientSerialized);
+
+            string jsss = MessagePackSerializer.ToJson<Client>(clientDeserialized);
+
+            string jsnat = JsonSerializer.Serialize(obj);
+
+            string jsnatc = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+
+            // var json = MessagePackSerializer.ConvertToJson(clientDeserialized);
+
             var doc = await docsApi.GetAsync(page);
             return File(doc, "application/octet-stream");
         }

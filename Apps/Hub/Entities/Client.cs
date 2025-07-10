@@ -1,7 +1,18 @@
-﻿namespace Hub.Entities;
+﻿using MessagePack;
 
+namespace Hub.Entities;
+
+[MessagePackObject]
 public class Client
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
+    [Key(0)]
+    public virtual int Id
+    {
+        get; set;
+    }
+    [Key(1)]
+    public virtual string Name
+    {
+        get; set;
+    }
 }
