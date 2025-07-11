@@ -197,27 +197,29 @@ namespace Hub.Api
             //     }
             // }, state, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(2));
             // state.Timer = timer;
-            string? json = await cacheClient.GetAsync<string?>(retry.ToString());
+
+            byte[]? json = await cacheClient.GetAsync<byte[]?>(retry.ToString());
 
             string[]? val;
 
-            if (string.IsNullOrEmpty(json))
+            if (json is not { Length: > 0 })
             {
                 IRandomStringApi randomStringApi = RestService.For<IRandomStringApi>(
                     new HttpClient() { BaseAddress = new Uri("https://www.randomnumberapi.com/") }
                 );
+
                 val = await randomStringApi.GetAsync(50, 90, retry);
                 string key = retry.ToString();
                 await cacheClient.StoreAsync(
                     StoreMode.Set,
                     key,
-                    JsonSerializer.Serialize(val),
+                    MessagePackSerializer.Serialize(val),
                     Expiration.From(TimeSpan.FromMinutes(2))
                 );
             }
             else
             {
-                val = JsonSerializer.Deserialize<string[]>(json);
+                val = MessagePackSerializer.Deserialize<string[]>(json);
             }
 
             return Ok(val);
