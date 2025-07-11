@@ -1,13 +1,13 @@
-﻿using System.Text.Json;
-using System.Threading.Tasks;
+using System.Text.Json;
+using Enyim.Caching.Memcached;
 using Hub.Database;
 using Hub.Entities;
 using Hub.Refit;
 using MessagePack;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Packaging.Signing;
 using OfficeOpenXml;
+using Refit;
 using Stripe;
 using Stripe.Checkout;
 
@@ -25,6 +25,7 @@ namespace Hub.Api
             _mDb = dbContext;
             _mLogger = logger;
         }
+
         [HttpGet("success/{token:guid}")]
         public IActionResult SuccessfullPayment(Guid token)
         {
@@ -55,12 +56,12 @@ namespace Hub.Api
                     new SessionLineItemOptions
                     {
                         Price = "price_1Rbo23HBZMMNglkKvqQS2vV0",
-                        Quantity = new Random().Next(30,50)
+                        Quantity = new Random().Next(30, 50),
                     },
                 },
                 Mode = "payment",
                 SuccessUrl = $"http://localhost:5076/api/clients/success/{token}",
-                CancelUrl = $"http://localhost:5076/api/clients/fail/{token}"
+                CancelUrl = $"http://localhost:5076/api/clients/fail/{token}",
             };
             SessionService sessionService = new SessionService();
             Session session = sessionService.Create(options);
@@ -84,7 +85,7 @@ namespace Hub.Api
             {
                 Currency = "gel",
                 UnitAmount = amount,
-                Product = "prod_SWrgiWMSSCoYJ4"
+                Product = "prod_SWrgiWMSSCoYJ4",
             };
             PriceService priceService = new PriceService();
             return Ok(priceService.Create(options));
@@ -173,32 +174,60 @@ namespace Hub.Api
         }
 
         [HttpGet("spawn")]
-        public IActionResult Spawn(int retry)
+        public async Task<IActionResult> Spawn(
+            [FromServices] IMemcachedClient cacheClient,
+            int retry
+        )
         {
-            TimerState state = new TimerState
-            {
-                MaxRetry = retry
-            };
+            // TimerState state = new TimerState
+            // {
+            //     MaxRetry = retry
+            // };
+            //
+            // Timer timer = new Timer((state) =>
+            // {
+            //     if (state is not TimerState ts || ts.Timer is null)
+            //     {
+            //         return;
+            //     }
+            //     Console.WriteLine($"Thread {Thread.CurrentThread.ManagedThreadId}, retry {ts.Counter}, max {ts.MaxRetry}");
+            //     if (ts.Increment() >= ts.MaxRetry)
+            //     {
+            //         ts.Timer.Dispose();
+            //     }
+            // }, state, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(2));
+            // state.Timer = timer;
+            string? json = await cacheClient.GetAsync<string?>(retry.ToString());
 
-            Timer timer = new Timer((state) =>
-            {
-                if (state is not TimerState ts || ts.Timer is null)
-                {
-                    return;
-                }
-                Console.WriteLine($"Thread {Thread.CurrentThread.ManagedThreadId}, retry {ts.Counter}, max {ts.MaxRetry}");
-                if (ts.Increment() >= ts.MaxRetry)
-                {
-                    ts.Timer.Dispose();
-                }
-            }, state, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(2));
-            state.Timer = timer;
+            string[]? val;
 
-            return Ok();
+            if (string.IsNullOrEmpty(json))
+            {
+                IRandomStringApi randomStringApi = RestService.For<IRandomStringApi>(
+                    new HttpClient() { BaseAddress = new Uri("https://www.randomnumberapi.com/") }
+                );
+                val = await randomStringApi.GetAsync(50, 90, retry);
+                string key = retry.ToString();
+                await cacheClient.StoreAsync(
+                    StoreMode.Set,
+                    key,
+                    JsonSerializer.Serialize(val),
+                    Expiration.From(TimeSpan.FromMinutes(2))
+                );
+            }
+            else
+            {
+                val = JsonSerializer.Deserialize<string[]>(json);
+            }
+
+            return Ok(val);
         }
 
         [HttpGet("refit")]
-        public async Task<IActionResult> Refit([FromServices] IDocsApi docsApi, [FromQuery] string page)
+        public async Task<IActionResult> Refit(
+            [FromServices] IDocsApi docsApi,
+            [FromQuery] string page
+        )
         {
             Client obj = new Client { Id = 4, Name = Guid.NewGuid().ToString("d") };
             byte[] clientSerialized = MessagePackSerializer.Serialize(obj);
@@ -225,6 +254,7 @@ namespace Hub.Api
         public int MaxRetry;
         public int Counter = 0;
         public Timer? Timer;
+
         public int Increment() => Interlocked.Increment(ref Counter);
     }
 }

@@ -1,11 +1,9 @@
-using HealthChecks.UI.Client;
-using Hub.Backgrounds;
 using Hub.Database;
-using Hub.HealthChecks;
 using Hub.Refit;
 using Microsoft.EntityFrameworkCore;
-using Stripe;
 using Refit;
+using Stripe;
+
 namespace Hub;
 
 internal class Program
@@ -27,11 +25,17 @@ internal class Program
         builder.Services.AddSwaggerGen();
         builder.Services.AddControllers();
 
-        builder.Services.AddRefitClient<IDocsApi>().ConfigureHttpClient((provider, client) =>
-        {
-            string url = provider.GetRequiredService<IConfiguration>()["DocsUrl"] ?? throw new Exception();
-            client.BaseAddress = new Uri(url);
-        });
+        builder
+            .Services.AddRefitClient<IDocsApi>()
+            .ConfigureHttpClient(
+                (provider, client) =>
+                {
+                    string url =
+                        provider.GetRequiredService<IConfiguration>()["DocsUrl"]
+                        ?? throw new Exception();
+                    client.BaseAddress = new Uri(url);
+                }
+            );
 
         builder.Services.AddDbContext<ApplicationContext>(opt => opt.UseInMemoryDatabase("app"));
         // builder.Services.AddSignalR();
@@ -44,6 +48,8 @@ internal class Program
         //     nameof(RabbitQueueWorker),
         //     Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Unhealthy,
         //     ["ready", "rabbitmq"]);
+
+        builder.Services.AddMemcached("localhost:11211");
 
         WebApplication app = builder.Build();
 
