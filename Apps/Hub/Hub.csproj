@@ -11,9 +11,9 @@
     <PackageReference Include="Enyim.Memcached2.Extensions.AspNetCore" Version="0.6.8" />
     <PackageReference Include="EPPlus" Version="8.0.2" />
     <PackageReference Include="l.d.glsh.core" Version="1.0.2" />
-    <PackageReference Include="MessagePack" Version="1.7.1" />
+    <PackageReference Include="MessagePack" Version="1.7.*" />
     <PackageReference Include="MessagePack.AspNetCoreMvcFormatter" Version="1.7.1" />
-    <PackageReference Include="MessagePack.ReactiveProperty" Version="1.7.1" />
+    <PackageReference Include="MessagePack.ReactiveProperty" Version="1.7.*" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8" />
