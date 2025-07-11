@@ -2,7 +2,7 @@ namespace ApiGenerator.Source.Services;
 
 public class WeatherService
 {
-    public Task GetWeatherAsync() =>
+    public Task<GetWeatherResponse> GetWeatherAsync() =>
         Task.FromResult<GetWeatherResponse>(
             new GetWeatherResponse()
             {
