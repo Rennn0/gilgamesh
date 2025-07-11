@@ -174,6 +174,65 @@ namespace EducativeIo.Projects.Uber
 
             return arr[rows - 1][columns - 1];
         }
+
+        public int[] SuggestTwoProducts(int[] prices, int amount)
+        {
+            Dictionary<int, int> map = new Dictionary<int, int>();
+            for (int i = 0; i < prices.Length; i++)
+            {
+                int diff = amount - prices[i];
+                if (map.TryGetValue(diff, out int value))
+                {
+                    return [value, i];
+                }
+                else
+                {
+                    map[prices[i]] = i;
+                }
+            }
+            return [];
+        }
+
+        public List<List<int>> SuggestThreeProducts(int[] prices, int amount)
+        {
+            Array.Sort(prices);
+            List<List<int>> res = new List<List<int>>();
+            for (int i = 0; i < prices.Length; i++)
+            {
+                if (prices[i] > amount)
+                {
+                    break;
+                }
+
+                if (i == 0 || prices[i] != prices[i - 1])
+                {
+                    TwoProduct(prices, amount, i, res);
+                }
+            }
+
+            return res;
+
+            static void TwoProduct(int[] prices, int amount, int i, List<List<int>> res)
+            {
+                HashSet<int> calculated = new HashSet<int>();
+                int j = i + 1;
+                while (j < prices.Length)
+                {
+                    int diff = amount - prices[i] - prices[j];
+                    if (calculated.Contains(diff))
+                    {
+                        res.Add([diff, prices[i], prices[j]]);
+                        while (j + 1 < prices.Length && prices[j] == prices[j + 1])
+                        {
+                            j++;
+                        }
+                    }
+
+                    calculated.Add(prices[j]);
+                    j++;
+                }
+            }
+        }
     }
 
     public class Array<T> : IDisposable, IEnumerable<T>
@@ -216,5 +275,4 @@ namespace EducativeIo.Projects.Uber
         }
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
-
 }

@@ -110,5 +110,22 @@ namespace __TESTS__.Uber
 
         [TestMethod]
         public void MinPathSum() => Assert.AreEqual(14, new Solution().MinPathSum([[1, 3, 7], [8, 5, 4], [4, 9, 1]]));
+
+        [TestMethod]
+        public void SuggestThreeProducts()
+        {
+            List<List<int>> res1 = new Solution().SuggestThreeProducts([100, 75, 150, 200, 50, 65, 40, 30, 15, 25, 60], 200);
+
+            List<List<int>> res2 = new Solution().SuggestThreeProducts([100, 75, 150, 200, 50, 65, 40, 30, 15, 25, 60], 250);
+        }
+
+
+        [TestMethod]
+        public void SuggestTwoProducts()
+        {
+            int[] res1 = new Solution().SuggestTwoProducts([100, 75, 150, 200, 50, 65, 40, 30, 15, 25, 60], 200);
+
+            int[] res2 = new Solution().SuggestTwoProducts([100, 75, 150, 200, 50, 65, 40, 30, 15, 25, 60], 250);
+        }
     }
 }
