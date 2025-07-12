@@ -1,12 +1,15 @@
 using System.Text.Json;
+using System.Threading.Tasks;
 using Enyim.Caching.Memcached;
 using Hub.Database;
 using Hub.Entities;
 using Hub.Refit;
 using MessagePack;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
+using Prometheus;
 using Refit;
 using Stripe;
 using Stripe.Checkout;
@@ -248,6 +251,26 @@ namespace Hub.Api
 
             var doc = await docsApi.GetAsync(page);
             return File(doc, "application/octet-stream");
+        }
+
+        private static readonly Counter RequestsProcessed = Metrics.CreateCounter("http_reqs_processed", "Number of processed http requests");
+
+        private static readonly Gauge InPrigressRequests = Metrics.CreateGauge("in_progress_req", "In progress requests");
+
+        private static readonly Histogram JobDuration = Metrics.CreateHistogram("job_duration", "Job duration");
+
+        [HttpGet("prometheus")]
+        public async Task Prometheus()
+        {
+            using (JobDuration.NewTimer())
+            {
+                InPrigressRequests.Inc();
+
+                await Task.Delay(new Random().Next(10, 1200));
+
+                InPrigressRequests.Dec();
+                RequestsProcessed.Inc();
+            }
         }
     }
 

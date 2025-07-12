@@ -1,6 +1,8 @@
 using Hub.Database;
 using Hub.Refit;
 using Microsoft.EntityFrameworkCore;
+using Prometheus;
+using Prometheus.DotNetRuntime;
 using Refit;
 using Stripe;
 
@@ -72,6 +74,11 @@ internal class Program
         // {
         //     Predicate = (_) => false
         // });
+
+        DotNetRuntimeStatsBuilder.Default().WithErrorHandler(ex => Console.WriteLine(ex.Message)).StartCollecting();
+
+        app.UseMetricServer();
+        app.UseHttpMetrics();
 
         app.MapControllers();
         app.Run();

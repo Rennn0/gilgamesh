@@ -233,6 +233,43 @@ namespace EducativeIo.Projects.Uber
                 }
             }
         }
+        public int IndexOf(int[] arr, int target)
+        {
+            int left = 0;
+            int right = arr.Length - 1;
+            while (left < right)
+            {
+                int mid = (left + right) / 2;
+                if (arr[mid] >= target)
+                {
+                    right = mid;
+                }
+                else
+                {
+                    left = mid + 1;
+                }
+            }
+
+            return left;
+        }
+
+        public int[] Milestones(int[] arr, int milestone)
+        {
+            int first = IndexOf(arr, milestone);
+            if (milestone == arr[first])
+            {
+                int last = IndexOf(arr, milestone + 1);
+                if (arr[last] == milestone + 1)
+                {
+                    return [first, last - 1];
+                }
+                else
+                {
+                    return [first, -1];
+                }
+            }
+            return [-1, -1];
+        }
     }
 
     public class Array<T> : IDisposable, IEnumerable<T>

@@ -127,5 +127,13 @@ namespace __TESTS__.Uber
 
             int[] res2 = new Solution().SuggestTwoProducts([100, 75, 150, 200, 50, 65, 40, 30, 15, 25, 60], 250);
         }
+
+        [TestMethod]
+        public void Milestones()
+        {
+            int[] res1 = new Solution().Milestones([1, 1, 2, 2, 2, 3, 4, 5], 2);// 2,4
+            int[] res2 = new Solution().Milestones([1, 1, 2, 2, 2, 3, 4, 5], 5);// 7
+            int[] res3 = new Solution().Milestones([1, 1, 2, 2, 2, 3, 4], 1); // 0,1
+        }
     }
 }
