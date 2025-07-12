@@ -275,4 +275,50 @@ namespace EducativeIo.Projects.Uber
         }
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
+
+    public class UpsellProducts
+    {
+        private readonly Dictionary<int, int> _pMap;
+        private readonly List<int> _pList;
+        private readonly Random _random;
+        public UpsellProducts()
+        {
+            _pMap = new Dictionary<int, int>();
+            _pList = new List<int>();
+            _random = new Random();
+        }
+
+        public bool Insert(int product)
+        {
+            if (_pMap.ContainsKey(product))
+            {
+                return false;
+            }
+
+            _pMap[product] = _pList.Count;
+            _pList.Add(product);
+
+            return true;
+        }
+
+        public bool Delete(int product)
+        {
+            if (!_pMap.ContainsKey(product))
+            {
+                return false;
+            }
+
+            int lastProduct = _pList[^1];
+            int indexToBeRemoved = _pMap[product];
+
+            _pList[indexToBeRemoved] = lastProduct;
+            _pMap[lastProduct] = indexToBeRemoved;
+            _pMap.Remove(product);
+            _pList.Remove(_pList[^1]);
+
+            return true;
+        }
+
+        public int SelectRandom() => _pList[_random.Next(_pList.Count)];
+    }
 }
