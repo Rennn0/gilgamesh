@@ -1,4 +1,5 @@
 using Enyim.Diagnostics;
+using Hub.Cache;
 using Hub.Database;
 using Hub.Refit;
 using Microsoft.EntityFrameworkCore;
@@ -54,8 +55,10 @@ internal class Program
         //     ["ready", "rabbitmq"]);
 
         Enyim.LogManager.AssignFactory(new ConsoleLoggerFactory(LogLevel.Information));
-
-        builder.Services.AddMemcached("localhost:11211");
+        builder.Services.AddSingleton<IApplicationCache>(provider => new ApplicationCache(
+            provider.GetRequiredService<IConfiguration>()["MemcachedCluster"]
+                ?? throw new Exception()
+        ));
 
         WebApplication app = builder.Build();
 
@@ -87,6 +90,7 @@ internal class Program
         app.UseMetricServer();
         app.UseHttpMetrics();
 
+        app.MapMetrics();
         app.MapControllers();
         app.Run();
     }

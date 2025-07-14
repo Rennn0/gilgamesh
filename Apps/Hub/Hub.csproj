@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <PackageReference Include="Enyim.Memcached2" Version="0.6.8" />
-    <PackageReference Include="Enyim.Memcached2.Extensions.AspNetCore" Version="0.6.8" />
     <PackageReference Include="EPPlus" Version="8.0.2" />
     <PackageReference Include="l.d.glsh.core" Version="1.0.2" />
     <PackageReference Include="MessagePack" Version="1.7.*" />

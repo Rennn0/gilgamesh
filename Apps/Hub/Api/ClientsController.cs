@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Enyim.Caching.Memcached;
+using Hub.Cache;
 using Hub.Database;
 using Hub.Entities;
 using Hub.Refit;
@@ -176,54 +177,36 @@ namespace Hub.Api
 
         [HttpGet("spawn")]
         public async Task<IActionResult> Spawn(
-            [FromServices] IMemcachedClient cacheClient,
+            [FromServices] IApplicationCache applicationCache,
             int retry
         )
         {
-            // TimerState state = new TimerState
-            // {
-            //     MaxRetry = retry
-            // };
-            //
-            // Timer timer = new Timer((state) =>
-            // {
-            //     if (state is not TimerState ts || ts.Timer is null)
-            //     {
-            //         return;
-            //     }
-            //     Console.WriteLine($"Thread {Thread.CurrentThread.ManagedThreadId}, retry {ts.Counter}, max {ts.MaxRetry}");
-            //     if (ts.Increment() >= ts.MaxRetry)
-            //     {
-            //         ts.Timer.Dispose();
-            //     }
-            // }, state, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(2));
-            // state.Timer = timer;
+            IRandomStringApi randomStringApi = RestService.For<IRandomStringApi>(
+                new HttpClient() { BaseAddress = new Uri("https://www.randomnumberapi.com/") }
+            );
 
-            byte[]? json = await cacheClient.GetAsync<byte[]?>(retry.ToString());
+            string[]? fromCache = await applicationCache.GetAsync<string[]?>(
+                nameof(randomStringApi) + retry
+            );
 
-            string[]? val;
-
-            if (json is not { Length: > 0 })
+            if (fromCache is not null)
             {
-                IRandomStringApi randomStringApi = RestService.For<IRandomStringApi>(
-                    new HttpClient() { BaseAddress = new Uri("https://www.randomnumberapi.com/") }
-                );
-
-                val = await randomStringApi.GetAsync(50, 90, retry);
-                string key = retry.ToString();
-                OperationResult result = await cacheClient.StoreWithResultAsync(
-                    StoreMode.Set,
-                    key,
-                    MessagePackSerializer.Serialize(val),
-                    expiration: Expiration.From(TimeSpan.FromMinutes(5))
-                );
-            }
-            else
-            {
-                val = MessagePackSerializer.Deserialize<string[]>(json);
+                return Ok(fromCache);
             }
 
-            return Ok(val);
+            string[] data = await randomStringApi.GetAsync(90, 99, retry);
+            string[] data1 = await randomStringApi.GetAsync(90, 99, retry);
+            string[] data2 = await randomStringApi.GetAsync(90, 99, retry);
+            string[] data3 = await randomStringApi.GetAsync(90, 99, retry);
+            // string[] arg = [.. data, .. data1, .. data2, .. data3];
+            string[] arg = [.. data, .. data1, .. data2, .. data3];
+            await applicationCache.SetAsync(
+                nameof(randomStringApi) + retry,
+                arg,
+                TimeSpan.FromMinutes(1)
+            );
+
+            return Ok(data);
         }
 
         [HttpGet("refit")]
