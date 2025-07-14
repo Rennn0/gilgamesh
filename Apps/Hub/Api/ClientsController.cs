@@ -1,11 +1,9 @@
 using System.Text.Json;
-using System.Threading.Tasks;
 using Enyim.Caching.Memcached;
 using Hub.Database;
 using Hub.Entities;
 using Hub.Refit;
 using MessagePack;
-using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
@@ -213,11 +211,11 @@ namespace Hub.Api
 
                 val = await randomStringApi.GetAsync(50, 90, retry);
                 string key = retry.ToString();
-                await cacheClient.StoreAsync(
+                OperationResult result = await cacheClient.StoreWithResultAsync(
                     StoreMode.Set,
                     key,
                     MessagePackSerializer.Serialize(val),
-                    Expiration.From(TimeSpan.FromMinutes(2))
+                    expiration: Expiration.From(TimeSpan.FromMinutes(5))
                 );
             }
             else
@@ -238,7 +236,6 @@ namespace Hub.Api
             byte[] clientSerialized = MessagePackSerializer.Serialize(obj);
 
             Client clientDeserialized = MessagePackSerializer.Deserialize<Client>(clientSerialized);
-
             string jss = MessagePackSerializer.ToJson(clientSerialized);
 
             string jsss = MessagePackSerializer.ToJson<Client>(clientDeserialized);
@@ -253,11 +250,20 @@ namespace Hub.Api
             return File(doc, "application/octet-stream");
         }
 
-        private static readonly Counter RequestsProcessed = Metrics.CreateCounter("http_reqs_processed", "Number of processed http requests");
+        private static readonly Counter RequestsProcessed = Metrics.CreateCounter(
+            "http_reqs_processed",
+            "Number of processed http requests"
+        );
 
-        private static readonly Gauge InPrigressRequests = Metrics.CreateGauge("in_progress_req", "In progress requests");
+        private static readonly Gauge InPrigressRequests = Metrics.CreateGauge(
+            "in_progress_req",
+            "In progress requests"
+        );
 
-        private static readonly Histogram JobDuration = Metrics.CreateHistogram("job_duration", "Job duration");
+        private static readonly Histogram JobDuration = Metrics.CreateHistogram(
+            "job_duration",
+            "Job duration"
+        );
 
         [HttpGet("prometheus")]
         public async Task Prometheus()

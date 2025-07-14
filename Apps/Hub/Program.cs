@@ -1,3 +1,4 @@
+using Enyim.Diagnostics;
 using Hub.Database;
 using Hub.Refit;
 using Microsoft.EntityFrameworkCore;
@@ -5,6 +6,7 @@ using Prometheus;
 using Prometheus.DotNetRuntime;
 using Refit;
 using Stripe;
+using LogLevel = Enyim.LogLevel;
 
 namespace Hub;
 
@@ -51,6 +53,8 @@ internal class Program
         //     Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Unhealthy,
         //     ["ready", "rabbitmq"]);
 
+        Enyim.LogManager.AssignFactory(new ConsoleLoggerFactory(LogLevel.Information));
+
         builder.Services.AddMemcached("localhost:11211");
 
         WebApplication app = builder.Build();
@@ -75,7 +79,10 @@ internal class Program
         //     Predicate = (_) => false
         // });
 
-        DotNetRuntimeStatsBuilder.Default().WithErrorHandler(ex => Console.WriteLine(ex.Message)).StartCollecting();
+        DotNetRuntimeStatsBuilder
+            .Default()
+            .WithErrorHandler(ex => Console.WriteLine(ex.Message))
+            .StartCollecting();
 
         app.UseMetricServer();
         app.UseHttpMetrics();
