@@ -8,7 +8,7 @@ namespace Hub.Cache;
 /// <summary>
 /// <exception cref="CacheNotFoundException"></exception>
 /// </summary>
-public class ApplicationCache : IApplicationCache
+public sealed class ApplicationCache : IApplicationCache
 {
     public class CacheNotFoundException : Exception
     {
