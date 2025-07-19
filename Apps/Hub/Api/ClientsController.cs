@@ -17,7 +17,7 @@ namespace Hub.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClientsController : ControllerBase
+    public partial class ClientsController : ControllerBase
     {
         private readonly ApplicationContext _mDb;
         private readonly ILogger<ClientsController> _mLogger;
@@ -265,6 +265,7 @@ namespace Hub.Api
         }
 
         [LoggerMessage(eventId: 1, level: LogLevel.Debug, message: "order {arg1} for {arg2}")]
+
         public static partial void SomeLog(ILogger logger, int arg1, string arg2);
     }
 
