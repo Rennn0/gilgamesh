@@ -268,10 +268,15 @@ namespace Hub.Api
 
                 await Task.Delay(new Random().Next(10, 1200));
 
+                SomeLog(_mLogger, 3, "xx");
+
                 InPrigressRequests.Dec();
                 RequestsProcessed.Inc();
             }
         }
+
+        [LoggerMessage(eventId: 1, level: LogLevel.Debug, message: "order {arg1} for {arg2}")]
+        public static partial void SomeLog(ILogger logger, int arg1, string arg2);
     }
 
     public class TimerState
