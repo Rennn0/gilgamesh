@@ -1,11 +1,10 @@
 using System.Text.Json;
-using System.Threading.Tasks;
 using Enyim.Caching.Memcached;
+using Hub.Cache;
 using Hub.Database;
 using Hub.Entities;
 using Hub.Refit;
 using MessagePack;
-using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
@@ -178,54 +177,36 @@ namespace Hub.Api
 
         [HttpGet("spawn")]
         public async Task<IActionResult> Spawn(
-            [FromServices] IMemcachedClient cacheClient,
+            [FromServices] IApplicationCache applicationCache,
             int retry
         )
         {
-            // TimerState state = new TimerState
-            // {
-            //     MaxRetry = retry
-            // };
-            //
-            // Timer timer = new Timer((state) =>
-            // {
-            //     if (state is not TimerState ts || ts.Timer is null)
-            //     {
-            //         return;
-            //     }
-            //     Console.WriteLine($"Thread {Thread.CurrentThread.ManagedThreadId}, retry {ts.Counter}, max {ts.MaxRetry}");
-            //     if (ts.Increment() >= ts.MaxRetry)
-            //     {
-            //         ts.Timer.Dispose();
-            //     }
-            // }, state, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(2));
-            // state.Timer = timer;
+            IRandomStringApi randomStringApi = RestService.For<IRandomStringApi>(
+                new HttpClient() { BaseAddress = new Uri("https://www.randomnumberapi.com/") }
+            );
 
-            byte[]? json = await cacheClient.GetAsync<byte[]?>(retry.ToString());
+            string[]? fromCache = await applicationCache.GetAsync<string[]?>(
+                nameof(randomStringApi) + retry
+            );
 
-            string[]? val;
-
-            if (json is not { Length: > 0 })
+            if (fromCache is not null)
             {
-                IRandomStringApi randomStringApi = RestService.For<IRandomStringApi>(
-                    new HttpClient() { BaseAddress = new Uri("https://www.randomnumberapi.com/") }
-                );
-
-                val = await randomStringApi.GetAsync(50, 90, retry);
-                string key = retry.ToString();
-                await cacheClient.StoreAsync(
-                    StoreMode.Set,
-                    key,
-                    MessagePackSerializer.Serialize(val),
-                    Expiration.From(TimeSpan.FromMinutes(2))
-                );
-            }
-            else
-            {
-                val = MessagePackSerializer.Deserialize<string[]>(json);
+                return Ok(fromCache);
             }
 
-            return Ok(val);
+            string[] data = await randomStringApi.GetAsync(90, 99, retry);
+            string[] data1 = await randomStringApi.GetAsync(90, 99, retry);
+            string[] data2 = await randomStringApi.GetAsync(90, 99, retry);
+            string[] data3 = await randomStringApi.GetAsync(90, 99, retry);
+            // string[] arg = [.. data, .. data1, .. data2, .. data3];
+            string[] arg = [.. data, .. data1, .. data2, .. data3];
+            await applicationCache.SetAsync(
+                nameof(randomStringApi) + retry,
+                arg,
+                TimeSpan.FromMinutes(1)
+            );
+
+            return Ok(data);
         }
 
         [HttpGet("refit")]
@@ -238,7 +219,6 @@ namespace Hub.Api
             byte[] clientSerialized = MessagePackSerializer.Serialize(obj);
 
             Client clientDeserialized = MessagePackSerializer.Deserialize<Client>(clientSerialized);
-
             string jss = MessagePackSerializer.ToJson(clientSerialized);
 
             string jsss = MessagePackSerializer.ToJson<Client>(clientDeserialized);
@@ -253,11 +233,20 @@ namespace Hub.Api
             return File(doc, "application/octet-stream");
         }
 
-        private static readonly Counter RequestsProcessed = Metrics.CreateCounter("http_reqs_processed", "Number of processed http requests");
+        private static readonly Counter RequestsProcessed = Metrics.CreateCounter(
+            "http_reqs_processed",
+            "Number of processed http requests"
+        );
 
-        private static readonly Gauge InPrigressRequests = Metrics.CreateGauge("in_progress_req", "In progress requests");
+        private static readonly Gauge InPrigressRequests = Metrics.CreateGauge(
+            "in_progress_req",
+            "In progress requests"
+        );
 
-        private static readonly Histogram JobDuration = Metrics.CreateHistogram("job_duration", "Job duration");
+        private static readonly Histogram JobDuration = Metrics.CreateHistogram(
+            "job_duration",
+            "Job duration"
+        );
 
         [HttpGet("prometheus")]
         public async Task Prometheus()
