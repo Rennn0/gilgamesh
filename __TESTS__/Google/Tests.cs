@@ -237,5 +237,54 @@ namespace __TESTS__.Google
             int[] arr = [19, 1, 4, 7, 3, -1, 0, 5, 8, -1, 6];
             Assert.AreEqual(6, new Solution().LongestConsecutiveSequence(arr));
         }
+
+
+        [TestMethod]
+        public void Bits()
+        {
+            byte b1 = 0b101;
+            byte b2 = 0b10;
+            byte b3 = 0b11111111;
+
+
+            string bin1 = Convert.ToString(b1, 2).PadLeft(8, '0');
+            string bin2 = Convert.ToString(b2, 2).PadLeft(8, '0');
+
+            Console.WriteLine($"b1: {bin1}");
+            Console.WriteLine($"b2: {bin2}");
+            Console.WriteLine($"b1: {b1}");
+            Console.WriteLine($"b2: {b2}");
+
+            Console.WriteLine($"b3: {b3}");
+
+
+
+            int tc1 = TClosure()(5)(1);
+            int tc2 = TClosure()(7)(2);
+            Func<int, int> tc3 = TClosure()(1);
+            Console.WriteLine(tc1);
+            Console.WriteLine(tc2);
+            Console.WriteLine(tc3(2));
+            Console.WriteLine(tc3(4));
+            Console.WriteLine(tc3(5));
+
+        }
+
+
+        private Func<int, Func<int, int>> TClosure()
+        {
+            int baseline = 1;
+
+            return a =>
+            {
+                baseline += a;
+                int anotherOne = baseline + 100;
+                return (b) =>
+                {
+                    anotherOne += b;
+                    return anotherOne;
+                };
+            };
+        }
     }
 }
