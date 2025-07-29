@@ -274,6 +274,14 @@ namespace __TESTS__.Google
         private Func<int, Func<int, int>> TClosure()
         {
             int baseline = 1;
+            int tt1 = 0;
+            string tt2 = "2";
+
+            string tt3 = (baseline, tt1, tt2) switch
+            {
+                (1, _, "2") => "xlop",
+                _ => throw new NotImplementedException(),
+            };
 
             return a =>
             {
