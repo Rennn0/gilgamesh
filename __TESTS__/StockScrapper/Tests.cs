@@ -70,7 +70,7 @@ namespace __TESTS__.StockScrapper
             Solution.TreeNode n2 = new Solution.TreeNode(9);
             lr2.right = n1;
             rl1.left = n2;
-            Assert.AreEqual(1,Solution.LCA(root, n1, n2));
+            Assert.AreEqual(1, Solution.LCA(root, n1, n2));
         }
     }
 }

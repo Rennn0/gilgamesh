@@ -1,5 +1,3 @@
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
 using EducativeIo.Projects.Google;
 
 namespace __TESTS__.Google
@@ -270,7 +268,6 @@ namespace __TESTS__.Google
 
         }
 
-
         private Func<int, Func<int, int>> TClosure()
         {
             int baseline = 1;
@@ -293,6 +290,23 @@ namespace __TESTS__.Google
                     return anotherOne;
                 };
             };
+        }
+
+        [TestMethod]
+        public void MatrixRotation()
+        {
+            int[][] matrix = [
+                [1,2,3,4,5],
+                [1,2,3,4,5],
+                [1,2,3,4,5],
+                [1,2,3,4,5],
+                [1,2,3,4,5]
+            ];
+
+            EducativeIo.Projects.Zoom.Feature.RotateMatrix(ref matrix);
+            EducativeIo.Projects.Zoom.Feature.RotateMatrix(ref matrix);
+            EducativeIo.Projects.Zoom.Feature.RotateMatrix(ref matrix);
+            EducativeIo.Projects.Zoom.Feature.RotateMatrix(ref matrix);
         }
     }
 }
