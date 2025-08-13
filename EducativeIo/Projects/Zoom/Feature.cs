@@ -28,5 +28,34 @@ namespace EducativeIo.Projects.Zoom
                 right--;
             }
         }
+
+        public static int JumpGame(int[] arr)
+        {
+            int jumps = 0;
+            Dictionary<int, List<int>> valuesToIndexMap = new Dictionary<int, List<int>>();
+            for (int i = 0; i < arr.Length; i++)
+            {
+                if (valuesToIndexMap.TryGetValue(arr[i], out List<int>? indexes))
+                {
+                    indexes.Add(i);
+                }
+                else
+                {
+                    valuesToIndexMap[arr[i]] = [i];
+                }
+            }
+
+            for (int i = 0; i < arr.Length; i++, jumps++)
+            {
+                int current = arr[i];
+                int lastIndex = valuesToIndexMap[current][^1];
+                if (lastIndex > i)
+                {
+                    i = lastIndex - 1;
+                }
+            }
+
+            return jumps - 1;
+        }
     }
 }

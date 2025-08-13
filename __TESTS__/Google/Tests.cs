@@ -308,5 +308,17 @@ namespace __TESTS__.Google
             EducativeIo.Projects.Zoom.Feature.RotateMatrix(ref matrix);
             EducativeIo.Projects.Zoom.Feature.RotateMatrix(ref matrix);
         }
+
+        [TestMethod]
+        public void JumpGame()
+        {
+            Assert.AreEqual(3, EducativeIo.Projects.Zoom.Feature.JumpGame([23, 11, 44, 5, 6, 9, 11, 16]));
+
+            Assert.AreEqual(5, EducativeIo.Projects.Zoom.Feature.JumpGame([23, 11, 44, 23, 6, 9, 11, 16]));
+
+            Assert.AreEqual(4, EducativeIo.Projects.Zoom.Feature.JumpGame([23, 11, 44, 23, 6, 9, 11, 9]));
+
+            Assert.AreEqual(3, EducativeIo.Projects.Zoom.Feature.JumpGame([1, 2, 3, 4]));
+        }
     }
 }
