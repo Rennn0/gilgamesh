@@ -33,6 +33,7 @@ namespace EducativeIo.Projects.Zoom
         {
             int jumps = 0;
             Dictionary<int, List<int>> valuesToIndexMap = new Dictionary<int, List<int>>();
+
             for (int i = 0; i < arr.Length; i++)
             {
                 if (valuesToIndexMap.TryGetValue(arr[i], out List<int>? indexes))
