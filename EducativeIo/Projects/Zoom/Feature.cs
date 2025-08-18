@@ -57,5 +57,47 @@ namespace EducativeIo.Projects.Zoom
 
             return jumps - 1;
         }
+
+        public static int NumMathingSubSeq(string sample, string[] words)
+        {
+            Dictionary<char,uint> charMap = new Dictionary<char, uint>();
+            int counter = 0;
+
+            foreach (char c in sample)
+            {
+                if (charMap.TryGetValue(c, out uint value))
+                {
+                    charMap[c] = ++value;
+                }
+                else
+                {
+                    charMap.Add(c, 1);
+                }
+            }
+
+            foreach (string word in words)
+            {
+                Dictionary<char, uint> tempMap = new Dictionary<char, uint>(charMap);
+                bool isSubSeq = true;
+                foreach (char c in word)
+                {
+                    if (tempMap.TryGetValue(c, out uint value) && value > 0)
+                    {
+                        tempMap[c]--;
+                    }
+                    else
+                    {
+                        isSubSeq = false;
+                        break;
+                    }
+                }
+                if (isSubSeq)
+                {
+                    counter++;
+                }
+            }
+
+            return counter;
+        }
     }
 }
