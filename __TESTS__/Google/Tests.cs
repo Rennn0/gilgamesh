@@ -419,5 +419,16 @@ namespace __TESTS__.Google
                 )
             );
         }
+
+        [TestMethod]
+        public void GetDevices()
+        {
+            var root = new EducativeIo.Projects.Network.Feature.NetworkNode(1);
+            root.Children.Add(new(2));
+            root.Children.Add(new(3));
+            root.Children.Add(new(4));
+
+            // #TODO
+        }
     }
 }
