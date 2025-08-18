@@ -47,11 +47,11 @@ namespace __TESTS__.Google
         {
             Feature feature = new Feature();
             int[][] matrix =
-             [
-                [1,1,0,0,0],
-                [1,1,0,0,0],
-                [0,0,1,0,0],
-                [0,0,0,1,1],
+            [
+                [1, 1, 0, 0, 0],
+                [1, 1, 0, 0, 0],
+                [0, 0, 1, 0, 0],
+                [0, 0, 0, 1, 1],
             ];
 
             Assert.AreEqual(3, feature.Islands(matrix));
@@ -101,16 +101,27 @@ namespace __TESTS__.Google
         public void MinMeetingRooms()
         {
             Feature feature = new Feature();
-            int[][] meetings = [
-                [2, 8], [3, 4], [3, 9], [5, 11], [8, 20], [11, 15]
+            int[][] meetings =
+            [
+                [2, 8],
+                [3, 4],
+                [3, 9],
+                [5, 11],
+                [8, 20],
+                [11, 15],
             ];
-            int[][] meetings2 = [
-                [1, 4], [2, 5], [4, 8], [5, 6], [5, 8], [6, 7]
+            int[][] meetings2 =
+            [
+                [1, 4],
+                [2, 5],
+                [4, 8],
+                [5, 6],
+                [5, 8],
+                [6, 7],
             ];
             Assert.AreEqual(3, feature.MinMeetingRooms(meetings));
             Assert.AreEqual(3, feature.MinMeetingRooms(meetings2));
         }
-
 
         [TestMethod]
         public void MaxRectangleSum()
@@ -128,9 +139,8 @@ namespace __TESTS__.Google
                 [0, -2, -7, 0],
                 [9, 2, -6, 2],
                 [-4, 1, -4, 1],
-                [-1, 8, 0, -2]
+                [-1, 8, 0, -2],
             ];
-
 
             Assert.AreEqual(15, feature.SubrectangleSum(matrix.ToArray()));
         }
@@ -139,28 +149,38 @@ namespace __TESTS__.Google
         public void MergeMeetings()
         {
             Feature feature = new Feature();
-            List<List<int>> result = feature.MergeMeetings([
-                [1,4],
-                [2,5],
-                [6,8],
-                [7,9],
-                [10,13]
-            ]);
+            List<List<int>> result = feature.MergeMeetings(
+                [
+                    [1, 4],
+                    [2, 5],
+                    [6, 8],
+                    [7, 9],
+                    [10, 13],
+                ]
+            );
             List<List<int>> expected =
             [
-                [1,5],
-                [6,9],
-                [10,13],
+                [1, 5],
+                [6, 9],
+                [10, 13],
             ];
-            CollectionAssert.AreEquivalent(expected.Select(e => string.Join(',', e)).ToList(), result.Select(r => string.Join(',', r)).ToList());
+            CollectionAssert.AreEquivalent(
+                expected.Select(e => string.Join(',', e)).ToList(),
+                result.Select(r => string.Join(',', r)).ToList()
+            );
         }
 
         [TestMethod]
         public void CheckMeetings()
         {
             Feature feature = new Feature();
-            int[][] meetingTimes = [
-                [1, 3], [4, 6], [8, 10], [10, 12], [13, 15]
+            int[][] meetingTimes =
+            [
+                [1, 3],
+                [4, 6],
+                [8, 10],
+                [10, 12],
+                [13, 15],
             ];
 
             int[] newMeeting = [7, 8];
@@ -174,8 +194,15 @@ namespace __TESTS__.Google
         public void AddAndMergeMeetings()
         {
             Feature feature = new Feature();
-            int[][] meetingTimes = [
-            [1, 3], [4, 6], [8, 10], [10, 12], [13, 15], [16, 18]];
+            int[][] meetingTimes =
+            [
+                [1, 3],
+                [4, 6],
+                [8, 10],
+                [10, 12],
+                [13, 15],
+                [16, 18],
+            ];
             int[] newMeeting = [9, 13];
             Assert.AreEqual(4, feature.AddAndMergeMeetings(meetingTimes, newMeeting).Count);
             newMeeting = [9, 20];
@@ -187,8 +214,17 @@ namespace __TESTS__.Google
         {
             Feature feature = new Feature();
 
-            int[][] meetingsA = [[1, 3], [5, 6], [6, 9]];
-            int[][] meetingsB = [[2, 3], [5, 7]];
+            int[][] meetingsA =
+            [
+                [1, 3],
+                [5, 6],
+                [6, 9],
+            ];
+            int[][] meetingsB =
+            [
+                [2, 3],
+                [5, 7],
+            ];
 
             List<List<int>> intersecion = feature.MeetingsIntersection(meetingsA, meetingsB);
             Assert.AreEqual(3, intersecion.Count);
@@ -200,11 +236,17 @@ namespace __TESTS__.Google
             Assert.AreEqual(7, intersecion[2][1]);
         }
 
-
         [TestMethod]
         public void MergeIntervals()
         {
-            int[][] arr = [[1, 4], [2, 5], [6, 7], [7, 10], [11, 12]];
+            int[][] arr =
+            [
+                [1, 4],
+                [2, 5],
+                [6, 7],
+                [7, 10],
+                [11, 12],
+            ];
             int[][] res = new Solution().MergeIntervals(arr);
 
             Assert.AreEqual(3, res.Length);
@@ -224,8 +266,19 @@ namespace __TESTS__.Google
         public void IntervalIntersection()
         {
             Solution solution = new Solution();
-            int[][] a = [[1, 3], [5, 6], [7, 8], [8, 10], [12, 15]];
-            int[][] b = [[2, 4], [7, 10]];
+            int[][] a =
+            [
+                [1, 3],
+                [5, 6],
+                [7, 8],
+                [8, 10],
+                [12, 15],
+            ];
+            int[][] b =
+            [
+                [2, 4],
+                [7, 10],
+            ];
             int[][] res = solution.IntervalIntersection(a, b);
         }
 
@@ -236,14 +289,12 @@ namespace __TESTS__.Google
             Assert.AreEqual(6, new Solution().LongestConsecutiveSequence(arr));
         }
 
-
         [TestMethod]
         public void Bits()
         {
             byte b1 = 0b101;
             byte b2 = 0b10;
             byte b3 = 0b11111111;
-
 
             string bin1 = Convert.ToString(b1, 2).PadLeft(8, '0');
             string bin2 = Convert.ToString(b2, 2).PadLeft(8, '0');
@@ -255,8 +306,6 @@ namespace __TESTS__.Google
 
             Console.WriteLine($"b3: {b3}");
 
-
-
             int tc1 = TClosure()(5)(1);
             int tc2 = TClosure()(7)(2);
             Func<int, int> tc3 = TClosure()(1);
@@ -265,7 +314,6 @@ namespace __TESTS__.Google
             Console.WriteLine(tc3(2));
             Console.WriteLine(tc3(4));
             Console.WriteLine(tc3(5));
-
         }
 
         private Func<int, Func<int, int>> TClosure()
@@ -295,12 +343,13 @@ namespace __TESTS__.Google
         [TestMethod]
         public void MatrixRotation()
         {
-            int[][] matrix = [
-                [1,2,3,4,5],
-                [1,2,3,4,5],
-                [1,2,3,4,5],
-                [1,2,3,4,5],
-                [1,2,3,4,5]
+            int[][] matrix =
+            [
+                [1, 2, 3, 4, 5],
+                [1, 2, 3, 4, 5],
+                [1, 2, 3, 4, 5],
+                [1, 2, 3, 4, 5],
+                [1, 2, 3, 4, 5],
             ];
 
             EducativeIo.Projects.Zoom.Feature.RotateMatrix(ref matrix);
@@ -312,11 +361,20 @@ namespace __TESTS__.Google
         [TestMethod]
         public void JumpGame()
         {
-            Assert.AreEqual(3, EducativeIo.Projects.Zoom.Feature.JumpGame([23, 11, 44, 5, 6, 9, 11, 16]));
+            Assert.AreEqual(
+                3,
+                EducativeIo.Projects.Zoom.Feature.JumpGame([23, 11, 44, 5, 6, 9, 11, 16])
+            );
 
-            Assert.AreEqual(5, EducativeIo.Projects.Zoom.Feature.JumpGame([23, 11, 44, 23, 6, 9, 11, 16]));
+            Assert.AreEqual(
+                5,
+                EducativeIo.Projects.Zoom.Feature.JumpGame([23, 11, 44, 23, 6, 9, 11, 16])
+            );
 
-            Assert.AreEqual(4, EducativeIo.Projects.Zoom.Feature.JumpGame([23, 11, 44, 23, 6, 9, 11, 9]));
+            Assert.AreEqual(
+                4,
+                EducativeIo.Projects.Zoom.Feature.JumpGame([23, 11, 44, 23, 6, 9, 11, 9])
+            );
 
             Assert.AreEqual(3, EducativeIo.Projects.Zoom.Feature.JumpGame([1, 2, 3, 4]));
         }
@@ -324,9 +382,42 @@ namespace __TESTS__.Google
         [TestMethod]
         public void NumMathingSubSeq()
         {
-            Assert.AreEqual(3, EducativeIo.Projects.Zoom.Feature.NumMathingSubSeq("abcde", ["a", "bb", "acd", "ace", "xyz"]));
+            Assert.AreEqual(
+                3,
+                EducativeIo.Projects.Zoom.Feature.NumMathingSubSeq(
+                    "abcde",
+                    ["a", "bb", "acd", "ace", "xyz"]
+                )
+            );
 
-            Assert.AreEqual(2, EducativeIo.Projects.Zoom.Feature.NumMathingSubSeq("abcde", ["bb", "acd", "eb", "xyz"]));
+            Assert.AreEqual(
+                2,
+                EducativeIo.Projects.Zoom.Feature.NumMathingSubSeq(
+                    "abcde",
+                    ["bb", "acd", "eb", "xyz"]
+                )
+            );
+        }
+
+        [TestMethod]
+        public void TotalTime()
+        {
+            Assert.AreEqual(
+                2,
+                EducativeIo.Projects.Network.Feature.TotalTime(
+                    0,
+                    [-1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6],
+                    [0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+                )
+            );
+            Assert.AreEqual(
+                4,
+                EducativeIo.Projects.Network.Feature.TotalTime(
+                    0,
+                    [-1, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6],
+                    [0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 2]
+                )
+            );
         }
     }
 }
