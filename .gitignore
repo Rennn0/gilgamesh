@@ -6,3 +6,5 @@ Models
 .vs
 node_modules
 publish
+.config
+.env
