@@ -320,5 +320,13 @@ namespace __TESTS__.Google
 
             Assert.AreEqual(3, EducativeIo.Projects.Zoom.Feature.JumpGame([1, 2, 3, 4]));
         }
+
+        [TestMethod]
+        public void NumMathingSubSeq()
+        {
+            Assert.AreEqual(3, EducativeIo.Projects.Zoom.Feature.NumMathingSubSeq("abcde", ["a", "bb", "acd", "ace", "xyz"]));
+
+            Assert.AreEqual(2, EducativeIo.Projects.Zoom.Feature.NumMathingSubSeq("abcde", ["bb", "acd", "eb", "xyz"]));
+        }
     }
 }

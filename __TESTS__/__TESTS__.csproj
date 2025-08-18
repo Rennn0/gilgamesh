@@ -18,6 +18,24 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Core">
+      <HintPath>..\EducativeIo\bin\Debug\net8.0\Core.dll</HintPath>
+    </Reference>
+    <Reference Include="EducativeIo">
+      <HintPath>..\EducativeIo\bin\Debug\net8.0\EducativeIo.dll</HintPath>
+    </Reference>
+    <Reference Include="HealthChecks.UI.Client">
+      <HintPath>..\EducativeIo\bin\Debug\net8.0\HealthChecks.UI.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="HealthChecks.UI.Core">
+      <HintPath>..\EducativeIo\bin\Debug\net8.0\HealthChecks.UI.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="RabbitMQ.Client">
+      <HintPath>..\EducativeIo\bin\Debug\net8.0\RabbitMQ.Client.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
 
