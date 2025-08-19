@@ -1,0 +1,70 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Consumer",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build consumer",
+            "program": "${workspaceFolder}/Apps/Consumer/bin/Debug/net8.0/Consumer.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/Apps/Consumer",
+            "console": "internalConsole",
+            "stopAtEntry": false,
+            "internalConsoleOptions": "openOnSessionStart",
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "DOTNET_ENVIRONMENT": "Development",
+            },
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "name": "Hub",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build hub",
+            "program": "${workspaceFolder}/Apps/Hub/bin/Debug/net8.0/Hub.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/Apps/Hub",
+            "console": "internalConsole",
+            "stopAtEntry": false,
+            "internalConsoleOptions": "openOnSessionStart",
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "DOTNET_ENVIRONMENT": "Development",
+            },
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "name": "DDDSample",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build ddd",
+            "program": "${workspaceFolder}/Apps/DDDSample/bin/Debug/net8.0/DDDSample.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/Apps/DDDSample",
+            "console": "internalConsole",
+            "stopAtEntry": false,
+            "internalConsoleOptions": "openOnSessionStart",
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "DOTNET_ENVIRONMENT": "Development",
+                "SQL_LOCAL_CONNECTION":"Server=localhost;Database=gmesh;User=sa;Password=Budh@000;TrustServerCertificate=True;"
+            },
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "name": "EducativeIo",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build eio",
+            "program": "${workspaceFolder}/EducativeIo/bin/Debug/net8.0/EducativeIo.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/EducativeIo",
+            "console": "internalConsole",
+            "stopAtEntry": false,
+            "internalConsoleOptions": "openOnSessionStart",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

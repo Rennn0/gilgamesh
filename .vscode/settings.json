@@ -1,0 +1,9 @@
+{
+    "dotnet.server.useOmnisharp":true,
+    "editor.wordWrap": "on",
+    "editor.wordWrapColumn": 100,
+    "[csharp]":{
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "csharpier.csharpier-vscode"
+    }
+}
