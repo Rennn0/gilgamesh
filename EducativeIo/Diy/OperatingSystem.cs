@@ -1,17 +1,17 @@
 namespace EducativeIo.Diy;
 
-public abstract class OsNode<T>
+public class OsNode<T>
 {
-    protected OsNode()
+    public OsNode()
     {
     }
 
-    protected OsNode(T value)
+    public OsNode(T value)
     {
         Value = value;
     }
 
-    protected OsNode(T value, OsNode<T> left, OsNode<T> right)
+    public OsNode(T value, OsNode<T> left, OsNode<T> right)
     {
         Value = value;
         Left = left;
@@ -27,13 +27,13 @@ public abstract class OsNode<T>
     public OsNode<T>? Left
     {
         get;
-        private set;
+        set;
     }
 
     public OsNode<T>? Right
     {
         get;
-        private set;
+        set;
     }
 
     public static OsNode<T>? InvertBinaryTree<T>(OsNode<T>? root)
@@ -49,6 +49,39 @@ public abstract class OsNode<T>
         root.Left = right;
         root.Right = left;
         return root;
+    }
+
+    public static int MaxPathSum(OsNode<int>? root)
+    {
+        int maxSum = int.MinValue;
+        recurse(root);
+        return maxSum;
+
+        int recurse(OsNode<int>? node)
+        {
+            if (node is null)
+            {
+                return 0;
+            }
+
+            int left = recurse(node.Left);
+            int right = recurse(node.Right);
+
+            int price = node.Value;
+            if (left > 0)
+            {
+                price += left;
+            }
+
+            if (right > 0)
+            {
+                price += right;
+            }
+
+            maxSum = Math.Max(maxSum, price);
+
+            return node.Value + Math.Max(left, right);
+        }
     }
 }
 
