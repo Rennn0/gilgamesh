@@ -83,6 +83,61 @@ public class OsNode<T>
             return node.Value + Math.Max(left, right);
         }
     }
+
+    public static List<List<T?>> ZigZagTraversal(OsNode<T>? root)
+    {
+        if (root is null)
+        {
+            return new List<List<T?>>();
+        }
+
+        LinkedList<OsNode<T>> deque = new LinkedList<OsNode<T>>();
+        List<List<T?>> result = new List<List<T?>>();
+        bool leftToRight = true;
+        deque.AddFirst(root);
+        while (deque.Count > 0)
+        {
+            int size = deque.Count;
+            result.Add(new List<T?>());
+            for (int i = 0; i < size; i++)
+            {
+                if (leftToRight)
+                {
+                    OsNode<T> node = deque.First!.Value;
+                    deque.RemoveFirst();
+                    result[^1].Add(node.Value);
+                    if (node.Left is not null)
+                    {
+                        deque.AddLast(node.Left);
+                    }
+
+                    if (node.Right is not null)
+                    {
+                        deque.AddLast(node.Right);
+                    }
+                }
+                else
+                {
+                    OsNode<T> node = deque.Last!.Value;
+                    deque.RemoveLast();
+                    result[^1].Add(node.Value);
+                    if (node.Right is not null)
+                    {
+                        deque.AddFirst(node.Right);
+                    }
+
+                    if (node.Left is not null)
+                    {
+                        deque.AddFirst(node.Left);
+                    }
+                }
+            }
+
+            leftToRight = !leftToRight;
+        }
+
+        return result;
+    }
 }
 
 public class OperatingSystem

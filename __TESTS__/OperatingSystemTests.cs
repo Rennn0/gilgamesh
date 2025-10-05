@@ -39,5 +39,7 @@ public class OperatingSystemTests
         root.Right.Left = rl;
         root.Right.Right = rr;
         Assert.AreEqual(0, OsNode<int>.MaxPathSum(root));
+        Assert.AreEqual("-8 -5 -10 -15 -2 0 -1", string.Join(" ",
+            OsNode<int>.ZigZagTraversal(root).Select(x => string.Join(" ", x))));
     }
 }
