@@ -138,6 +138,36 @@ public class OsNode<T>
 
         return result;
     }
+
+    public static List<T?> RightSideView(OsNode<T>? root)
+    {
+        List<T?> result = new List<T?>();
+        if (root is null)
+        {
+            return result;
+        }
+
+        dfs(root, 0);
+        return result;
+
+        void dfs(OsNode<T>? node, int level)
+        {
+            if (level == result.Count && node is not null)
+            {
+                result.Add(node.Value);
+            }
+
+            if (node is { Right: not null })
+            {
+                dfs(node.Right, level + 1);
+            }
+
+            if (node is { Left: not null })
+            {
+                dfs(node.Left, level + 1);
+            }
+        }
+    }
 }
 
 public class OperatingSystem
