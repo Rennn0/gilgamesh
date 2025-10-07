@@ -41,5 +41,6 @@ public class OperatingSystemTests
         Assert.AreEqual("-8 -5 -10 -15 -2 0 -1 7", string.Join(" ",
             OsNode<int>.ZigZagTraversal(root).Select(x => string.Join(" ", x))));
         Assert.AreEqual("-8 -5 -1 7", string.Join(" ", OsNode<int>.RightSideView(root)));
+        OsNode<int> flat = OsNode<int>.FlattenBinaryTree(root);
     }
 }

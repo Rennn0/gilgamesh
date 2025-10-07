@@ -168,6 +168,31 @@ public class OsNode<T>
             }
         }
     }
+
+    public static OsNode<T> FlattenBinaryTree(OsNode<T>? root)
+    {
+        ArgumentNullException.ThrowIfNull(root);
+        OsNode<T>? iterator = root;
+        while (iterator is not null)
+        {
+            if (iterator.Left is not null)
+            {
+                OsNode<T>? last = iterator.Left;
+                while (last.Right is not null)
+                {
+                    last = last.Right;
+                }
+
+                last.Right = iterator.Right;
+                iterator.Right = iterator.Left;
+                iterator.Left = null;
+            }
+
+            iterator = iterator.Right;
+        }
+
+        return root;
+    }
 }
 
 public class OperatingSystem
